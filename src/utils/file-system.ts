@@ -11,7 +11,8 @@ export function getAllFiles(dirPath: string, arrayOfFiles: string[] = []): strin
     if (fs.statSync(fullPath).isDirectory()) {
       arrayOfFiles = getAllFiles(fullPath, arrayOfFiles);
     } else {
-      if (file.endsWith(".md") || file.endsWith(".mdx")) {
+      if (file.endsWith(".json")) {
+        // if (file.endsWith(".md") || file.endsWith(".mdx"))
         arrayOfFiles.push(fullPath);
       }
     }

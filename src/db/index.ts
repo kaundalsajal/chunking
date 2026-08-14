@@ -1,9 +1,10 @@
-import { Pool } from "pg";
+import { Pool } from "postgres-pool";
 import type { FinalChunk } from "../types/index.js";
-
+import { config } from "dotenv";
+config();
 // Uses DATABASE_URL environment variable by default
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL!,
 });
 
 export async function initDb() {
@@ -22,7 +23,7 @@ export async function initDb() {
         content TEXT NOT NULL,
         metadata JSONB,
         source_file TEXT,
-        embedding vector(768)
+        embedding vector(3072)
       );
     `);
     console.log("Database schema initialized successfully.");
@@ -36,17 +37,17 @@ export async function insertChunk(chunk: FinalChunk, embedding: number[]) {
     INSERT INTO document_embeddings (document_title, section_title, content, metadata, source_file, embedding)
     VALUES ($1, $2, $3, $4, $5, $6)
   `;
-  
+
   // Format the vector array as a string representation for Postgres pgvector
   const vectorString = `[${embedding.join(",")}]`;
-  
+
   const values = [
     chunk.documentTitle,
     chunk.sectionTitle,
     chunk.content,
     chunk.metadata,
     chunk.sourceFile,
-    vectorString
+    vectorString,
   ];
 
   await pool.query(query, values);
