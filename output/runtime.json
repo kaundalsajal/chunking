@@ -1,0 +1,12 @@
+[
+  {
+    "documentTitle": "runtime",
+    "documentDescription": "API reference for the runtime route segment config option.",
+    "sectionTitle": "Introduction",
+    "content": "The runtime option allows you to select the JavaScript runtime used for rendering your route.\n\nexport const runtime = 'nodejs'\r\n// 'nodejs'\n\nexport const runtime = 'nodejs'\r\n// 'nodejs'\n\n'nodejs' (default)'edge' (deprecated)\n\nGood to know:The Edge Runtime is deprecated. Remove the runtime export from your route files. See Edge Runtime Deprecated.This option cannot be used in Proxy.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\runtime.mdx"
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "documentTitle": "Custom Errors",
+    "documentDescription": "Override and extend the built-in Error page to handle custom errors.",
+    "sectionTitle": "404 Page",
+    "content": "A 404 page may be accessed very often. Server-rendering an error page for every visit increases the load of the Next.js server. This can result in increased costs and slow experiences.\n\nTo avoid the above pitfalls, Next.js provides a static 404 page by default without having to add any additional files.\n\nGood to know: The default 404 and 500 pages follow the operating system's color scheme via prefers-color-scheme and do not read an app-level theme. Because pages/404.js and pages/500.js render inside your custom App, providing your own files lets your global styles and theme apply.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\08-custom-error.mdx"
+  },
+  {
+    "documentTitle": "Custom Errors",
+    "documentDescription": "Override and extend the built-in Error page to handle custom errors.",
+    "sectionTitle": "Customizing The 404 Page",
+    "content": "To create a custom 404 page you can create a pages/404.js file. This file is statically generated at build time.\n\nexport default function Custom404() {\r\n  return <h1>404 - Page Not Found</h1>\r\n}\n\nGood to know: You can use getStaticProps inside this page if you need to fetch data at build time.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\08-custom-error.mdx"
+  },
+  {
+    "documentTitle": "Custom Errors",
+    "documentDescription": "Override and extend the built-in Error page to handle custom errors.",
+    "sectionTitle": "500 Page",
+    "content": "Server-rendering an error page for every visit adds complexity to responding to errors. To help users get responses to errors as fast as possible, Next.js provides a static 500 page by default without having to add any additional files.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\08-custom-error.mdx"
+  },
+  {
+    "documentTitle": "Custom Errors",
+    "documentDescription": "Override and extend the built-in Error page to handle custom errors.",
+    "sectionTitle": "Customizing The 500 Page",
+    "content": "To customize the 500 page you can create a pages/500.js file. This file is statically generated at build time.\n\nexport default function Custom500() {\r\n  return <h1>500 - Server-side error occurred</h1>\r\n}\n\nGood to know: You can use getStaticProps inside this page if you need to fetch data at build time.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\08-custom-error.mdx"
+  },
+  {
+    "documentTitle": "Custom Errors",
+    "documentDescription": "Override and extend the built-in Error page to handle custom errors.",
+    "sectionTitle": "More Advanced Error Page Customizing",
+    "content": "500 errors are handled both client-side and server-side by the Error component. If you wish to override it, define the file pages/_error.js and add the following code:\n\nfunction Error({ statusCode }) {\r\n  return (\r\n    <p>\r\n      {statusCode\r\n        ? `An error ${statusCode} occurred on server`\r\n        : 'An error occurred on client'}\r\n    </p>\r\n  )\r\n}\r\n\r\nError.getInitialProps = ({ res, err }) => {\r\n  const statusCode = res ? res.statusCode : err ? err.statusCode : 404\r\n  return { statusCode }\r\n}\r\n\r\nexport default Error\n\npages/_error.js is only used in production. In development you’ll get an error with the call stack to know where the error originated from.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\08-custom-error.mdx"
+  },
+  {
+    "documentTitle": "Custom Errors",
+    "documentDescription": "Override and extend the built-in Error page to handle custom errors.",
+    "sectionTitle": "Reusing the built-in error page",
+    "content": "If you want to render the built-in error page you can by importing the Error component:\n\nimport Error from 'next/error'\r\n\r\nexport async function getServerSideProps() {\r\n  const res = await fetch('https://api.github.com/repos/vercel/next.js')\r\n  const errorCode = res.ok ? false : res.status\r\n  const json = await res.json()\r\n\r\n  return {\r\n    props: { errorCode, stars: json.stargazers_count },\r\n  }\r\n}\r\n\r\nexport default function Page({ errorCode, stars }) {\r\n  if (errorCode) {\r\n    return <Error statusCode={errorCode} />\r\n  }\r\n\r\n  return <div>Next stars: {stars}</div>\r\n}\n\nThe Error component also takes title as a property if you want to pass in a text message along with a statusCode.\n\nIf you have a custom Error component be sure to import that one instead. next/error exports the default component used by Next.js.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\08-custom-error.mdx"
+  },
+  {
+    "documentTitle": "Custom Errors",
+    "documentDescription": "Override and extend the built-in Error page to handle custom errors.",
+    "sectionTitle": "Caveats",
+    "content": "Error does not currently support Next.js Data Fetching methods like getStaticProps or getServerSideProps._error, like _app, is a reserved pathname. _error is used to define the customized layouts and behaviors of the error pages. /_error will render 404 when accessed directly via routing or rendering in a custom server.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\08-custom-error.mdx"
+  }
+]

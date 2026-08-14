@@ -1,0 +1,1044 @@
+[
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "Introduction",
+    "content": "If you want to access the router object inside any function component in your app, you can use the useRouter hook, take a look at the following example:\n\nimport { useRouter } from 'next/router'\r\n\r\nfunction ActiveLink({ children, href }) {\r\n  const router = useRouter()\r\n  const style = {\r\n    marginRight: 10,\r\n    color: router.asPath === href ? 'red' : 'black',\r\n  }\r\n\r\n  const handleClick = (e) => {\r\n    e.preventDefault()\r\n    router.push(href)\r\n  }\r\n\r\n  return (\r\n    <a href={href} onClick={handleClick} style={style}>\r\n      {children}\r\n    </a>\r\n  )\r\n}\r\n\r\nexport default ActiveLink\n\nuseRouter is a React Hook, meaning it cannot be used with classes. You can either use withRouter or wrap your class in a function component.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "The following is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "he following is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "e following is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "following is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "following is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ollowing is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "llowing is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "lowing is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "owing is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "wing is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ing is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ng is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "g is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "is the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "s the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "the definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "he definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "e definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "definition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "efinition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "finition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "inition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "nition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ition of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "tion of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ion of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "on of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "n of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "of the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "f the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "the router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "he router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "e router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "router object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "outer object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "uter object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ter object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "er object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "r object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "object returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "bject returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ject returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ect returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ct returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "t returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "returned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "eturned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "turned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "urned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "rned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ned by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ed by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "d by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "by both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "y both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "both useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "oth useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "th useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "h useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "useRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "seRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "eRouter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "Router and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "outer and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "uter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ter and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "er and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "r and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "and withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "nd withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "d withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "withRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ithRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "thRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "hRouter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "Router:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "outer:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "uter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "ter:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "er:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "r:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": ":",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "pathname: String - The path for current route file that comes after /pages. Therefore, basePath, locale and trailing slash (trailingSlash: true) are not included.query: Object - The query string parsed to an object, including dynamic route parameters. It will be an empty object during prerendering if the page doesn't use Server-side Rendering. Defaults to {}asPath: String - The path as shown in the browser including the search params and respecting the trailingSlash configuration. basePath and locale are not included.isFallback: boolean - Whether the current page is in fallback mode.basePath: String - The active basePath (if enabled).locale: String - The active locale (if enabled).locales: String[] - All supported locales (if enabled).defaultLocale: String - The current default locale (if enabled).domainLocales: Array<{domain, defaultLocale, locales}> - Any configured domain locales.isReady: boolean - Whether the router fields are updated client-side and ready for use. Should only be",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router object",
+    "content": "f enabled).domainLocales: Array<{domain, defaultLocale, locales}> - Any configured domain locales.isReady: boolean - Whether the router fields are updated client-side and ready for use. Should only be used inside of useEffect methods and not for conditionally rendering on the server. See related docs for use case with automatically statically optimized pagesisPreview: boolean - Whether the application is currently in preview mode.\n\nUsing the asPath field may lead to a mismatch between client and server if the page is rendered using server-side rendering or automatic static optimization. Avoid using asPath until the isReady field is true.\n\nThe following methods are included inside router:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.push",
+    "content": "Handles client-side transitions, this method is useful for cases where next/link is not enough.\n\nrouter.push(url, as, options)\n\nurl: UrlObject | String - The URL to navigate to (see Node.JS URL module documentation for UrlObject properties).as: UrlObject | String - Optional decorator for the path that will be shown in the browser URL bar. Before Next.js 9.5.3 this was used for dynamic routes.options - Optional object with the following configuration options:scroll - Optional boolean, controls scrolling to the top of the page after navigation. Defaults to trueshallow: Update the path of the current page without rerunning getStaticProps, getServerSideProps or getInitialProps. Defaults to falselocale - Optional string, indicates locale of the new page\n\nYou don't need to use router.push for external URLs. window.location is better suited for those cases.\n\nNavigating to pages/about.js, which is a predefined route:\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.push",
+    "content": "ternal URLs. window.location is better suited for those cases.\n\nNavigating to pages/about.js, which is a predefined route:\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {\r\n  const router = useRouter()\r\n\r\n  return (\r\n    <button type=\"button\" onClick={() => router.push('/about')}>\r\n      Click me\r\n    </button>\r\n  )\r\n}\n\nNavigating pages/post/[pid].js, which is a dynamic route:\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {\r\n  const router = useRouter()\r\n\r\n  return (\r\n    <button type=\"button\" onClick={() => router.push('/post/abc')}>\r\n      Click me\r\n    </button>\r\n  )\r\n}\n\nRedirecting the user to pages/login.js, useful for pages behind authentication:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\n// Here you would fetch and return the user\r\nconst useUser = () => ({ user: null, loading: false })\r\n\r\nexport default function Page() {\r\n  const { user, loading } = useUser()",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.push",
+    "content": "} from 'next/router'\r\n\r\n// Here you would fetch and return the user\r\nconst useUser = () => ({ user: null, loading: false })\r\n\r\nexport default function Page() {\r\n  const { user, loading } = useUser()\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    if (!(user || loading)) {\r\n      router.push('/login')\r\n    }\r\n  }, [user, loading])\r\n\r\n  return <p>Redirecting...</p>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "Resetting state after navigation",
+    "content": "When navigating to the same page in Next.js, the page's state will not be reset by default as React does not unmount unless the parent component has changed.\n\nimport Link from 'next/link'\r\nimport { useState } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page(props) {\r\n  const router = useRouter()\r\n  const [count, setCount] = useState(0)\r\n  return (\r\n    <div>\r\n      <h1>Page: {router.query.slug}</h1>\r\n      <p>Count: {count}</p>\r\n      <button onClick={() => setCount(count + 1)}>Increase count</button>\r\n      <Link href=\"/one\">one</Link> <Link href=\"/two\">two</Link>\r\n    </div>\r\n  )\r\n}\n\nIn the above example, navigating between /one and /two will not reset the count . The useState is maintained between renders because the top-level React component, Page, is the same.\n\nIf you do not want this behavior, you have a couple of options:\n\nManually ensure each state is updated using useEffect. In the above example, that could look like:useEffect(() => {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "Resetting state after navigation",
+    "content": "age, is the same.\n\nIf you do not want this behavior, you have a couple of options:\n\nManually ensure each state is updated using useEffect. In the above example, that could look like:useEffect(() => {\r\n  setCount(0)\r\n}, [router.query.slug])Use a React key to tell React to remount the component. To do this for all pages, you can use a custom app:import { useRouter } from 'next/router'\r\n\r\nexport default function MyApp({ Component, pageProps }) {\r\n  const router = useRouter()\r\n  return <Component key={router.asPath} {...pageProps} />\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "With URL object",
+    "content": "You can use a URL object in the same way you can use it for next/link. Works for both the url and as parameters:\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function ReadMore({ post }) {\r\n  const router = useRouter()\r\n\r\n  return (\r\n    <button\r\n      type=\"button\"\r\n      onClick={() => {\r\n        router.push({\r\n          pathname: '/post/[pid]',\r\n          query: { pid: post.id },\r\n        })\r\n      }}\r\n    >\r\n      Click here to read more\r\n    </button>\r\n  )\r\n}\n\nIf you omit pathname, the query is applied to the URL shown in the browser (asPath) rather than to the current page's route (pathname). This keeps rewrites intact: on a page served by a rewrite, a query-only navigation preserves the URL the visitor requested instead of revealing the rewrite destination.\n\nThe two values also differ when you mask the URL yourself with the as parameter. Pass pathname explicitly in that case, otherwise the query is applied to the masked URL and can resolve to a different page:",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "With URL object",
+    "content": "o values also differ when you mask the URL yourself with the as parameter. Pass pathname explicitly in that case, otherwise the query is applied to the masked URL and can resolve to a different page:\n\n// On the `/` page, with the URL masked as `/p/1`\r\nrouter.push({ pathname: '/', query: { photoId: 2 } }, '/p/2', { shallow: true })",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.replace",
+    "content": "Similar to the replace prop in next/link, router.replace will prevent adding a new URL entry into the history stack.\n\nrouter.replace(url, as, options)\n\nThe API for router.replace is exactly the same as the API for router.push.\n\nTake a look at the following example:\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {\r\n  const router = useRouter()\r\n\r\n  return (\r\n    <button type=\"button\" onClick={() => router.replace('/home')}>\r\n      Click me\r\n    </button>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.prefetch",
+    "content": "Prefetch pages for faster client-side transitions. This method is only useful for navigations without next/link, as next/link takes care of prefetching pages automatically.\n\nThis is a production only feature. Next.js doesn't prefetch pages in development.\n\nrouter.prefetch(url, as, options)\n\nurl - The URL to prefetch, including explicit routes (e.g. /dashboard) and dynamic routes (e.g. /product/[id])as - Optional decorator for url. Before Next.js 9.5.3 this was used to prefetch dynamic routes.options - Optional object with the following allowed fields:locale - allows providing a different locale from the active one. If false, url has to include the locale as the active locale won't be used.\n\nLet's say you have a login page, and after a login, you redirect the user to the dashboard. For that case, we can prefetch the dashboard to make a faster transition, like in the following example:\n\nimport { useCallback, useEffect } from 'react'\r\nimport { useRouter } from 'next/router'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.prefetch",
+    "content": "rd. For that case, we can prefetch the dashboard to make a faster transition, like in the following example:\n\nimport { useCallback, useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Login() {\r\n  const router = useRouter()\r\n  const handleSubmit = useCallback((e) => {\r\n    e.preventDefault()\r\n\r\n    fetch('/api/login', {\r\n      method: 'POST',\r\n      headers: { 'Content-Type': 'application/json' },\r\n      body: JSON.stringify({\r\n        /* Form data */\r\n      }),\r\n    }).then((res) => {\r\n      // Do a fast client-side transition to the already prefetched dashboard page\r\n      if (res.ok) router.push('/dashboard')\r\n    })\r\n  }, [])\r\n\r\n  useEffect(() => {\r\n    // Prefetch the dashboard page\r\n    router.prefetch('/dashboard')\r\n  }, [router])\r\n\r\n  return (\r\n    <form onSubmit={handleSubmit}>\r\n      {/* Form fields */}\r\n      <button type=\"submit\">Login</button>\r\n    </form>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.beforePopState",
+    "content": "In some cases (for example, if using a Custom Server), you may wish to listen to popstate and do something before the router acts on it.\n\nrouter.beforePopState(cb)\n\ncb - The function to run on incoming popstate events. The function receives the state of the event as an object with the following props:url: String - the route for the new state. This is usually the name of a pageas: String - the url that will be shown in the browseroptions: Object - Additional options sent by router.push\n\nIf cb returns false, the Next.js router will not handle popstate, and you'll be responsible for handling it in that case. See Disabling file-system routing.\n\nYou could use beforePopState to manipulate the request, or force a SSR refresh, as in the following example:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    router.beforePopState(({ url, as, options }) => {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.beforePopState",
+    "content": "} from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    router.beforePopState(({ url, as, options }) => {\r\n      // I only want to allow these two routes!\r\n      if (as !== '/' && as !== '/other') {\r\n        // Have SSR render bad routes as a 404.\r\n        window.location.href = as\r\n        return false\r\n      }\r\n\r\n      return true\r\n    })\r\n  }, [router])\r\n\r\n  return <p>Welcome to the page</p>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.back",
+    "content": "Navigate back in history. Equivalent to clicking the browser’s back button. It executes window.history.back().\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {\r\n  const router = useRouter()\r\n\r\n  return (\r\n    <button type=\"button\" onClick={() => router.back()}>\r\n      Click here to go back\r\n    </button>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.reload",
+    "content": "Reload the current URL. Equivalent to clicking the browser’s refresh button. It executes window.location.reload().\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function Page() {\r\n  const router = useRouter()\r\n\r\n  return (\r\n    <button type=\"button\" onClick={() => router.reload()}>\r\n      Click here to reload\r\n    </button>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.events",
+    "content": "You can listen to different events happening inside the Next.js Router. Here's a list of supported events:\n\nrouteChangeStart(url, { shallow }) - Fires when a route starts to changerouteChangeComplete(url, { shallow }) - Fires when a route changed completelyrouteChangeError(err, url, { shallow }) - Fires when there's an error when changing routes, or a route load is cancellederr.cancelled - Indicates if the navigation was cancelledbeforeHistoryChange(url, { shallow }) - Fires before changing the browser's historyhashChangeStart(url, { shallow }) - Fires when the hash will change but not the pagehashChangeComplete(url, { shallow }) - Fires when the hash has changed but not the page\n\nGood to know: Here url is the URL shown in the browser, including the basePath.\n\nFor example, to listen to the router event routeChangeStart, open or create pages/_app.js and subscribe to the event, like so:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.events",
+    "content": "xample, to listen to the router event routeChangeStart, open or create pages/_app.js and subscribe to the event, like so:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\nexport default function MyApp({ Component, pageProps }) {\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    const handleRouteChange = (url, { shallow }) => {\r\n      console.log(\r\n        `App is changing to ${url} ${\r\n          shallow ? 'with' : 'without'\r\n        } shallow routing`\r\n      )\r\n    }\r\n\r\n    router.events.on('routeChangeStart', handleRouteChange)\r\n\r\n    // If the component is unmounted, unsubscribe\r\n    // from the event with the `off` method:\r\n    return () => {\r\n      router.events.off('routeChangeStart', handleRouteChange)\r\n    }\r\n  }, [router])\r\n\r\n  return <Component {...pageProps} />\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.events",
+    "content": "be\r\n    // from the event with the `off` method:\r\n    return () => {\r\n      router.events.off('routeChangeStart', handleRouteChange)\r\n    }\r\n  }, [router])\r\n\r\n  return <Component {...pageProps} />\r\n}\n\nWe use a Custom App (pages/_app.js) for this example to subscribe to the event because it's not unmounted on page navigations, but you can subscribe to router events on any component in your application.\n\nRouter events should be registered when a component mounts (useEffect or componentDidMount / componentWillUnmount) or imperatively when an event happens.\n\nIf a route load is cancelled (for example, by clicking two links rapidly in succession), routeChangeError will fire. And the passed err will contain a cancelled property set to true, as in the following example:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\nexport default function MyApp({ Component, pageProps }) {\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "router.events",
+    "content": "example:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\nexport default function MyApp({ Component, pageProps }) {\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    const handleRouteChangeError = (err, url) => {\r\n      if (err.cancelled) {\r\n        console.log(`Route to ${url} was cancelled!`)\r\n      }\r\n    }\r\n\r\n    router.events.on('routeChangeError', handleRouteChangeError)\r\n\r\n    // If the component is unmounted, unsubscribe\r\n    // from the event with the `off` method:\r\n    return () => {\r\n      router.events.off('routeChangeError', handleRouteChangeError)\r\n    }\r\n  }, [router])\r\n\r\n  return <Component {...pageProps} />\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "The next/compat/router export",
+    "content": "This is the same useRouter hook, but can be used in both app and pages directories.\n\nIt differs from next/router in that it does not throw an error when the pages router is not mounted, and instead has a return type of NextRouter | null.\r\nThis allows developers to convert components to support running in both app and pages as they transition to the app router.\n\nA component that previously looked like this:\n\nimport { useRouter } from 'next/router'\r\nconst MyComponent = () => {\r\n  const { isReady, query } = useRouter()\r\n  // ...\r\n}\n\nWill error when converted over to next/compat/router, as null cannot be destructured. Instead, developers will be able to take advantage of new hooks:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/compat/router'\r\nimport { useSearchParams } from 'next/navigation'\r\nconst MyComponent = () => {\r\n  const router = useRouter() // may be null or a NextRouter instance\r\n  const searchParams = useSearchParams()\r\n  useEffect(() => {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "The next/compat/router export",
+    "content": "SearchParams } from 'next/navigation'\r\nconst MyComponent = () => {\r\n  const router = useRouter() // may be null or a NextRouter instance\r\n  const searchParams = useSearchParams()\r\n  useEffect(() => {\r\n    if (router && !router.isReady) {\r\n      return\r\n    }\r\n    // In `app/`, searchParams will be ready immediately with the values, in\r\n    // `pages/` it will be available after the router is ready.\r\n    const search = searchParams.get('search')\r\n    // ...\r\n  }, [router, searchParams])\r\n  // ...\r\n}\n\nThis component will now work in both pages and app directories. When the component is no longer used in pages, you can remove the references to the compat router:\n\nimport { useSearchParams } from 'next/navigation'\r\nconst MyComponent = () => {\r\n  const searchParams = useSearchParams()\r\n  // As this component is only used in `app/`, the compat router can be removed.\r\n  const search = searchParams.get('search')\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "Using useRouter outside of Next.js context in pages",
+    "content": "Another specific use case is when rendering components outside of a Next.js application context, such as inside getServerSideProps on the pages directory. In this case, the compat router can be used to avoid errors:\n\nimport { renderToString } from 'react-dom/server'\r\nimport { useRouter } from 'next/compat/router'\r\nconst MyComponent = () => {\r\n  const router = useRouter() // may be null or a NextRouter instance\r\n  // ...\r\n}\r\nexport async function getServerSideProps() {\r\n  const renderedComponent = renderToString(<MyComponent />)\r\n  return {\r\n    props: {\r\n      renderedComponent,\r\n    },\r\n  }\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "Potential ESLint errors",
+    "content": "Certain methods accessible on the router object return a Promise. If you have the ESLint rule, no-floating-promises enabled, consider disabling it either globally, or for the affected line.\n\nIf your application needs this rule, you should either void the promise – or use an async function, await the Promise, then void the function call. This is not applicable when the method is called from inside an onClick handler.\n\nThe affected methods are:\n\nrouter.pushrouter.replacerouter.prefetch",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "Potential solutions",
+    "content": "import { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\n// Here you would fetch and return the user\r\nconst useUser = () => ({ user: null, loading: false })\r\n\r\nexport default function Page() {\r\n  const { user, loading } = useUser()\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    // disable the linting on the next line - This is the cleanest solution\r\n    // eslint-disable-next-line no-floating-promises\r\n    router.push('/login')\r\n\r\n    // void the Promise returned by router.push\r\n    if (!(user || loading)) {\r\n      void router.push('/login')\r\n    }\r\n    // or use an async function, await the Promise, then void the function call\r\n    async function handleRouteChange() {\r\n      if (!(user || loading)) {\r\n        await router.push('/login')\r\n      }\r\n    }\r\n    void handleRouteChange()\r\n  }, [user, loading])\r\n\r\n  return <p>Redirecting...</p>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "withRouter",
+    "content": "If useRouter is not the best fit for you, withRouter can also add the same router object to any component.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "Usage",
+    "content": "import { withRouter } from 'next/router'\r\n\r\nfunction Page({ router }) {\r\n  return <p>{router.pathname}</p>\r\n}\r\n\r\nexport default withRouter(Page)",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  },
+  {
+    "documentTitle": "useRouter",
+    "documentDescription": "Learn more about the API of the Next.js Router, and access the router instance in your page with the useRouter hook.",
+    "sectionTitle": "TypeScript",
+    "content": "To use class components with withRouter, the component needs to accept a router prop:\n\nimport React from 'react'\r\nimport { withRouter, NextRouter } from 'next/router'\r\n\r\ninterface WithRouterProps {\r\n  router: NextRouter\r\n}\r\n\r\ninterface MyComponentProps extends WithRouterProps {}\r\n\r\nclass MyComponent extends React.Component<MyComponentProps> {\r\n  render() {\r\n    return <p>{this.props.router.pathname}</p>\r\n  }\r\n}\r\n\r\nexport default withRouter(MyComponent)",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-router.mdx"
+  }
+]

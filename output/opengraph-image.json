@@ -1,0 +1,258 @@
+[
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Introduction",
+    "content": "The opengraph-image and twitter-image file conventions allow you to set Open Graph and Twitter images for a route segment.\n\nThey are useful for setting the images that appear on social networks and messaging apps when a user shares a link to your site.\n\nThere are two ways to set Open Graph and Twitter images:\n\nUsing image files (.jpg, .png, .gif)Using code to generate images (.js, .ts, .tsx)",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Image files (.jpg, .png, .gif)",
+    "content": "Use an image file to set a route segment's shared image by placing an opengraph-image or twitter-image image file in the segment.\n\nNext.js will evaluate the file and automatically add the appropriate tags to your app's <head> element.\n\n| File convention                                 | Supported file types            |\r\n| ----------------------------------------------- | ------------------------------- |\r\n| opengraph-image           | .jpg, .jpeg, .png, .gif |\r\n| twitter-image               | .jpg, .jpeg, .png, .gif |\r\n| opengraph-image.alt | .txt                          |\r\n| twitter-image.alt     | .txt                          |\n\nGood to know:The twitter-image file size must not exceed 5MB, and the opengraph-image file size must not exceed 8MB. If the image file size exceeds these limits, the build will fail.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "opengraph-image",
+    "content": "Add an opengraph-image.(jpg|jpeg|png|gif) image file to any route segment.\n\n<meta property=\"og:image\" content=\"<generated>\" />\r\n<meta property=\"og:image:type\" content=\"<generated>\" />\r\n<meta property=\"og:image:width\" content=\"<generated>\" />\r\n<meta property=\"og:image:height\" content=\"<generated>\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "twitter-image",
+    "content": "Add a twitter-image.(jpg|jpeg|png|gif) image file to any route segment.\n\n<meta name=\"twitter:image\" content=\"<generated>\" />\r\n<meta name=\"twitter:image:type\" content=\"<generated>\" />\r\n<meta name=\"twitter:image:width\" content=\"<generated>\" />\r\n<meta name=\"twitter:image:height\" content=\"<generated>\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "opengraph-image.alt.txt",
+    "content": "Add an accompanying opengraph-image.alt.txt file in the same route segment as the opengraph-image.(jpg|jpeg|png|gif) image its alt text.\n\nAbout Acme\n\n<meta property=\"og:image:alt\" content=\"About Acme\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "twitter-image.alt.txt",
+    "content": "Add an accompanying twitter-image.alt.txt file in the same route segment as the twitter-image.(jpg|jpeg|png|gif) image its alt text.\n\nAbout Acme\n\n<meta name=\"twitter:image:alt\" content=\"About Acme\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Generate images using code (.js, .ts, .tsx)",
+    "content": "In addition to using literal image files, you can programmatically generate images using code.\n\nGenerate a route segment's shared image by creating an opengraph-image or twitter-image route that default exports a function.\n\n| File convention   | Supported file types |\r\n| ----------------- | -------------------- |\r\n| opengraph-image | .js, .ts, .tsx |\r\n| twitter-image   | .js, .ts, .tsx |\n\nGood to know:By default, generated images are statically optimized (generated at build time and cached) unless they use Request-time APIs or uncached data.You can generate multiple Images in the same file using generateImageMetadata.opengraph-image.js and twitter-image.js are special Route Handlers that are cached by default unless it uses a Request-time API or dynamic config option.\n\nThe easiest way to generate an image is to use the ImageResponse API from next/og.\n\nimport { ImageResponse } from 'next/og'\r\nimport { readFile } from 'node:fs/promises'\r\nimport { join } from 'node:path'",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Generate images using code (.js, .ts, .tsx)",
+    "content": "asiest way to generate an image is to use the ImageResponse API from next/og.\n\nimport { ImageResponse } from 'next/og'\r\nimport { readFile } from 'node:fs/promises'\r\nimport { join } from 'node:path'\r\n\r\n// Image metadata\r\nexport const alt = 'About Acme'\r\nexport const size = {\r\n  width: 1200,\r\n  height: 630,\r\n}\r\n\r\nexport const contentType = 'image/png'\r\n\r\nconst interSemiBold = await readFile(\r\n  join(process.cwd(), 'assets/Inter-SemiBold.ttf')\r\n)\r\n\r\n// Image generation\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      // ImageResponse JSX element\r\n      <div\r\n        style={{\r\n          fontSize: 128,\r\n          background: 'white',\r\n          width: '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        About Acme\r\n      </div>\r\n    ),\r\n    // ImageResponse options\r\n    {\r\n      // For convenience, we can re-use the exported opengraph-image",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Generate images using code (.js, .ts, .tsx)",
+    "content": "justifyContent: 'center',\r\n        }}\r\n      >\r\n        About Acme\r\n      </div>\r\n    ),\r\n    // ImageResponse options\r\n    {\r\n      // For convenience, we can re-use the exported opengraph-image\r\n      // size config to also set the ImageResponse's width and height.\r\n      ...size,\r\n      fonts: [\r\n        {\r\n          name: 'Inter',\r\n          data: interSemiBold,\r\n          style: 'normal',\r\n          weight: 400,\r\n        },\r\n      ],\r\n    }\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\nimport { readFile } from 'node:fs/promises'\r\nimport { join } from 'node:path'\r\n\r\n// Image metadata\r\nexport const alt = 'About Acme'\r\nexport const size = {\r\n  width: 1200,\r\n  height: 630,\r\n}\r\n\r\nexport const contentType = 'image/png'\r\n\r\nconst interSemiBold = await readFile(\r\n  join(process.cwd(), 'assets/Inter-SemiBold.ttf')\r\n)\r\n\r\n// Image generation\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      // ImageResponse JSX element\r\n      <div\r\n        style={{",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Generate images using code (.js, .ts, .tsx)",
+    "content": ", 'assets/Inter-SemiBold.ttf')\r\n)\r\n\r\n// Image generation\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      // ImageResponse JSX element\r\n      <div\r\n        style={{\r\n          fontSize: 128,\r\n          background: 'white',\r\n          width: '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        About Acme\r\n      </div>\r\n    ),\r\n    // ImageResponse options\r\n    {\r\n      // For convenience, we can re-use the exported opengraph-image\r\n      // size config to also set the ImageResponse's width and height.\r\n      ...size,\r\n      fonts: [\r\n        {\r\n          name: 'Inter',\r\n          data: interSemiBold,\r\n          style: 'normal',\r\n          weight: 400,\r\n        },\r\n      ],\r\n    }\r\n  )\r\n}\n\n<meta property=\"og:image\" content=\"<generated>\" />\r\n<meta property=\"og:image:alt\" content=\"About Acme\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Generate images using code (.js, .ts, .tsx)",
+    "content": "ld,\r\n          style: 'normal',\r\n          weight: 400,\r\n        },\r\n      ],\r\n    }\r\n  )\r\n}\n\n<meta property=\"og:image\" content=\"<generated>\" />\r\n<meta property=\"og:image:alt\" content=\"About Acme\" />\r\n<meta property=\"og:image:type\" content=\"image/png\" />\r\n<meta property=\"og:image:width\" content=\"1200\" />\r\n<meta property=\"og:image:height\" content=\"630\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Props",
+    "content": "The default export function receives the following props:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "params (optional)",
+    "content": "A promise that resolves to an object containing the dynamic route parameters object from the root segment down to the segment opengraph-image or twitter-image is colocated in.\n\nGood to know: If you use generateImageMetadata, the function will also receive an id prop that is a promise resolving to the id value from one of the items returned by generateImageMetadata.\n\nexport default async function Image({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n  // ...\r\n}\n\nexport default async function Image({ params }) {\r\n  const { slug } = await params\r\n  // ...\r\n}\n\n| Route                                      | URL         | params                           |\r\n| ------------------------------------------ | ----------- | ---------------------------------- |\r\n| app/shop/opengraph-image.js              | /shop     | undefined                        |\r\n| app/shop/[slug]/opengraph-image.js       | /shop/1   | Promise<{ slug: '1' }>           |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "params (optional)",
+    "content": "----------- |\r\n| app/shop/opengraph-image.js              | /shop     | undefined                        |\r\n| app/shop/[slug]/opengraph-image.js       | /shop/1   | Promise<{ slug: '1' }>           |\r\n| app/shop/[tag]/[item]/opengraph-image.js | /shop/1/2 | Promise<{ tag: '1', item: '2' }> |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Returns",
+    "content": "The default export function should return a Response.\n\nGood to know: ImageResponse satisfies this return type.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Config exports",
+    "content": "You can optionally configure the image's metadata by exporting alt, size, and contentType variables from opengraph-image or twitter-image route.\n\n| Option                        | Type                                                                                                            |\r\n| ----------------------------- | --------------------------------------------------------------------------------------------------------------- |\r\n| alt                 | string                                                                                                        |\r\n| size               | { width: number; height: number }                                                                             |\r\n| contentType | string - image MIME type |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "alt",
+    "content": "export const alt = 'My images alt text'\r\n\r\nexport default function Image() {}\n\nexport const alt = 'My images alt text'\r\n\r\nexport default function Image() {}\n\n<meta property=\"og:image:alt\" content=\"My images alt text\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "size",
+    "content": "export const size = { width: 1200, height: 630 }\r\n\r\nexport default function Image() {}\n\nexport const size = { width: 1200, height: 630 }\r\n\r\nexport default function Image() {}\n\n<meta property=\"og:image:width\" content=\"1200\" />\r\n<meta property=\"og:image:height\" content=\"630\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "contentType",
+    "content": "export const contentType = 'image/png'\r\n\r\nexport default function Image() {}\n\nexport const contentType = 'image/png'\r\n\r\nexport default function Image() {}\n\n<meta property=\"og:image:type\" content=\"image/png\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Route Segment Config",
+    "content": "opengraph-image and twitter-image are specialized Route Handlers that can use the same route segment configuration options as Pages and Layouts.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Using external data",
+    "content": "This example uses the params object and external data to generate the image.\n\nGood to know:\r\nBy default, this generated image will be statically optimized. You can configure the individual fetch options or route segments options to change this behavior.\n\nimport { ImageResponse } from 'next/og'\r\n\r\nexport const alt = 'About Acme'\r\nexport const size = {\r\n  width: 1200,\r\n  height: 630,\r\n}\r\nexport const contentType = 'image/png'\r\n\r\nexport default async function Image({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n  const post = await fetch(`https://.../posts/${slug}`).then((res) =>\r\n    res.json()\r\n  )\r\n\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          fontSize: 48,\r\n          background: 'white',\r\n          width: '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        {post.title}\r\n      </div>\r\n    ),",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Using external data",
+    "content": ": '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        {post.title}\r\n      </div>\r\n    ),\r\n    {\r\n      ...size,\r\n    }\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\n\r\nexport const alt = 'About Acme'\r\nexport const size = {\r\n  width: 1200,\r\n  height: 630,\r\n}\r\nexport const contentType = 'image/png'\r\n\r\nexport default async function Image({ params }) {\r\n  const { slug } = await params\r\n  const post = await fetch(`https://.../posts/${slug}`).then((res) =>\r\n    res.json()\r\n  )\r\n\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          fontSize: 48,\r\n          background: 'white',\r\n          width: '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        {post.title}\r\n      </div>\r\n    ),\r\n    {\r\n      ...size,\r\n    }\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Using Node.js runtime with local assets",
+    "content": "These examples use the Node.js runtime to fetch a local image from the file system and pass it to the <img> src attribute, either as a base64 string or an ArrayBuffer. Place the local asset relative to the project root, not the example source file.\n\nThe asset doesn't depend on request data, so read it once at module scope. See Predictable values.\n\nimport { ImageResponse } from 'next/og'\r\nimport { join } from 'node:path'\r\nimport { readFile } from 'node:fs/promises'\r\n\r\nconst logoData = await readFile(join(process.cwd(), 'logo.png'), 'base64')\r\nconst logoSrc = `data:image/png;base64,${logoData}`\r\n\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        <img src={logoSrc} height=\"100\" />\r\n      </div>\r\n    )\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\nimport { join } from 'node:path'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Using Node.js runtime with local assets",
+    "content": "justifyContent: 'center',\r\n        }}\r\n      >\r\n        <img src={logoSrc} height=\"100\" />\r\n      </div>\r\n    )\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\nimport { join } from 'node:path'\r\nimport { readFile } from 'node:fs/promises'\r\n\r\nconst logoData = await readFile(join(process.cwd(), 'logo.png'), 'base64')\r\nconst logoSrc = `data:image/png;base64,${logoData}`\r\n\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        <img src={logoSrc} height=\"100\" />\r\n      </div>\r\n    )\r\n  )\r\n}\n\nPassing an ArrayBuffer to the src attribute of an <img> element is not part of the HTML spec. The rendering engine used by next/og supports it, but because TypeScript definitions follow the spec, you need a @ts-expect-error directive or similar to use this feature.\n\nimport { ImageResponse } from 'next/og'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Using Node.js runtime with local assets",
+    "content": "engine used by next/og supports it, but because TypeScript definitions follow the spec, you need a @ts-expect-error directive or similar to use this feature.\n\nimport { ImageResponse } from 'next/og'\r\nimport { join } from 'node:path'\r\nimport { readFile } from 'node:fs/promises'\r\n\r\nconst logoData = await readFile(join(process.cwd(), 'logo.png'))\r\nconst logoSrc = Uint8Array.from(logoData).buffer\r\n\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        {/* @ts-expect-error Satori accepts ArrayBuffer/typed arrays for <img src> at runtime */}\r\n        <img src={logoSrc} height=\"100\" />\r\n      </div>\r\n    )\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\nimport { join } from 'node:path'\r\nimport { readFile } from 'node:fs/promises'\r\n\r\nconst logoData = await readFile(join(process.cwd(), 'logo.png'))",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Using Node.js runtime with local assets",
+    "content": ")\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\nimport { join } from 'node:path'\r\nimport { readFile } from 'node:fs/promises'\r\n\r\nconst logoData = await readFile(join(process.cwd(), 'logo.png'))\r\nconst logoSrc = Uint8Array.from(logoData).buffer\r\n\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        <img src={logoSrc} height=\"100\" />\r\n      </div>\r\n    )\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  },
+  {
+    "documentTitle": "opengraph-image and twitter-image",
+    "documentDescription": "API Reference for the Open Graph Image and Twitter Image file conventions.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                              |\r\n| --------- | ---------------------------------------------------- |\r\n| v16.0.0 | params is now a promise that resolves to an object |\r\n| v13.3.0 | opengraph-image and twitter-image introduced.    |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\opengraph-image.mdx"
+  }
+]

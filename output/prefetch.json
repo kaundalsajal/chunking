@@ -1,0 +1,66 @@
+[
+  {
+    "documentTitle": "prefetch",
+    "documentDescription": "API reference for the prefetch route segment config.",
+    "sectionTitle": "Introduction",
+    "content": "The prefetch route segment config controls how a segment is prefetched during client-side navigation. By default, the framework manages the strategy based on the app's partialPrefetching setting. To override per segment, set this export to one of the values below.\n\nGood to know:The prefetch export only works when cacheComponents is enabled.prefetch cannot be used when the segment is a Client Component.The meaningful values to set are 'partial' and 'force-disabled'. 'auto' is the default and is equivalent to omitting the export; don't write prefetch = 'auto' explicitly.\n\nexport const prefetch = 'partial'\r\n\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}\n\nexport const prefetch = 'partial'\r\n\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\prefetch.mdx"
+  },
+  {
+    "documentTitle": "prefetch",
+    "documentDescription": "API reference for the prefetch route segment config.",
+    "sectionTitle": "'partial'",
+    "content": "Opts the segment into Partial Prefetching without enabling the global partialPrefetching flag. A <Link> pointing at a segment with prefetch = 'partial' loads the per-route App Shell instead of the legacy full prefetch. Set this on the destination, not the link.\n\nFor links that opt into a wider prefetch with <Link prefetch={true}>, Next.js uses per-link prefetching. The server renders a fresh response that resolves URL data (params, searchParams, and the full URL). On pages where all the content is statically renderable, Next.js serves prefetches from the static cache. If a page accesses non-static data, it's prefetched at runtime.\n\nUse this for incremental adoption when you can't enable partialPrefetching for the entire app at once. Once every route in scope has prefetch = 'partial', enable the global flag and remove the per-route exports.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\prefetch.mdx"
+  },
+  {
+    "documentTitle": "prefetch",
+    "documentDescription": "API reference for the prefetch route segment config.",
+    "sectionTitle": "'partial'",
+    "content": "incremental adoption when you can't enable partialPrefetching for the entire app at once. Once every route in scope has prefetch = 'partial', enable the global flag and remove the per-route exports.\n\nGood to know: When Next.js performs a per-link prefetch for a segment, all downstream segments are included in the same request. Segments deeper in the tree that are configured with 'force-disabled' will still be prefetched as part of the response.\n\nexport const prefetch = 'partial'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\prefetch.mdx"
+  },
+  {
+    "documentTitle": "prefetch",
+    "documentDescription": "API reference for the prefetch route segment config.",
+    "sectionTitle": "'force-disabled'",
+    "content": "Never prefetch this segment. The client will not request segment data ahead of navigation. Use this for segments where prefetching would be wasteful, for example pages behind authentication that are rarely visited.\n\nGood to know: 'force-disabled' does not prevent Next.js from prefetching metadata about the route. However, the actual segment data for this segment and all deeper segments will be omitted from prefetching.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\prefetch.mdx"
+  },
+  {
+    "documentTitle": "prefetch",
+    "documentDescription": "API reference for the prefetch route segment config.",
+    "sectionTitle": "Relationship with the <Link prefetch> prop",
+    "content": "A prefetch starts with a <Link> that expresses intent (should this destination be prefetched, and how eagerly), and ends at a segment that sets a cost ceiling (how much work is it OK to do ahead of time, for any link that points here).\n\nA destination can't know which links target it, so the segment config caps what any <Link prefetch={true}> pulls:\n\n'partial': App Shell for default links; a <Link prefetch={true}> additionally resolves URL data (params, searchParams, and the full URL) and the cached content behind it.'force-disabled': skip segment data entirely.\n\n<Link prefetch={false}> skips prefetching at the link level regardless of how the destination is configured.\n\nGood to know: On pages where all the content is statically renderable, Next.js serves prefetches from the static cache (or a CDN). If a page accesses non-static data like cookies or headers, it's prefetched at runtime with a fresh server render, which costs server CPU per page view.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\prefetch.mdx"
+  },
+  {
+    "documentTitle": "prefetch",
+    "documentDescription": "API reference for the prefetch route segment config.",
+    "sectionTitle": "TypeScript",
+    "content": "type Prefetch = 'auto' | 'partial' | 'force-disabled'\r\n\r\nexport const prefetch: Prefetch = 'partial'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\prefetch.mdx"
+  },
+  {
+    "documentTitle": "prefetch",
+    "documentDescription": "API reference for the prefetch route segment config.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                              |\r\n| --------- | ---------------------------------------------------- |\r\n| v16.x.x | prefetch export introduced (Cache Components only) |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\prefetch.mdx"
+  }
+]

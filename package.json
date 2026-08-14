@@ -17,7 +17,10 @@
   },
   "dependencies": {
     "@chonkiejs/core": "^0.0.11",
+    "@google/generative-ai": "^0.24.1",
+    "@types/pg": "^8.21.0",
     "gray-matter": "^4.0.3",
+    "pg": "^8.23.0",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",

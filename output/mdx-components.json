@@ -1,0 +1,30 @@
+[
+  {
+    "documentTitle": "mdx-components.js",
+    "documentDescription": "API reference for the mdx-components.js file.",
+    "sectionTitle": "Introduction",
+    "content": "The mdx-components.js|tsx file is required to use @next/mdx with App Router and will not work without it. Additionally, you can use it to customize styles.\n\nUse the file mdx-components.tsx (or .js) in the root of your project to define MDX Components. For example, at the same level as pages or app, or inside src if applicable.\n\nimport type { MDXComponents } from 'mdx/types'\r\n\r\nconst components: MDXComponents = {}\r\n\r\nexport function useMDXComponents(): MDXComponents {\r\n  return components\r\n}\n\nconst components = {}\r\n\r\nexport function useMDXComponents() {\r\n  return components\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\mdx-components.mdx"
+  },
+  {
+    "documentTitle": "mdx-components.js",
+    "documentDescription": "API reference for the mdx-components.js file.",
+    "sectionTitle": "useMDXComponents function",
+    "content": "The file must export a single function named useMDXComponents. This function does not accept any arguments.\n\nimport type { MDXComponents } from 'mdx/types'\r\n\r\nconst components: MDXComponents = {}\r\n\r\nexport function useMDXComponents(): MDXComponents {\r\n  return components\r\n}\n\nconst components = {}\r\n\r\nexport function useMDXComponents() {\r\n  return components\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\mdx-components.mdx"
+  },
+  {
+    "documentTitle": "mdx-components.js",
+    "documentDescription": "API reference for the mdx-components.js file.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes              |\r\n| --------- | -------------------- |\r\n| v13.1.2 | MDX Components added |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\mdx-components.mdx"
+  }
+]

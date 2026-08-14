@@ -1,0 +1,30 @@
+[
+  {
+    "documentTitle": "supportsImmutableAssets",
+    "documentDescription": "Configure support for immutable static assets",
+    "sectionTitle": "Introduction",
+    "content": "Attention: This option is primarily intended for adapter authors.\r\nApp developers should only set it when troubleshooting adapter-specific issues.Enabling this feature when your provider or adapter does not support it can result in broken deployments.\n\nWhen skew protection is enabled, static asset requests include a deployment-specific query parameter, for example:\n\nGET https://foo.com/_next/static/chunks/0d_ks0ow7ur6m.js?dpl=<unique-deployment-id>\n\nOne downside is that browsers have to download static assets again after each new deployment, even when those assets have not changed.\n\nImmutable static assets allow the ?dpl query parameter to be omitted for static assets that are guaranteed to be immutable and content-addressed by their filename. This lets browsers cache those assets indefinitely and allows unchanged static assets to be skipped when uploading files during subsequent deployments:\n\nGET https://foo.com/_next/static/immutable/chunks/0d_ks0ow7ur6m.js",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\supportsImmutableAssets.mdx"
+  },
+  {
+    "documentTitle": "supportsImmutableAssets",
+    "documentDescription": "Configure support for immutable static assets",
+    "sectionTitle": "Introduction",
+    "content": "ache those assets indefinitely and allows unchanged static assets to be skipped when uploading files during subsequent deployments:\n\nGET https://foo.com/_next/static/immutable/chunks/0d_ks0ow7ur6m.js\n\nYou can use this config option to opt out of immutable static assets when your adapter has enabled support for them. If your adapter has not enabled this feature, this option has no effect:\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  supportsImmutableAssets: false,\r\n}\r\n\r\nmodule.exports = nextConfig\n\nSee Supporting immutable static assets for more information on how to support this feature in an adapter.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\supportsImmutableAssets.mdx"
+  },
+  {
+    "documentTitle": "supportsImmutableAssets",
+    "documentDescription": "Configure support for immutable static assets",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                    |\r\n| --------- | ------------------------------------------ |\r\n| v16.3.0 | Added support for immutable static assets. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\supportsImmutableAssets.mdx"
+  }
+]

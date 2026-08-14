@@ -1,0 +1,758 @@
+[
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Introduction",
+    "content": "You can use the metadata object or the generateMetadata function to define metadata.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "The metadata object",
+    "content": "To define static metadata, export a Metadata object from a layout.js or page.js file.\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: '...',\r\n  description: '...',\r\n}\r\n\r\nexport default function Page() {}\n\nexport const metadata = {\r\n  title: '...',\r\n  description: '...',\r\n}\r\n\r\nexport default function Page() {}\n\nSee the Metadata Fields for a complete list of supported options.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "generateMetadata function",
+    "content": "Dynamic metadata depends on dynamic information, such as the current route parameters, external data, or metadata in parent segments, can be set by exporting a generateMetadata function that returns a Metadata object.\n\nResolving generateMetadata is part of rendering the page. If the page can be prerendered and generateMetadata doesn't introduce dynamic behavior, the resulting metadata is included in the page's initial HTML.\n\nOtherwise the metadata resolved from generateMetadata can be streamed after sending the initial UI.\n\nimport type { Metadata, ResolvingMetadata } from 'next'\r\n\r\ntype Props = {\r\n  params: Promise<{ id: string }>\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}\r\n\r\nexport async function generateMetadata(\r\n  { params, searchParams }: Props,\r\n  parent: ResolvingMetadata\r\n): Promise<Metadata> {\r\n  // read route params\r\n  const { id } = await params\r\n\r\n  // fetch data",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "generateMetadata function",
+    "content": "ort async function generateMetadata(\r\n  { params, searchParams }: Props,\r\n  parent: ResolvingMetadata\r\n): Promise<Metadata> {\r\n  // read route params\r\n  const { id } = await params\r\n\r\n  // fetch data\r\n  const product = await fetch(`https://.../${id}`).then((res) => res.json())\r\n\r\n  // optionally access and extend (rather than replace) parent metadata\r\n  const previousImages = (await parent).openGraph?.images || []\r\n\r\n  return {\r\n    title: product.title,\r\n    openGraph: {\r\n      images: ['/some-specific-page-image.jpg', ...previousImages],\r\n    },\r\n  }\r\n}\r\n\r\nexport default function Page({ params, searchParams }: Props) {}\n\nexport async function generateMetadata({ params, searchParams }, parent) {\r\n  // read route params\r\n  const { id } = await params\r\n\r\n  // fetch data\r\n  const product = await fetch(`https://.../${id}`).then((res) => res.json())\r\n\r\n  // optionally access and extend (rather than replace) parent metadata\r\n  const previousImages = (await parent).openGraph?.images || []",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "generateMetadata function",
+    "content": "wait fetch(`https://.../${id}`).then((res) => res.json())\r\n\r\n  // optionally access and extend (rather than replace) parent metadata\r\n  const previousImages = (await parent).openGraph?.images || []\r\n\r\n  return {\r\n    title: product.title,\r\n    openGraph: {\r\n      images: ['/some-specific-page-image.jpg', ...previousImages],\r\n    },\r\n  }\r\n}\r\n\r\nexport default function Page({ params, searchParams }) {}\n\nFor type completion of params and searchParams, you can type the first argument with PageProps<'/route'> or LayoutProps<'/route'> for pages and layouts respectively.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "generateMetadata function",
+    "content": "age({ params, searchParams }) {}\n\nFor type completion of params and searchParams, you can type the first argument with PageProps<'/route'> or LayoutProps<'/route'> for pages and layouts respectively.\n\nGood to know:Metadata can be added to layout.js and page.js files.Next.js will automatically resolve the metadata, and create the relevant <head> tags for the page.The metadata object and generateMetadata function exports are only supported in Server Components.You cannot export both the metadata object and generateMetadata function from the same route segment.fetch requests inside generateMetadata are automatically memoized for the same data across generateMetadata, generateStaticParams, Layouts, Pages, and Server Components.React cache can be used if fetch is unavailable.File-based metadata has the higher priority and will override the metadata object and generateMetadata function.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Why generateMetadata is Server Component only",
+    "content": "generateMetadata and the metadata export are only supported in Server Components because metadata must be resolved on the server before the page component is rendered. This allows Next.js to include the metadata in the initial HTML response.\n\nIf you need to use Client Component features, keep your page.tsx as a Server Component and move the Client Component logic to a separate file:\n\nimport type { Metadata } from 'next'\r\nimport { InteractiveComponent } from './interactive-component'\r\n\r\nexport const metadata: Metadata = {\r\n  title: 'My Page',\r\n}\r\n\r\nexport default function Page() {\r\n  return <InteractiveComponent />\r\n}\n\nimport { InteractiveComponent } from './interactive-component'\r\n\r\nexport const metadata = {\r\n  title: 'My Page',\r\n}\r\n\r\nexport default function Page() {\r\n  return <InteractiveComponent />\r\n}\n\n'use client'\r\n\r\nexport function InteractiveComponent() {\r\n  // Client-side interactivity (hooks, event handlers, etc.)\r\n}\n\n'use client'\r\n\r\nexport function InteractiveComponent() {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Why generateMetadata is Server Component only",
+    "content": "iveComponent />\r\n}\n\n'use client'\r\n\r\nexport function InteractiveComponent() {\r\n  // Client-side interactivity (hooks, event handlers, etc.)\r\n}\n\n'use client'\r\n\r\nexport function InteractiveComponent() {\r\n  // Client-side interactivity (hooks, event handlers, etc.)\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Parameters",
+    "content": "generateMetadata function accepts the following parameters:\n\nprops - An object containing the parameters of the current route:params - An object containing the dynamic route parameters object from the root segment down to the segment generateMetadata is called from. Examples:| Route                           | URL         | params                  |\r\n| ------------------------------- | ----------- | ------------------------- |\r\n| app/shop/[slug]/page.js       | /shop/1   | { slug: '1' }           |\r\n| app/shop/[tag]/[item]/page.js | /shop/1/2 | { tag: '1', item: '2' } |\r\n| app/shop/[...slug]/page.js    | /shop/1/2 | { slug: ['1', '2'] }    |searchParams - An object containing the current URL's search params. Examples:| URL             | searchParams       |\r\n| --------------- | -------------------- |\r\n| /shop?a=1     | { a: '1' }         |\r\n| /shop?a=1&b=2 | { a: '1', b: '2' } |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Parameters",
+    "content": "rent URL's search params. Examples:| URL             | searchParams       |\r\n| --------------- | -------------------- |\r\n| /shop?a=1     | { a: '1' }         |\r\n| /shop?a=1&b=2 | { a: '1', b: '2' } |\r\n| /shop?a=1&a=2 | { a: ['1', '2'] }  |parent - A promise of the resolved metadata from parent route segments.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Returns",
+    "content": "generateMetadata should return a Metadata object containing one or more metadata fields.\n\nGood to know:If metadata doesn't depend on request information, it should be defined using the static metadata object rather than generateMetadata.fetch requests are automatically memoized for the same data across generateMetadata, generateStaticParams, Layouts, Pages, and Server Components. React cache can be used if fetch is unavailable.searchParams are only available in page.js segments.The redirect() and notFound() Next.js methods can also be used inside generateMetadata.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Metadata Fields",
+    "content": "The following fields are supported:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "title",
+    "content": "The title attribute is used to set the title of the document. It can be defined as a simple string or an optional template object.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "String",
+    "content": "export const metadata = {\r\n  title: 'Next.js',\r\n}\n\n<title>Next.js</title>",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "default",
+    "content": "title.default can be used to provide a fallback title to child route segments that don't define a title.\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: {\r\n    default: 'Acme',\r\n  },\r\n}\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {}\r\n\r\n// Output: <title>Acme</title>",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "template",
+    "content": "title.template can be used to add a prefix or a suffix to titles defined in child route segments.\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: {\r\n    template: '%s | Acme',\r\n    default: 'Acme', // a default is required when creating a template\r\n  },\r\n}\n\nexport const metadata = {\r\n  title: {\r\n    template: '%s | Acme',\r\n    default: 'Acme', // a default is required when creating a template\r\n  },\r\n}\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: 'About',\r\n}\r\n\r\n// Output: <title>About | Acme</title>\n\nexport const metadata = {\r\n  title: 'About',\r\n}\r\n\r\n// Output: <title>About | Acme</title>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "template",
+    "content": "next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: 'About',\r\n}\r\n\r\n// Output: <title>About | Acme</title>\n\nexport const metadata = {\r\n  title: 'About',\r\n}\r\n\r\n// Output: <title>About | Acme</title>\n\nGood to know:title.template applies to child route segments and not the segment it's defined in. This means:title.default is required when you add a title.template.title.template defined in layout.js will not apply to a title defined in a page.js of the same route segment.title.template defined in page.js has no effect because a page is always the terminating segment (it doesn't have any children route segments).title.template has no effect if a route has not defined a title or title.default.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "absolute",
+    "content": "title.absolute can be used to provide a title that ignores title.template set in parent segments.\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: {\r\n    template: '%s | Acme',\r\n  },\r\n}\n\nexport const metadata = {\r\n  title: {\r\n    template: '%s | Acme',\r\n  },\r\n}\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: {\r\n    absolute: 'About',\r\n  },\r\n}\r\n\r\n// Output: <title>About</title>\n\nexport const metadata = {\r\n  title: {\r\n    absolute: 'About',\r\n  },\r\n}\r\n\r\n// Output: <title>About</title>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "absolute",
+    "content": "Metadata = {\r\n  title: {\r\n    absolute: 'About',\r\n  },\r\n}\r\n\r\n// Output: <title>About</title>\n\nexport const metadata = {\r\n  title: {\r\n    absolute: 'About',\r\n  },\r\n}\r\n\r\n// Output: <title>About</title>\n\nGood to know:layout.jstitle (string) and title.default define the default title for child segments (that do not define their own title). It will augment title.template from the closest parent segment if it exists.title.absolute defines the default title for child segments. It ignores title.template from parent segments.title.template defines a new title template for child segments.page.jsIf a page does not define its own title the closest parents resolved title will be used.title (string) defines the routes title. It will augment title.template from the closest parent segment if it exists.title.absolute defines the route title. It ignores title.template from parent segments.title.template has no effect in page.js because a page is always the terminating segment of a route.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "description",
+    "content": "export const metadata = {\r\n  description: 'The React Framework for the Web',\r\n}\n\n<meta name=\"description\" content=\"The React Framework for the Web\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Other fields",
+    "content": "export const metadata = {\r\n  generator: 'Next.js',\r\n  applicationName: 'Next.js',\r\n  referrer: 'origin-when-cross-origin',\r\n  keywords: ['Next.js', 'React', 'JavaScript'],\r\n  authors: [{ name: 'Seb' }, { name: 'Josh', url: 'https://nextjs.org' }],\r\n  creator: 'Jiachi Liu',\r\n  publisher: 'Sebastian Markbåge',\r\n  formatDetection: {\r\n    email: false,\r\n    address: false,\r\n    telephone: false,\r\n  },\r\n}\n\n<meta name=\"application-name\" content=\"Next.js\" />\r\n<meta name=\"author\" content=\"Seb\" />\r\n<link rel=\"author\" href=\"https://nextjs.org\" />\r\n<meta name=\"author\" content=\"Josh\" />\r\n<meta name=\"generator\" content=\"Next.js\" />\r\n<meta name=\"keywords\" content=\"Next.js,React,JavaScript\" />\r\n<meta name=\"referrer\" content=\"origin-when-cross-origin\" />\r\n<meta name=\"color-scheme\" content=\"dark\" />\r\n<meta name=\"creator\" content=\"Jiachi Liu\" />\r\n<meta name=\"publisher\" content=\"Sebastian Markbåge\" />\r\n<meta name=\"format-detection\" content=\"telephone=no, address=no, email=no\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "metadataBase",
+    "content": "metadataBase is a convenience option to set a base URL prefix for metadata fields that require a fully qualified URL.\n\nmetadataBase allows URL-based metadata fields defined in the current route segment and below to use a relative path instead of an otherwise required absolute URL.The field's relative path will be composed with metadataBase to form a fully qualified URL.\n\nexport const metadata = {\r\n  metadataBase: new URL('https://acme.com'),\r\n  alternates: {\r\n    canonical: '/',\r\n    languages: {\r\n      'en-US': '/en-US',\r\n      'de-DE': '/de-DE',\r\n    },\r\n  },\r\n  openGraph: {\r\n    images: '/og-image.png',\r\n  },\r\n}\n\n<link rel=\"canonical\" href=\"https://acme.com\" />\r\n<link rel=\"alternate\" hreflang=\"en-US\" href=\"https://acme.com/en-US\" />\r\n<link rel=\"alternate\" hreflang=\"de-DE\" href=\"https://acme.com/de-DE\" />\r\n<meta property=\"og:image\" content=\"https://acme.com/og-image.png\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "metadataBase",
+    "content": "rnate\" hreflang=\"en-US\" href=\"https://acme.com/en-US\" />\r\n<link rel=\"alternate\" hreflang=\"de-DE\" href=\"https://acme.com/de-DE\" />\r\n<meta property=\"og:image\" content=\"https://acme.com/og-image.png\" />\n\nGood to know:metadataBase is typically set in root app/layout.js to apply to URL-based metadata fields across all routes.All URL-based metadata fields that require absolute URLs can be configured with a metadataBase option.metadataBase can contain a subdomain e.g. https://app.acme.com or base path e.g. https://acme.com/start/from/hereIf a metadata field provides an absolute URL, metadataBase will be ignored.Using a relative path in a URL-based metadata field without configuring a metadataBase will cause a build error.Next.js will normalize duplicate slashes between metadataBase (e.g. https://acme.com/) and a relative field (e.g. /path) to a single slash (e.g. https://acme.com/path)",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "URL Composition",
+    "content": "URL composition favors developer intent over default directory traversal semantics.\n\nTrailing slashes between metadataBase and metadata fields are normalized.An \"absolute\" path in a metadata field (that typically would replace the whole URL path) is treated as a \"relative\" path (starting from the end of metadataBase).\n\nFor example, given the following metadataBase:\n\nimport type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  metadataBase: new URL('https://acme.com'),\r\n}\n\nexport const metadata = {\r\n  metadataBase: new URL('https://acme.com'),\r\n}\n\nAny metadata fields that inherit the above metadataBase and set their own value will be resolved as follows:\n\n| metadata field                 | Resolved URL                     |\r\n| -------------------------------- | -------------------------------- |\r\n| /                              | https://acme.com               |\r\n| ./                             | https://acme.com               |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "URL Composition",
+    "content": "------------------------ | -------------------------------- |\r\n| /                              | https://acme.com               |\r\n| ./                             | https://acme.com               |\r\n| payments                       | https://acme.com/payments      |\r\n| /payments                      | https://acme.com/payments      |\r\n| ./payments                     | https://acme.com/payments      |\r\n| ../payments                    | https://acme.com/payments      |\r\n| https://beta.acme.com/payments | https://beta.acme.com/payments |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "openGraph",
+    "content": "export const metadata = {\r\n  openGraph: {\r\n    title: 'Next.js',\r\n    description: 'The React Framework for the Web',\r\n    url: 'https://nextjs.org',\r\n    siteName: 'Next.js',\r\n    images: [\r\n      {\r\n        url: 'https://nextjs.org/og.png', // Must be an absolute URL\r\n        width: 800,\r\n        height: 600,\r\n      },\r\n      {\r\n        url: 'https://nextjs.org/og-alt.png', // Must be an absolute URL\r\n        width: 1800,\r\n        height: 1600,\r\n        alt: 'My custom alt',\r\n      },\r\n    ],\r\n    videos: [\r\n      {\r\n        url: 'https://nextjs.org/video.mp4', // Must be an absolute URL\r\n        width: 800,\r\n        height: 600,\r\n      },\r\n    ],\r\n    audio: [\r\n      {\r\n        url: 'https://nextjs.org/audio.mp3', // Must be an absolute URL\r\n      },\r\n    ],\r\n    locale: 'en_US',\r\n    type: 'website',\r\n  },\r\n}\n\n<meta property=\"og:title\" content=\"Next.js\" />\r\n<meta property=\"og:description\" content=\"The React Framework for the Web\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "openGraph",
+    "content": "RL\r\n      },\r\n    ],\r\n    locale: 'en_US',\r\n    type: 'website',\r\n  },\r\n}\n\n<meta property=\"og:title\" content=\"Next.js\" />\r\n<meta property=\"og:description\" content=\"The React Framework for the Web\" />\r\n<meta property=\"og:url\" content=\"https://nextjs.org/\" />\r\n<meta property=\"og:site_name\" content=\"Next.js\" />\r\n<meta property=\"og:locale\" content=\"en_US\" />\r\n<meta property=\"og:image\" content=\"https://nextjs.org/og.png\" />\r\n<meta property=\"og:image:width\" content=\"800\" />\r\n<meta property=\"og:image:height\" content=\"600\" />\r\n<meta property=\"og:image\" content=\"https://nextjs.org/og-alt.png\" />\r\n<meta property=\"og:image:width\" content=\"1800\" />\r\n<meta property=\"og:image:height\" content=\"1600\" />\r\n<meta property=\"og:image:alt\" content=\"My custom alt\" />\r\n<meta property=\"og:video\" content=\"https://nextjs.org/video.mp4\" />\r\n<meta property=\"og:video:width\" content=\"800\" />\r\n<meta property=\"og:video:height\" content=\"600\" />\r\n<meta property=\"og:audio\" content=\"https://nextjs.org/audio.mp3\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "openGraph",
+    "content": "ps://nextjs.org/video.mp4\" />\r\n<meta property=\"og:video:width\" content=\"800\" />\r\n<meta property=\"og:video:height\" content=\"600\" />\r\n<meta property=\"og:audio\" content=\"https://nextjs.org/audio.mp3\" />\r\n<meta property=\"og:type\" content=\"website\" />\n\nexport const metadata = {\r\n  openGraph: {\r\n    title: 'Next.js',\r\n    description: 'The React Framework for the Web',\r\n    type: 'article',\r\n    publishedTime: '2023-01-01T00:00:00.000Z',\r\n    authors: ['Seb', 'Josh'],\r\n  },\r\n}\n\n<meta property=\"og:title\" content=\"Next.js\" />\r\n<meta property=\"og:description\" content=\"The React Framework for the Web\" />\r\n<meta property=\"og:type\" content=\"article\" />\r\n<meta property=\"article:published_time\" content=\"2023-01-01T00:00:00.000Z\" />\r\n<meta property=\"article:author\" content=\"Seb\" />\r\n<meta property=\"article:author\" content=\"Josh\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "openGraph",
+    "content": "ontent=\"article\" />\r\n<meta property=\"article:published_time\" content=\"2023-01-01T00:00:00.000Z\" />\r\n<meta property=\"article:author\" content=\"Seb\" />\r\n<meta property=\"article:author\" content=\"Josh\" />\n\nGood to know:It may be more convenient to use the file-based Metadata API for Open Graph images. Rather than having to sync the config export with actual files, the file-based API will automatically generate the correct metadata for you.",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "robots",
+    "content": "import type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  robots: {\r\n    index: true,\r\n    follow: true,\r\n    nocache: false,\r\n    googleBot: {\r\n      index: true,\r\n      follow: true,\r\n      noimageindex: false,\r\n      'max-video-preview': -1,\r\n      'max-image-preview': 'large',\r\n      'max-snippet': -1,\r\n    },\r\n  },\r\n}\n\n<meta name=\"robots\" content=\"index, follow\" />\r\n<meta\r\n  name=\"googlebot\"\r\n  content=\"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1\"\r\n/>",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "icons",
+    "content": "Good to know: We recommend using the file-based Metadata API for icons where possible. Rather than having to sync the config export with actual files, the file-based API will automatically generate the correct metadata for you.\n\nexport const metadata = {\r\n  icons: {\r\n    icon: '/icon.png',\r\n    shortcut: '/shortcut-icon.png',\r\n    apple: '/apple-icon.png',\r\n    other: {\r\n      rel: 'apple-touch-icon-precomposed',\r\n      url: '/apple-touch-icon-precomposed.png',\r\n    },\r\n  },\r\n}\n\n<link rel=\"shortcut icon\" href=\"/shortcut-icon.png\" />\r\n<link rel=\"icon\" href=\"/icon.png\" />\r\n<link rel=\"apple-touch-icon\" href=\"/apple-icon.png\" />\r\n<link\r\n  rel=\"apple-touch-icon-precomposed\"\r\n  href=\"/apple-touch-icon-precomposed.png\"\r\n/>\n\nexport const metadata = {\r\n  icons: {\r\n    icon: [\r\n      { url: '/icon.png' },\r\n      new URL('/icon.png', 'https://example.com'),\r\n      { url: '/icon-dark.png', media: '(prefers-color-scheme: dark)' },\r\n    ],\r\n    shortcut: ['/shortcut-icon.png'],\r\n    apple: [",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "icons",
+    "content": "/icon.png' },\r\n      new URL('/icon.png', 'https://example.com'),\r\n      { url: '/icon-dark.png', media: '(prefers-color-scheme: dark)' },\r\n    ],\r\n    shortcut: ['/shortcut-icon.png'],\r\n    apple: [\r\n      { url: '/apple-icon.png' },\r\n      { url: '/apple-icon-x3.png', sizes: '180x180', type: 'image/png' },\r\n    ],\r\n    other: [\r\n      {\r\n        rel: 'apple-touch-icon-precomposed',\r\n        url: '/apple-touch-icon-precomposed.png',\r\n      },\r\n    ],\r\n  },\r\n}\n\n<link rel=\"shortcut icon\" href=\"/shortcut-icon.png\" />\r\n<link rel=\"icon\" href=\"/icon.png\" />\r\n<link rel=\"icon\" href=\"https://example.com/icon.png\" />\r\n<link rel=\"icon\" href=\"/icon-dark.png\" media=\"(prefers-color-scheme: dark)\" />\r\n<link rel=\"apple-touch-icon\" href=\"/apple-icon.png\" />\r\n<link\r\n  rel=\"apple-touch-icon-precomposed\"\r\n  href=\"/apple-touch-icon-precomposed.png\"\r\n/>\r\n<link\r\n  rel=\"apple-touch-icon\"\r\n  href=\"/apple-icon-x3.png\"\r\n  sizes=\"180x180\"\r\n  type=\"image/png\"\r\n/>",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "icons",
+    "content": ">\r\n<link\r\n  rel=\"apple-touch-icon-precomposed\"\r\n  href=\"/apple-touch-icon-precomposed.png\"\r\n/>\r\n<link\r\n  rel=\"apple-touch-icon\"\r\n  href=\"/apple-icon-x3.png\"\r\n  sizes=\"180x180\"\r\n  type=\"image/png\"\r\n/>\n\nGood to know: The msapplication-* meta tags are no longer supported in Chromium builds of Microsoft Edge, and thus no longer needed.",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "themeColor",
+    "content": "Deprecated: The themeColor option in metadata is deprecated as of Next.js 14. Please use the viewport configuration instead.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "colorScheme",
+    "content": "Deprecated: The colorScheme option in metadata is deprecated as of Next.js 14. Please use the viewport configuration instead.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "manifest",
+    "content": "A web application manifest, as defined in the Web Application Manifest specification.\n\nexport const metadata = {\r\n  manifest: 'https://nextjs.org/manifest.json',\r\n}\n\n<link rel=\"manifest\" href=\"https://nextjs.org/manifest.json\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "twitter",
+    "content": "The Twitter specification is (surprisingly) used for more than just X (formerly known as Twitter).\n\nLearn more about the Twitter Card markup reference.\n\nexport const metadata = {\r\n  twitter: {\r\n    card: 'summary_large_image',\r\n    title: 'Next.js',\r\n    description: 'The React Framework for the Web',\r\n    siteId: '1467726470533754880',\r\n    creator: '@nextjs',\r\n    creatorId: '1467726470533754880',\r\n    images: ['https://nextjs.org/og.png'], // Must be an absolute URL\r\n  },\r\n}\n\n<meta name=\"twitter:card\" content=\"summary_large_image\" />\r\n<meta name=\"twitter:site:id\" content=\"1467726470533754880\" />\r\n<meta name=\"twitter:creator\" content=\"@nextjs\" />\r\n<meta name=\"twitter:creator:id\" content=\"1467726470533754880\" />\r\n<meta name=\"twitter:title\" content=\"Next.js\" />\r\n<meta name=\"twitter:description\" content=\"The React Framework for the Web\" />\r\n<meta name=\"twitter:image\" content=\"https://nextjs.org/og.png\" />\n\nexport const metadata = {\r\n  twitter: {\r\n    card: 'app',\r\n    title: 'Next.js',",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "twitter",
+    "content": "tion\" content=\"The React Framework for the Web\" />\r\n<meta name=\"twitter:image\" content=\"https://nextjs.org/og.png\" />\n\nexport const metadata = {\r\n  twitter: {\r\n    card: 'app',\r\n    title: 'Next.js',\r\n    description: 'The React Framework for the Web',\r\n    siteId: '1467726470533754880',\r\n    creator: '@nextjs',\r\n    creatorId: '1467726470533754880',\r\n    images: {\r\n      url: 'https://nextjs.org/og.png',\r\n      alt: 'Next.js Logo',\r\n    },\r\n    app: {\r\n      name: 'twitter_app',\r\n      id: {\r\n        iphone: 'twitter_app://iphone',\r\n        ipad: 'twitter_app://ipad',\r\n        googleplay: 'twitter_app://googleplay',\r\n      },\r\n      url: {\r\n        iphone: 'https://iphone_url',\r\n        ipad: 'https://ipad_url',\r\n      },\r\n    },\r\n  },\r\n}\n\n<meta name=\"twitter:site:id\" content=\"1467726470533754880\" />\r\n<meta name=\"twitter:creator\" content=\"@nextjs\" />\r\n<meta name=\"twitter:creator:id\" content=\"1467726470533754880\" />\r\n<meta name=\"twitter:title\" content=\"Next.js\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "twitter",
+    "content": "content=\"1467726470533754880\" />\r\n<meta name=\"twitter:creator\" content=\"@nextjs\" />\r\n<meta name=\"twitter:creator:id\" content=\"1467726470533754880\" />\r\n<meta name=\"twitter:title\" content=\"Next.js\" />\r\n<meta name=\"twitter:description\" content=\"The React Framework for the Web\" />\r\n<meta name=\"twitter:card\" content=\"app\" />\r\n<meta name=\"twitter:image\" content=\"https://nextjs.org/og.png\" />\r\n<meta name=\"twitter:image:alt\" content=\"Next.js Logo\" />\r\n<meta name=\"twitter:app:name:iphone\" content=\"twitter_app\" />\r\n<meta name=\"twitter:app:id:iphone\" content=\"twitter_app://iphone\" />\r\n<meta name=\"twitter:app:id:ipad\" content=\"twitter_app://ipad\" />\r\n<meta name=\"twitter:app:id:googleplay\" content=\"twitter_app://googleplay\" />\r\n<meta name=\"twitter:app:url:iphone\" content=\"https://iphone_url\" />\r\n<meta name=\"twitter:app:url:ipad\" content=\"https://ipad_url\" />\r\n<meta name=\"twitter:app:name:ipad\" content=\"twitter_app\" />\r\n<meta name=\"twitter:app:name:googleplay\" content=\"twitter_app\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "viewport",
+    "content": "Deprecated: The viewport option in metadata is deprecated as of Next.js 14. Please use the viewport configuration instead.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "verification",
+    "content": "export const metadata = {\r\n  verification: {\r\n    google: 'google',\r\n    yandex: 'yandex',\r\n    yahoo: 'yahoo',\r\n    other: {\r\n      me: ['my-email', 'my-link'],\r\n    },\r\n  },\r\n}\n\n<meta name=\"google-site-verification\" content=\"google\" />\r\n<meta name=\"y_key\" content=\"yahoo\" />\r\n<meta name=\"yandex-verification\" content=\"yandex\" />\r\n<meta name=\"me\" content=\"my-email\" />\r\n<meta name=\"me\" content=\"my-link\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "appleWebApp",
+    "content": "export const metadata = {\r\n  itunes: {\r\n    appId: 'myAppStoreID',\r\n    appArgument: 'myAppArgument',\r\n  },\r\n  appleWebApp: {\r\n    title: 'Apple Web App',\r\n    statusBarStyle: 'black-translucent',\r\n    startupImage: [\r\n      '/assets/startup/apple-touch-startup-image-768x1004.png',\r\n      {\r\n        url: '/assets/startup/apple-touch-startup-image-1536x2008.png',\r\n        media: '(device-width: 768px) and (device-height: 1024px)',\r\n      },\r\n    ],\r\n  },\r\n}\n\n<meta\r\n  name=\"apple-itunes-app\"\r\n  content=\"app-id=myAppStoreID, app-argument=myAppArgument\"\r\n/>\r\n<meta name=\"mobile-web-app-capable\" content=\"yes\" />\r\n<meta name=\"apple-mobile-web-app-title\" content=\"Apple Web App\" />\r\n<link\r\n  href=\"/assets/startup/apple-touch-startup-image-768x1004.png\"\r\n  rel=\"apple-touch-startup-image\"\r\n/>\r\n<link\r\n  href=\"/assets/startup/apple-touch-startup-image-1536x2008.png\"\r\n  media=\"(device-width: 768px) and (device-height: 1024px)\"\r\n  rel=\"apple-touch-startup-image\"\r\n/>\r\n<meta",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "appleWebApp",
+    "content": "-startup-image\"\r\n/>\r\n<link\r\n  href=\"/assets/startup/apple-touch-startup-image-1536x2008.png\"\r\n  media=\"(device-width: 768px) and (device-height: 1024px)\"\r\n  rel=\"apple-touch-startup-image\"\r\n/>\r\n<meta\r\n  name=\"apple-mobile-web-app-status-bar-style\"\r\n  content=\"black-translucent\"\r\n/>",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "alternates",
+    "content": "export const metadata = {\r\n  alternates: {\r\n    canonical: 'https://nextjs.org',\r\n    languages: {\r\n      'en-US': 'https://nextjs.org/en-US',\r\n      'de-DE': 'https://nextjs.org/de-DE',\r\n    },\r\n    media: {\r\n      'only screen and (max-width: 600px)': 'https://nextjs.org/mobile',\r\n    },\r\n    types: {\r\n      'application/rss+xml': 'https://nextjs.org/rss',\r\n    },\r\n  },\r\n}\n\n<link rel=\"canonical\" href=\"https://nextjs.org\" />\r\n<link rel=\"alternate\" hreflang=\"en-US\" href=\"https://nextjs.org/en-US\" />\r\n<link rel=\"alternate\" hreflang=\"de-DE\" href=\"https://nextjs.org/de-DE\" />\r\n<link\r\n  rel=\"alternate\"\r\n  media=\"only screen and (max-width: 600px)\"\r\n  href=\"https://nextjs.org/mobile\"\r\n/>\r\n<link\r\n  rel=\"alternate\"\r\n  type=\"application/rss+xml\"\r\n  href=\"https://nextjs.org/rss\"\r\n/>",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "appLinks",
+    "content": "export const metadata = {\r\n  appLinks: {\r\n    ios: {\r\n      url: 'https://nextjs.org/ios',\r\n      app_store_id: 'app_store_id',\r\n    },\r\n    android: {\r\n      package: 'com.example.android/package',\r\n      app_name: 'app_name_android',\r\n    },\r\n    web: {\r\n      url: 'https://nextjs.org/web',\r\n      should_fallback: true,\r\n    },\r\n  },\r\n}\n\n<meta property=\"al:ios:url\" content=\"https://nextjs.org/ios\" />\r\n<meta property=\"al:ios:app_store_id\" content=\"app_store_id\" />\r\n<meta property=\"al:android:package\" content=\"com.example.android/package\" />\r\n<meta property=\"al:android:app_name\" content=\"app_name_android\" />\r\n<meta property=\"al:web:url\" content=\"https://nextjs.org/web\" />\r\n<meta property=\"al:web:should_fallback\" content=\"true\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "archives",
+    "content": "Describes a collection of records, documents, or other materials of historical interest (source).\n\nexport const metadata = {\r\n  archives: ['https://nextjs.org/13'],\r\n}\n\n<link rel=\"archives\" href=\"https://nextjs.org/13\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "assets",
+    "content": "export const metadata = {\r\n  assets: ['https://nextjs.org/assets'],\r\n}\n\n<link rel=\"assets\" href=\"https://nextjs.org/assets\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "bookmarks",
+    "content": "export const metadata = {\r\n  bookmarks: ['https://nextjs.org/13'],\r\n}\n\n<link rel=\"bookmarks\" href=\"https://nextjs.org/13\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "category",
+    "content": "export const metadata = {\r\n  category: 'technology',\r\n}\n\n<meta name=\"category\" content=\"technology\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "facebook",
+    "content": "You can connect a Facebook app or Facebook account to your webpage for certain Facebook Social Plugins Facebook Documentation\n\nGood to know: You can specify either appId or admins, but not both.\n\nexport const metadata = {\r\n  facebook: {\r\n    appId: '12345678',\r\n  },\r\n}\n\n<meta property=\"fb:app_id\" content=\"12345678\" />\n\nexport const metadata = {\r\n  facebook: {\r\n    admins: '12345678',\r\n  },\r\n}\n\n<meta property=\"fb:admins\" content=\"12345678\" />\n\nIf you want to generate multiple fb:admins meta tags you can use array value.\n\nexport const metadata = {\r\n  facebook: {\r\n    admins: ['12345678', '87654321'],\r\n  },\r\n}\n\n<meta property=\"fb:admins\" content=\"12345678\" />\r\n<meta property=\"fb:admins\" content=\"87654321\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "pinterest",
+    "content": "You can enable or disable Pinterest Rich Pins on your webpage.\n\nexport const metadata = {\r\n  pinterest: {\r\n    richPin: true,\r\n  },\r\n}\n\n<meta name=\"pinterest-rich-pin\" content=\"true\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "other",
+    "content": "All metadata options should be covered using the built-in support. However, there may be custom metadata tags specific to your site, or brand new metadata tags just released. You can use the other option to render any custom metadata tag.\n\nexport const metadata = {\r\n  other: {\r\n    custom: 'meta',\r\n  },\r\n}\n\n<meta name=\"custom\" content=\"meta\" />\n\nIf you want to generate multiple same key meta tags you can use array value.\n\nexport const metadata = {\r\n  other: {\r\n    custom: ['meta1', 'meta2'],\r\n  },\r\n}\n\n<meta name=\"custom\" content=\"meta1\" /> <meta name=\"custom\" content=\"meta2\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Types",
+    "content": "You can add type safety to your metadata by using the Metadata type. If you are using the built-in TypeScript plugin in your IDE, you do not need to manually add the type, but you can still explicitly add it if you want.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "metadata object",
+    "content": "import type { Metadata } from 'next'\r\n\r\nexport const metadata: Metadata = {\r\n  title: 'Next.js',\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Regular function",
+    "content": "import type { Metadata } from 'next'\r\n\r\nexport function generateMetadata(): Metadata {\r\n  return {\r\n    title: 'Next.js',\r\n  }\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Async function",
+    "content": "import type { Metadata } from 'next'\r\n\r\nexport async function generateMetadata(): Promise<Metadata> {\r\n  return {\r\n    title: 'Next.js',\r\n  }\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "With segment props",
+    "content": "import type { Metadata } from 'next'\r\n\r\ntype Props = {\r\n  params: Promise<{ id: string }>\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}\r\n\r\nexport function generateMetadata({ params, searchParams }: Props): Metadata {\r\n  return {\r\n    title: 'Next.js',\r\n  }\r\n}\r\n\r\nexport default function Page({ params, searchParams }: Props) {}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "With parent metadata",
+    "content": "import type { Metadata, ResolvingMetadata } from 'next'\r\n\r\nexport async function generateMetadata(\r\n  { params, searchParams }: Props,\r\n  parent: ResolvingMetadata\r\n): Promise<Metadata> {\r\n  return {\r\n    title: 'Next.js',\r\n  }\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "JavaScript Projects",
+    "content": "For JavaScript projects, you can use JSDoc to add type safety.\n\n/** @type {import(\"next\").Metadata} */\r\nexport const metadata = {\r\n  title: 'Next.js',\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Unsupported Metadata",
+    "content": "The following metadata types do not currently have built-in support. However, they can still be rendered in the layout or page itself.\n\n| Metadata                      | Recommendation                                                                                                                                                                                                                               |\r\n| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| <meta http-equiv=\"...\">     | Use appropriate HTTP Headers via redirect(), Proxy, Security Headers |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Unsupported Metadata",
+    "content": "--------------------------------------------------------------------------------------------- |\r\n| <meta http-equiv=\"...\">     | Use appropriate HTTP Headers via redirect(), Proxy, Security Headers |\r\n| <base>                      | Render the tag in the layout or page itself.                                                                                                                                                                                                 |\r\n| <noscript>                  | Render the tag in the layout or page itself.                                                                                                                                                                                                 |\r\n| <style>                     | Learn more about styling in Next.js.                                                                                                                                                                        |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Unsupported Metadata",
+    "content": "more about styling in Next.js.                                                                                                                                                                        |\r\n| <script>                    | Learn more about using scripts.                                                                                                                                                                                  |\r\n| <link rel=\"stylesheet\" />   | import stylesheets directly in the layout or page itself.                                                                                                                                                                                  |\r\n| <link rel=\"preload />       | Use ReactDOM preload method                                                                                                                                                                                              |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Unsupported Metadata",
+    "content": "d method                                                                                                                                                                                              |\r\n| <link rel=\"preconnect\" />   | Use ReactDOM preconnect method                                                                                                                                                                                        |\r\n| <link rel=\"dns-prefetch\" /> | Use ReactDOM prefetchDNS method                                                                                                                                                                                     |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Resource hints",
+    "content": "The <link> element has a number of rel keywords that can be used to hint to the browser that an external resource is likely to be needed. The browser uses this information to apply preloading optimizations depending on the keyword.\n\nWhile the Metadata API doesn't directly support these hints, you can use new ReactDOM methods to safely insert them into the <head> of the document.\n\n'use client'\r\n\r\nimport ReactDOM from 'react-dom'\r\n\r\nexport function PreloadResources() {\r\n  ReactDOM.preload('...', { as: '...' })\r\n  ReactDOM.preconnect('...', { crossOrigin: '...' })\r\n  ReactDOM.prefetchDNS('...')\r\n\r\n  return '...'\r\n}\n\n'use client'\r\n\r\nimport ReactDOM from 'react-dom'\r\n\r\nexport function PreloadResources() {\r\n  ReactDOM.preload('...', { as: '...' })\r\n  ReactDOM.preconnect('...', { crossOrigin: '...' })\r\n  ReactDOM.prefetchDNS('...')\r\n\r\n  return '...'\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "<link rel=\"preload\">",
+    "content": "Start loading a resource early in the page rendering (browser) lifecycle. MDN Docs.\n\nReactDOM.preload(href: string, options: { as: string })\n\n<link rel=\"preload\" href=\"...\" as=\"...\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "<link rel=\"preconnect\">",
+    "content": "Preemptively initiate a connection to an origin. MDN Docs.\n\nReactDOM.preconnect(href: string, options?: { crossOrigin?: string })\n\n<link rel=\"preconnect\" href=\"...\" crossorigin />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "<link rel=\"dns-prefetch\">",
+    "content": "Attempt to resolve a domain name before resources get requested. MDN Docs.\n\nReactDOM.prefetchDNS(href: string)\n\n<link rel=\"dns-prefetch\" href=\"...\" />\n\nGood to know:These methods are currently only supported in Client Components, which are still Server Side Rendered on initial page load.Next.js in-built features such as next/font, next/image and next/script automatically handle relevant resource hints.",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Default Fields",
+    "content": "There are two default meta tags that are always added even if a route doesn't define metadata:\n\nThe meta charset tag sets the character encoding for the website.The meta viewport tag sets the viewport width and scale for the website to adjust for different devices.\n\n<meta charset=\"utf-8\" />\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n\nGood to know: You can overwrite the default viewport meta tag.",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Streaming metadata",
+    "content": "Streaming metadata allows Next.js to render and send the initial UI to the browser, without waiting for generateMetadata to complete.\n\nWhen generateMetadata resolves, the resulting metadata tags are appended to the <body> tag. We have verified that metadata is interpreted correctly by bots that execute JavaScript and inspect the full DOM (e.g. Googlebot).\n\nFor HTML-limited bots that can’t execute JavaScript (e.g. facebookexternalhit), metadata continues to block page rendering. The resulting metadata will be available in the <head> tag.\n\nNext.js automatically detects HTML-limited bots by looking at the User Agent header. You can use the htmlLimitedBots option in your Next.js config file to override the default User Agent list.\n\nTo fully disable streaming metadata:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst config: NextConfig = {\r\n  htmlLimitedBots: /.*/,\r\n}\r\n\r\nexport default config\n\nmodule.exports = {\r\n  htmlLimitedBots: /.*/,\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Streaming metadata",
+    "content": "able streaming metadata:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst config: NextConfig = {\r\n  htmlLimitedBots: /.*/,\r\n}\r\n\r\nexport default config\n\nmodule.exports = {\r\n  htmlLimitedBots: /.*/,\r\n}\n\nStreaming metadata improves perceived performance by reducing TTFB and can help lowering LCP time.\n\nOverriding htmlLimitedBots could lead to longer response times. Streaming metadata is an advanced feature, and the default should be sufficient for most cases.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "With Cache Components",
+    "content": "When Cache Components is enabled, generateMetadata follows the same rules as other components. If metadata accesses runtime data (cookies(), headers(), params, searchParams) or performs uncached data fetching, it defers to request time.\n\nHow Next.js handles this depends on the rest of your page:\n\nIf other parts also defer to request time: Prerendering generates a static shell, and metadata streams in with other deferred content.If the page or layout is otherwise fully prerenderable: Next.js requires an explicit choice: cache the data if possible, or signal that deferred rendering is intentional.\n\nStreaming metadata at runtime while the rest of the page is fully prerenderable is not common. To ensure this behavior is intentional, an error is raised indicating which page or layout needs to be handled.\n\nTo resolve this, you have two options. If metadata depends on external data but not runtime data, use use cache:\n\nexport async function generateMetadata() {\r\n  'use cache'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "With Cache Components",
+    "content": "ayout needs to be handled.\n\nTo resolve this, you have two options. If metadata depends on external data but not runtime data, use use cache:\n\nexport async function generateMetadata() {\r\n  'use cache'\r\n  const { title, description } = await db.query('site-metadata')\r\n  return { title, description }\r\n}\n\nIf metadata genuinely requires runtime data, add a dynamic marker component to your page:\n\nimport { Suspense } from 'react'\r\nimport { cookies } from 'next/headers'\r\nimport { connection } from 'next/server'\r\n\r\nexport async function generateMetadata() {\r\n  const token = (await cookies()).get('token')?.value\r\n  // ... use token to fetch personalized metadata\r\n  return { title: 'Personalized Title' }\r\n}\r\n\r\nconst Connection = async () => {\r\n  await connection()\r\n  return null\r\n}\r\n\r\nasync function DynamicMarker() {\r\n  return (\r\n    <Suspense>\r\n      <Connection />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nexport default function Page() {\r\n  // DO NOT place await connection() here",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "With Cache Components",
+    "content": "n null\r\n}\r\n\r\nasync function DynamicMarker() {\r\n  return (\r\n    <Suspense>\r\n      <Connection />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nexport default function Page() {\r\n  // DO NOT place await connection() here\r\n  // doing so prevents the article tag content from\r\n  // being included in the static shell\r\n  return (\r\n    <>\r\n      <article>Static content</article>\r\n      <DynamicMarker />\r\n    </>\r\n  )\r\n}\n\nThe DynamicMarker component renders nothing but tells Next.js the page has intentional dynamic content. By wrapping it in Suspense, the static content still prerenders normally.\n\nSee Next.js encountered runtime data in generateMetadata() and Next.js encountered uncached data in generateMetadata() for full fix options and trade-offs.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Ordering",
+    "content": "Metadata is evaluated in order, starting from the root segment down to the segment closest to the final page.js segment. For example:\n\napp/layout.tsx (Root Layout)app/blog/layout.tsx (Nested Blog Layout)app/blog/[slug]/page.tsx (Blog Page)",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Merging",
+    "content": "Following the evaluation order, Metadata objects exported from multiple segments in the same route are shallowly merged together to form the final metadata output of a route. Duplicate keys are replaced based on their ordering.\n\nThis means metadata with nested fields such as openGraph and robots that are defined in an earlier segment are overwritten by the last segment to define them.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Overwriting fields",
+    "content": "export const metadata = {\r\n  title: 'Acme',\r\n  openGraph: {\r\n    title: 'Acme',\r\n    description: 'Acme is a...',\r\n  },\r\n}\n\nexport const metadata = {\r\n  title: 'Blog',\r\n  openGraph: {\r\n    title: 'Blog',\r\n  },\r\n}\r\n\r\n// Output:\r\n// <title>Blog</title>\r\n// <meta property=\"og:title\" content=\"Blog\" />\n\nIn the example above:\n\ntitle from app/layout.js is replaced by title in app/blog/page.js.All openGraph fields from app/layout.js are replaced in app/blog/page.js because app/blog/page.js sets openGraph metadata. Note the absence of openGraph.description.\n\nIf you'd like to share some nested fields between segments while overwriting others, you can pull them out into a separate variable:\n\nexport const openGraphImage = { images: ['http://...'] }\n\nimport { openGraphImage } from './shared-metadata'\r\n\r\nexport const metadata = {\r\n  openGraph: {\r\n    ...openGraphImage,\r\n    title: 'Home',\r\n  },\r\n}\n\nimport { openGraphImage } from '../shared-metadata'\r\n\r\nexport const metadata = {\r\n  openGraph: {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Overwriting fields",
+    "content": "ta'\r\n\r\nexport const metadata = {\r\n  openGraph: {\r\n    ...openGraphImage,\r\n    title: 'Home',\r\n  },\r\n}\n\nimport { openGraphImage } from '../shared-metadata'\r\n\r\nexport const metadata = {\r\n  openGraph: {\r\n    ...openGraphImage,\r\n    title: 'About',\r\n  },\r\n}\n\nIn the example above, the OG image is shared between app/layout.js and app/about/page.js while the titles are different.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Inheriting fields",
+    "content": "export const metadata = {\r\n  title: 'Acme',\r\n  openGraph: {\r\n    title: 'Acme',\r\n    description: 'Acme is a...',\r\n  },\r\n}\n\nexport const metadata = {\r\n  title: 'About',\r\n}\r\n\r\n// Output:\r\n// <title>About</title>\r\n// <meta property=\"og:title\" content=\"Acme\" />\r\n// <meta property=\"og:description\" content=\"Acme is a...\" />\n\nNotes\n\ntitle from app/layout.js is replaced by title in app/about/page.js.All openGraph fields from app/layout.js are inherited in app/about/page.js because app/about/page.js doesn't set openGraph metadata.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateMetadata",
+    "documentDescription": "Learn how to add Metadata to your Next.js application for improved search engine optimization (SEO) and web shareability.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                                                                                                                                 |\r\n| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| v15.2.0 | Introduced streaming support to generateMetadata.                                                                                                     |\r\n| v13.2.0 | viewport, themeColor, and colorScheme deprecated in favor of the viewport configuration. |\r\n| v13.2.0 | metadata and generateMetadata introduced.                                                                                                           |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-metadata.mdx"
+  }
+]

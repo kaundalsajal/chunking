@@ -1,0 +1,172 @@
+[
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Introduction",
+    "content": "Exporting a function called getStaticProps will prerender a page at build time using the props returned from the function:\n\nimport type { InferGetStaticPropsType, GetStaticProps } from 'next'\r\n\r\ntype Repo = {\r\n  name: string\r\n  stargazers_count: number\r\n}\r\n\r\nexport const getStaticProps = (async (context) => {\r\n  const res = await fetch('https://api.github.com/repos/vercel/next.js')\r\n  const repo = await res.json()\r\n  return { props: { repo } }\r\n}) satisfies GetStaticProps<{\r\n  repo: Repo\r\n}>\r\n\r\nexport default function Page({\r\n  repo,\r\n}: InferGetStaticPropsType<typeof getStaticProps>) {\r\n  return repo.stargazers_count\r\n}\n\nexport async function getStaticProps() {\r\n  const res = await fetch('https://api.github.com/repos/vercel/next.js')\r\n  const repo = await res.json()\r\n  return { props: { repo } }\r\n}\r\n\r\nexport default function Page({ repo }) {\r\n  return repo.stargazers_count\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Introduction",
+    "content": "t fetch('https://api.github.com/repos/vercel/next.js')\r\n  const repo = await res.json()\r\n  return { props: { repo } }\r\n}\r\n\r\nexport default function Page({ repo }) {\r\n  return repo.stargazers_count\r\n}\n\nYou can import modules in top-level scope for use in getStaticProps. Imports used will not be bundled for the client-side. This means you can write server-side code directly in getStaticProps, including fetching data from your database.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Context parameter",
+    "content": "The context parameter is an object containing the following keys:\n\n| Name               | Description                                                                                                                                                                                                                                                                                                                                                                                                                          |\r\n| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Context parameter",
+    "content": "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| params           | Contains the route parameters for pages using dynamic routes. For example, if the page name is [id].js, then params will look like { id: ... }. You should use this together with getStaticPaths, which we'll explain later.                                                                                                                                 |\r\n| preview          | (Deprecated for draftMode) preview is true if the page is in the Preview Mode and false otherwise.                                                                                                                                                                                                                                                                                        |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Context parameter",
+    "content": "|\r\n| previewData      | (Deprecated for draftMode) The preview data set by setPreviewData.                                                                                                                                                                                                                                                                                                                            |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Context parameter",
+    "content": "|\r\n| draftMode        | draftMode is true if the page is in the Draft Mode and false otherwise.                                                                                                                                                                                                                                                                                                                       |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Context parameter",
+    "content": "|\r\n| locale           | Contains the active locale (if enabled).                                                                                                                                                                                                                                                                                                                                                                                             |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Context parameter",
+    "content": "|\r\n| locales          | Contains all supported locales (if enabled).                                                                                                                                                                                                                                                                                                                                                                                         |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Context parameter",
+    "content": "|\r\n| defaultLocale    | Contains the configured default locale (if enabled).                                                                                                                                                                                                                                                                                                                                                                                 |\r\n| revalidateReason | Provides a reason for why the function was called. Can be one of: \"build\" (run at build time), \"stale\" (revalidate period expired, or running in development mode), \"on-demand\" (triggered via on-demand revalidation) |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "getStaticProps return values",
+    "content": "The getStaticProps function should return an object containing either props, redirect, or notFound followed by an optional revalidate property.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "props",
+    "content": "The props object is a key-value pair, where each value is received by the page component. It should be a serializable object so that any props passed, could be serialized with JSON.stringify.\n\nexport async function getStaticProps(context) {\r\n  return {\r\n    props: { message: `Next.js is awesome` }, // will be passed to the page component as props\r\n  }\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "revalidate",
+    "content": "The revalidate property is the amount in seconds after which a page re-generation can occur (defaults to false or no revalidation).\n\n// This function gets called at build time on server-side.\r\n// It may be called again, on a serverless function, if\r\n// revalidation is enabled and a new request comes in\r\nexport async function getStaticProps() {\r\n  const res = await fetch('https://.../posts')\r\n  const posts = await res.json()\r\n\r\n  return {\r\n    props: {\r\n      posts,\r\n    },\r\n    // Next.js will attempt to re-generate the page:\r\n    // - When a request comes in\r\n    // - At most once every 10 seconds\r\n    revalidate: 10, // In seconds\r\n  }\r\n}\n\nLearn more about Incremental Static Regeneration.\n\nThe cache status of a page leveraging ISR can be determined by reading the value of the x-nextjs-cache response header. The possible values are the following:",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "revalidate",
+    "content": "about Incremental Static Regeneration.\n\nThe cache status of a page leveraging ISR can be determined by reading the value of the x-nextjs-cache response header. The possible values are the following:\n\nMISS - the path is not in the cache (occurs at most once, on the first visit)STALE - the path is in the cache but exceeded the revalidate time so it will be updated in the backgroundHIT - the path is in the cache and has not exceeded the revalidate time",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "notFound",
+    "content": "The notFound boolean allows the page to return a 404 status and 404 Page. With notFound: true, the page will return a 404 even if there was a successfully generated page before. This is meant to support use cases like user-generated content getting removed by its author. Note, notFound follows the same revalidate behavior described here.\n\nexport async function getStaticProps(context) {\r\n  const res = await fetch(`https://.../data`)\r\n  const data = await res.json()\r\n\r\n  if (!data) {\r\n    return {\r\n      notFound: true,\r\n    }\r\n  }\r\n\r\n  return {\r\n    props: { data }, // will be passed to the page component as props\r\n  }\r\n}\n\nGood to know: notFound is not needed for fallback: false mode as only paths returned from getStaticPaths will be prerendered.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "redirect",
+    "content": "The redirect object allows redirecting to internal or external resources. It should match the shape of { destination: string, permanent: boolean }.\n\nIn some rare cases, you might need to assign a custom status code for older HTTP clients to properly redirect. In these cases, you can use the statusCode property instead of the permanent property, but not both. You can also set basePath: false similar to redirects in next.config.js.\n\nexport async function getStaticProps(context) {\r\n  const res = await fetch(`https://...`)\r\n  const data = await res.json()\r\n\r\n  if (!data) {\r\n    return {\r\n      redirect: {\r\n        destination: '/',\r\n        permanent: false,\r\n        // statusCode: 301\r\n      },\r\n    }\r\n  }\r\n\r\n  return {\r\n    props: { data }, // will be passed to the page component as props\r\n  }\r\n}\n\nIf the redirects are known at build-time, they should be added in next.config.js instead.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Reading files: Use process.cwd()",
+    "content": "Files can be read directly from the filesystem in getStaticProps.\n\nIn order to do so you have to get the full path to a file.\n\nSince Next.js compiles your code into a separate directory you can't use __dirname as the path it returns will be different from the Pages Router.\n\nInstead you can use process.cwd() which gives you the directory where Next.js is being executed.\n\nimport { promises as fs } from 'fs'\r\nimport path from 'path'\r\n\r\n// posts will be populated at build time by getStaticProps()\r\nfunction Blog({ posts }) {\r\n  return (\r\n    <ul>\r\n      {posts.map((post) => (\r\n        <li>\r\n          <h3>{post.filename}</h3>\r\n          <p>{post.content}</p>\r\n        </li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\r\n\r\n// This function gets called at build time on server-side.\r\n// It won't be called on client-side, so you can even do\r\n// direct database queries.\r\nexport async function getStaticProps() {\r\n  const postsDirectory = path.join(process.cwd(), 'posts')",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Reading files: Use process.cwd()",
+    "content": "rver-side.\r\n// It won't be called on client-side, so you can even do\r\n// direct database queries.\r\nexport async function getStaticProps() {\r\n  const postsDirectory = path.join(process.cwd(), 'posts')\r\n  const filenames = await fs.readdir(postsDirectory)\r\n\r\n  const posts = filenames.map(async (filename) => {\r\n    const filePath = path.join(postsDirectory, filename)\r\n    const fileContents = await fs.readFile(filePath, 'utf8')\r\n\r\n    // Generally you would parse/transform the contents\r\n    // For example you can transform markdown to HTML here\r\n\r\n    return {\r\n      filename,\r\n      content: fileContents,\r\n    }\r\n  })\r\n  // By returning { props: { posts } }, the Blog component\r\n  // will receive `posts` as a prop at build time\r\n  return {\r\n    props: {\r\n      posts: await Promise.all(posts),\r\n    },\r\n  }\r\n}\r\n\r\nexport default Blog",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                                                                                                                                  |\r\n| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| v13.4.0 | App Router is now stable with simplified data fetching                                                        |\r\n| v12.2.0 | On-Demand Incremental Static Regeneration is stable.    |\r\n| v12.1.0 | On-Demand Incremental Static Regeneration added (beta). |\r\n| v10.0.0 | locale, locales, defaultLocale, and notFound options added.                                                                                      |\r\n| v10.0.0 | fallback: 'blocking' return option added.                                                                                                              |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  },
+  {
+    "documentTitle": "getStaticProps",
+    "documentDescription": "API reference for `getStaticProps`. Learn how to use `getStaticProps` to generate static pages with Next.js.",
+    "sectionTitle": "Version History",
+    "content": "|\r\n| v10.0.0 | fallback: 'blocking' return option added.                                                                                                              |\r\n| v9.5.0  | Stable Incremental Static Regeneration                                                             |\r\n| v9.3.0  | getStaticProps introduced.                                                                                                                             |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-props.mdx"
+  }
+]

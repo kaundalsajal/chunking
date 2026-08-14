@@ -1,0 +1,428 @@
+[
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Introduction",
+    "content": "When a user interaction requires server-side work, the result is not available immediately. Network requests take an unknown amount of time to complete and may succeed or fail. While waiting, the client should provide feedback and respond to those states. Otherwise, users are left looking at stale data and may wonder whether anything is happening.\n\nThis guide adds responsive feedback to a task management app called Taskboard. Each step handles a different kind of pending work, from streaming slow reads to confirming mutations before the server responds.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Introduction",
+    "content": "e adds responsive feedback to a task management app called Taskboard. Each step handles a different kind of pending work, from streaming slow reads to confirming mutations before the server responds.\n\nGood to know: The patterns in this guide also improve Core Web Vitals. Streaming with <Suspense> lowers FCP and LCP by letting the shell paint while slow reads finish. Optimistic UI and transitions lower INP by keeping the click frame fast. Prefetching the next route makes FCP, LCP, and INP on the destination page near-instant. These patterns help, but they don't replace the usual INP work: shipping less client JavaScript and avoiding blocking roundtrips during interactions.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Example",
+    "content": "The patterns build in order: stream slow data behind loading boundaries, add an instant priority toggle, build a reusable filter with a callback prop, show comments before they're confirmed, move cards between columns on drop, manage form lifecycle in a create dialog, and signal pending deletion to a parent. The final step caches the reusable reads so navigations stay instant.\n\nThe companion Taskboard demo (source) lets you see each pattern from this guide in action.\n\nThe app is organized by feature. Everything for the task domain (queries, Server Functions, and components) lives under features/task/. Shared UI primitives live in components/ui/, and pages in app/ compose feature components. The file paths throughout this guide follow that structure.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Example",
+    "content": "ons, and components) lives under features/task/. Shared UI primitives live in components/ui/, and pages in app/ compose feature components. The file paths throughout this guide follow that structure.\n\nThe starting point is a Server Component app that reads tasks and comments from a database, with no <Suspense> boundaries and no caching. Client Components call Server Functions to mutate that data. After each mutation, the Server Function calls refresh() so the server re-renders with fresh data:\n\n'use server'\r\n\r\nimport { refresh } from 'next/cache'\r\nimport { PRIORITY_CYCLE } from '@/lib/data'\r\nimport { getTaskById, updateTaskPriority } from '@/lib/db'\r\n\r\nexport async function cyclePriority(taskId: string) {\r\n  const task = await getTaskById(taskId)\r\n  if (!task) return null\r\n  const newPriority = PRIORITY_CYCLE[task.priority]\r\n  await updateTaskPriority(taskId, newPriority)\r\n  refresh()\r\n  return newPriority\r\n}",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 1: Stream slow data with Suspense",
+    "content": "The task detail page reads the task and its comments. When both are awaited at the top of the page component, the whole page blocks until the slowest read resolves.\n\nimport { getTask } from '@/features/task/task-queries'\r\nimport { TaskDetail } from '@/features/task/components/task-detail'\r\nimport { CommentSection } from '@/features/task/components/comment-section'\r\n\r\nexport default async function TaskPage({ params }) {\r\n  const { id } = await params\r\n  const task = await getTask(id)\r\n\r\n  return (\r\n    <div>\r\n      <TaskDetail task={task} />\r\n      <CommentSection taskId={id} />\r\n    </div>\r\n  )\r\n}\n\nWith this version, nothing renders until getTask resolves, and the comments read starts only after that.\n\nSplit the reads into separate components, pass each one a promise, and wrap them in <Suspense>. The page becomes synchronous, returns the shell immediately, and the server streams each section in as its data resolves:\n\nimport { Suspense } from 'react'\r\nimport {\r\n  TaskDetail,",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 1: Stream slow data with Suspense",
+    "content": "hem in <Suspense>. The page becomes synchronous, returns the shell immediately, and the server streams each section in as its data resolves:\n\nimport { Suspense } from 'react'\r\nimport {\r\n  TaskDetail,\r\n  TaskDetailSkeleton,\r\n} from '@/features/task/components/task-detail'\r\nimport {\r\n  CommentSection,\r\n  CommentSectionSkeleton,\r\n} from '@/features/task/components/comment-section'\r\n\r\nexport default function TaskPage({ params }) {\r\n  return (\r\n    <div>\r\n      <Suspense fallback={<TaskDetailSkeleton />}>\r\n        {params.then(({ id }) => (\r\n          <>\r\n            <TaskDetail id={id} />\r\n            <Suspense fallback={<CommentSectionSkeleton />}>\r\n              <CommentSection taskId={id} />\r\n            </Suspense>\r\n          </>\r\n        ))}\r\n      </Suspense>\r\n    </div>\r\n  )\r\n}\n\nEach section component awaits its own data:\n\nexport async function TaskDetail({ id }) {\r\n  const task = await getTask(id)\r\n  return <TaskHeader task={task} />\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 1: Stream slow data with Suspense",
+    "content": "</Suspense>\r\n    </div>\r\n  )\r\n}\n\nEach section component awaits its own data:\n\nexport async function TaskDetail({ id }) {\r\n  const task = await getTask(id)\r\n  return <TaskHeader task={task} />\r\n}\n\nCalling params.then() inline in JSX keeps the page synchronous. The outer <Suspense> covers the params resolution and the task detail read. Once TaskDetail resolves, React reveals the task header and the nested <Suspense> boundary, which shows CommentSectionSkeleton while comments load.\n\nThe page shell now paints immediately, the task header streams in when getTask resolves, and the comments section follows when getComments resolves.\n\nFor more on streaming patterns, see the Streaming guide.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 2: Respond instantly to a toggle",
+    "content": "Each task card has a priority indicator that cycles through low, medium, and high on click.\n\nThe button renders the priority prop from the server. Calling a Server Function starts the mutation, but it doesn't change that prop in the current render.\n\nHere the Server Function is called directly:\n\n'use client'\r\n\r\nimport { cyclePriority } from '@/features/task/task-actions'\r\n\r\nexport function TaskCard({ id, priority }) {\r\n  return (\r\n    <button onClick={() => cyclePriority(id)} className={priorityDot[priority]}>\r\n      {priority}\r\n    </button>\r\n  )\r\n}\n\nIf you click the dot, the Server Function runs, but the button keeps rendering the old priority prop until the next server render arrives.\n\nReplace the direct call with useOptimistic and useTransition. useOptimistic provides a value to render in place of the stale prop, and useTransition runs the Server Function as part of a transition. The optimistic value applies for as long as that transition is pending:\n\n'use client'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 2: Respond instantly to a toggle",
+    "content": "value to render in place of the stale prop, and useTransition runs the Server Function as part of a transition. The optimistic value applies for as long as that transition is pending:\n\n'use client'\r\n\r\nimport { useOptimistic, useTransition } from 'react'\r\nimport { cyclePriority } from '@/features/task/task-actions'\r\nimport { PRIORITY_CYCLE } from '@/lib/data'\r\n\r\nexport function TaskCard({ id, priority }) {\r\n  const [optimisticPriority, setOptimisticPriority] = useOptimistic(priority)\r\n  const [, startTransition] = useTransition()\r\n\r\n  function handlePriority() {\r\n    startTransition(async () => {\r\n      setOptimisticPriority(PRIORITY_CYCLE[optimisticPriority])\r\n      await cyclePriority(id)\r\n    })\r\n  }\r\n\r\n  return (\r\n    <button\r\n      onClick={handlePriority}\r\n      className={priorityDot[optimisticPriority]}\r\n    >\r\n      {optimisticPriority}\r\n    </button>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 2: Respond instantly to a toggle",
+    "content": "cyclePriority(id)\r\n    })\r\n  }\r\n\r\n  return (\r\n    <button\r\n      onClick={handlePriority}\r\n      className={priorityDot[optimisticPriority]}\r\n    >\r\n      {optimisticPriority}\r\n    </button>\r\n  )\r\n}\n\nThe setOptimisticPriority call updates the UI on the current frame with the next value in the cycle. Reading from optimisticPriority instead of the prop means rapid double-clicks cycle correctly rather than reading a stale closure value.\n\nWhen the transition ends and fresh data arrives, the optimistic value reverts to the new server-rendered prop. If the Server Function inside useTransition throws, the error is forwarded to the nearest error boundary without a manual try/catch.\n\nThe color now changes the moment the mouse lifts. Clicking again cycles to the next value without waiting for the first mutation to finish.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 3: Filter with pending feedback",
+    "content": "The board has label filter chips (Design, Frontend, Backend). Clicking a chip updates a query param to filter the task list.\n\nThe selected filter comes from the URL. Calling router.push() starts a client navigation, and the server re-renders the board with the new search params. Until that navigation completes, the page keeps rendering the old URL state.\n\nHere router.push() is called directly:\n\n'use client'\r\n\r\nimport { useRouter, useSearchParams } from 'next/navigation'\r\n\r\nexport function LabelFilter() {\r\n  const router = useRouter()\r\n  const searchParams = useSearchParams()\r\n\r\n  function handleFilter(value: string | null) {\r\n    const params = new URLSearchParams(searchParams.toString())\r\n    if (value) params.set('label', value)\r\n    else params.delete('label')\r\n    router.push(`/?${params.toString()}`)\r\n  }\r\n\r\n  // ...render chips with onClick={handleFilter}\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 3: Filter with pending feedback",
+    "content": "chParams.toString())\r\n    if (value) params.set('label', value)\r\n    else params.delete('label')\r\n    router.push(`/?${params.toString()}`)\r\n  }\r\n\r\n  // ...render chips with onClick={handleFilter}\r\n}\n\nWith this version, router.push() starts the navigation, but there's no local pending state. The chip keeps rendering the old URL value, and the board gives no sign that a new server render is loading.\n\nSeparate the filter into two components. LabelFilter owns the query string update and passes the navigation callback to a reusable ChipGroup, which handles all the pending feedback:\n\n'use client'\r\n\r\nimport { useRouter, useSearchParams } from 'next/navigation'\r\nimport { ChipGroup } from '@/components/ui/chip-group'\r\n\r\nconst labels = [\r\n  { label: 'Design', value: 'design' },\r\n  { label: 'Frontend', value: 'frontend' },\r\n  { label: 'Backend', value: 'backend' },\r\n]\r\n\r\nexport function LabelFilter() {\r\n  const router = useRouter()\r\n  const searchParams = useSearchParams()",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 3: Filter with pending feedback",
+    "content": ",\r\n  { label: 'Frontend', value: 'frontend' },\r\n  { label: 'Backend', value: 'backend' },\r\n]\r\n\r\nexport function LabelFilter() {\r\n  const router = useRouter()\r\n  const searchParams = useSearchParams()\r\n  const current = searchParams.get('label') ?? null\r\n\r\n  function filterAction(value: string | null) {\r\n    const params = new URLSearchParams(searchParams.toString())\r\n    if (value) {\r\n      params.set('label', value)\r\n    } else {\r\n      params.delete('label')\r\n    }\r\n    router.push(`/?${params.toString()}`)\r\n  }\r\n\r\n  return (\r\n    <ChipGroup items={labels} value={current} changeAction={filterAction} />\r\n  )\r\n}\n\nLabelFilter decides where the app navigates and holds no pending state of its own.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Handle pending feedback internally",
+    "content": "ChipGroup accepts a changeAction prop and calls it inside its own startTransition. It uses two useOptimistic hooks: one for the selected chip, and one for the data-pending attribute that ancestor components can style against:\n\n'use client'\r\n\r\nimport { startTransition, useOptimistic } from 'react'\r\n\r\nexport function ChipGroup({ items, value, changeAction }) {\r\n  const [optimisticValue, setOptimisticValue] = useOptimistic(value)\r\n  const [isPending, setIsPending] = useOptimistic(false)\r\n\r\n  function handleClick(newValue) {\r\n    startTransition(async () => {\r\n      setOptimisticValue(newValue)\r\n      setIsPending(true)\r\n      await changeAction(newValue)\r\n    })\r\n  }\r\n\r\n  return (\r\n    <div className=\"flex gap-1.5\" data-pending={isPending ? '' : undefined}>\r\n      {items.map((item) => (\r\n        <button\r\n          key={item.value}\r\n          onClick={() =>\r\n            handleClick(item.value === optimisticValue ? null : item.value)\r\n          }",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Handle pending feedback internally",
+    "content": "efined}>\r\n      {items.map((item) => (\r\n        <button\r\n          key={item.value}\r\n          onClick={() =>\r\n            handleClick(item.value === optimisticValue ? null : item.value)\r\n          }\r\n          className={item.value === optimisticValue ? 'active' : ''}\r\n        >\r\n          {item.label}\r\n        </button>\r\n      ))}\r\n    </div>\r\n  )\r\n}\n\nThe consumer passes a callback (changeAction), and the design component runs it inside a transition. By convention, props named action or suffixed with Action signal this behavior. See Exposing action props from components in the React docs for this pattern.\n\nThe data-pending attribute on the ChipGroup root element lets ancestor components react through CSS without any coordination. The board on the home page uses group-has-data-pending:opacity-50 to dim while the transition runs, without replacing the board with a skeleton. Because ChipGroup renders inside the group element, the attribute is available to any ancestor for styling.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Handle pending feedback internally",
+    "content": "g:opacity-50 to dim while the transition runs, without replacing the board with a skeleton. Because ChipGroup renders inside the group element, the attribute is available to any ancestor for styling.\n\nGood to know: group-has-data-pending: and has-data-pending: compile to the CSS :has() selector, which the browser re-evaluates over the anchored subtree whenever data-pending toggles. That stays cheap here because the board toggles it only twice per filter, and dragging (Step 5) deliberately skips it. Reach for client state instead when a broad :has() anchor toggles on a high-frequency interaction like dragging or scrolling, where repeated recalculation over a large subtree adds up.\n\nThe \"Frontend\" chip now highlights on the current frame. The board dims while the filtered data loads, then updates with the filtered tasks.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 4: Add comments with instant feedback",
+    "content": "The task detail page has a comment section. Submitting a comment writes new data on the server, but a server component renders the persisted list, so it can't include the new comment until the next server render arrives.\n\nHere a comment form uses controlled state for the input and calls the Server Function directly:\n\n'use client'\r\n\r\nimport { useState } from 'react'\r\nimport { addComment } from '@/features/task/task-actions'\r\n\r\nexport function CommentForm({ taskId }) {\r\n  const [content, setContent] = useState('')\r\n\r\n  async function handleSubmit() {\r\n    if (!content.trim()) return\r\n    await addComment(taskId, content)\r\n    setContent('')\r\n  }\r\n\r\n  return (\r\n    <div>\r\n      <input\r\n        value={content}\r\n        onChange={(e) => setContent(e.target.value)}\r\n        placeholder=\"Write a comment...\"\r\n      />\r\n      <button onClick={handleSubmit}>Send</button>\r\n    </div>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 4: Add comments with instant feedback",
+    "content": "value={content}\r\n        onChange={(e) => setContent(e.target.value)}\r\n        placeholder=\"Write a comment...\"\r\n      />\r\n      <button onClick={handleSubmit}>Send</button>\r\n    </div>\r\n  )\r\n}\n\nWith this version, the Server Function runs on submit, but the input stays filled and the list doesn't change until the server responds.\n\nSplit the comment list into two parts. A server component renders the persisted comments, and a client component tracks only the pending comments using useOptimistic([]) with an empty initial array. When the transition completes and a new render arrives with fresh data, the pending list resets to empty and the real comment appears in the server-rendered list:\n\n'use client'\r\n\r\nimport { useOptimistic, useRef } from 'react'\r\nimport { addComment } from '@/features/task/task-actions'\r\nimport { CommentCard } from './comment-card'\r\n\r\nexport function OptimisticComments({ taskId }) {\r\n  const [pendingComments, setPendingComments] = useOptimistic([])",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 4: Add comments with instant feedback",
+    "content": "rom '@/features/task/task-actions'\r\nimport { CommentCard } from './comment-card'\r\n\r\nexport function OptimisticComments({ taskId }) {\r\n  const [pendingComments, setPendingComments] = useOptimistic([])\r\n  const formRef = useRef(null)\r\n\r\n  return (\r\n    <>\r\n      <form\r\n        ref={formRef}\r\n        action={async (formData) => {\r\n          const content = formData.get('content')?.trim()\r\n          if (!content) return\r\n          formRef.current?.reset()\r\n\r\n          const id = crypto.randomUUID()\r\n          setPendingComments((current) => [\r\n            {\r\n              id,\r\n              content,\r\n              userName: 'You',\r\n              createdAt: new Date().toISOString(),\r\n            },\r\n            ...current,\r\n          ])\r\n\r\n          await addComment(taskId, content)\r\n        }}\r\n      >\r\n        <input name=\"content\" placeholder=\"Write a comment...\" required />\r\n        <button type=\"submit\">Send</button>\r\n      </form>\r\n      {pendingComments.map((comment) => (",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 4: Add comments with instant feedback",
+    "content": "}}\r\n      >\r\n        <input name=\"content\" placeholder=\"Write a comment...\" required />\r\n        <button type=\"submit\">Send</button>\r\n      </form>\r\n      {pendingComments.map((comment) => (\r\n        <CommentCard key={comment.id} comment={comment} pending />\r\n      ))}\r\n    </>\r\n  )\r\n}\n\nThree things happen on submit:\n\nformRef.current?.reset() clears the input through direct DOM manipulation. Inside a transition, useState setters are deferred until the transition completes, but useOptimistic setters and direct DOM calls like formRef.reset() apply on the current frame.setPendingComments adds the new comment to the pending list with a client-generated UUID.The form action runs the handler inside a transition.\n\nThe server component renders the real list alongside it:\n\nimport { getComments } from '@/features/task/task-queries'\r\nimport { CommentCard } from './comment-card'\r\nimport { OptimisticComments } from './optimistic-comments'\r\n\r\nasync function CommentSection({ taskId }) {",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 4: Add comments with instant feedback",
+    "content": "Comments } from '@/features/task/task-queries'\r\nimport { CommentCard } from './comment-card'\r\nimport { OptimisticComments } from './optimistic-comments'\r\n\r\nasync function CommentSection({ taskId }) {\r\n  const comments = await getComments(taskId)\r\n\r\n  return (\r\n    <div>\r\n      <OptimisticComments taskId={taskId} />\r\n      {comments.map((comment) => (\r\n        <CommentCard key={comment.id} comment={comment} />\r\n      ))}\r\n    </div>\r\n  )\r\n}\n\nThe input now clears on submit and a faded comment card appears at the top of the list. When the server confirms, the faded card disappears and the real comment takes its place in the server-rendered list.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 5: Move cards between columns",
+    "content": "The board has three columns: Todo, In Progress, and Done. Each column renders tasks from the server-provided tasks prop.\n\nDropping a card starts a Server Function that writes the new status. The tasks prop doesn't change until the next server render arrives, so the client needs a temporary task list for the pending move.\n\nHere the Server Function is called on drop:\n\n'use client'\r\n\r\nimport { use } from 'react'\r\nimport { updateStatus } from '@/features/task/task-actions'\r\n\r\nexport function Board({ tasksPromise }) {\r\n  const tasks = use(tasksPromise)\r\n\r\n  function handleDrop(targetStatus, taskId) {\r\n    updateStatus(taskId, targetStatus)\r\n  }\r\n\r\n  // ...render columns from tasks\r\n}\n\nThe component receives a promise from the parent server component (see Step 1's <Suspense> boundary) and unwraps it with use. With this version, a card dragged from \"Todo\" to \"In Progress\" stays in the old column while the server processes the update, then jumps to the new column after the response arrives.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 5: Move cards between columns",
+    "content": "aps it with use. With this version, a card dragged from \"Todo\" to \"In Progress\" stays in the old column while the server processes the update, then jumps to the new column after the response arrives.\n\nAdd useOptimistic with a reducer to remap the card's status on the current frame. The reducer receives the full task list and an action describing which card moved where:\n\n'use client'\r\n\r\nimport { startTransition, use, useOptimistic } from 'react'\r\nimport { updateStatus } from '@/features/task/task-actions'\r\n\r\nexport function Board({ tasksPromise }) {\r\n  const tasks = use(tasksPromise)\r\n  const [optimisticTasks, moveTask] = useOptimistic(\r\n    tasks,\r\n    (currentTasks, action: { taskId: string; status: Status }) =>\r\n      currentTasks.map((t) =>\r\n        t.id === action.taskId ? { ...t, status: action.status } : t\r\n      )\r\n  )\r\n\r\n  function handleDrop(targetStatus, taskId) {\r\n    startTransition(async () => {\r\n      moveTask({ taskId, status: targetStatus })",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 5: Move cards between columns",
+    "content": "action.taskId ? { ...t, status: action.status } : t\r\n      )\r\n  )\r\n\r\n  function handleDrop(targetStatus, taskId) {\r\n    startTransition(async () => {\r\n      moveTask({ taskId, status: targetStatus })\r\n      await updateStatus(taskId, targetStatus)\r\n    })\r\n  }\r\n\r\n  return (\r\n    <div className=\"grid grid-cols-3 gap-4\">\r\n      {columns.map((col) => (\r\n        <Column\r\n          key={col.status}\r\n          tasks={optimisticTasks.filter((t) => t.status === col.status)}\r\n          onDrop={(taskId) => handleDrop(col.status, taskId)}\r\n        />\r\n      ))}\r\n    </div>\r\n  )\r\n}\n\nThe reducer maps over the task list and updates the status of the dragged card, leaving the rest unchanged. If a background refresh arrives mid-drag, for example from polling or another user's mutation, React re-runs the reducer with the updated base data so the optimistic move sits on top of fresh data.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 5: Move cards between columns",
+    "content": ". If a background refresh arrives mid-drag, for example from polling or another user's mutation, React re-runs the reducer with the updated base data so the optimistic move sits on top of fresh data.\n\nThis step uses the standalone startTransition instead of useTransition because the hook's isPending would trigger the board fade from Step 3. The optimistic move already covers the visual feedback, so no pending indicator is needed. If the Server Function fails, the card reverts.\n\nA card dragged from \"Todo\" to \"In Progress\" now lands in the target column the moment you release.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 6: Manage form lifecycle",
+    "content": "The board has a \"New Task\" button that opens a create dialog. The form action creates the task on the server, then refreshes the board.\n\nThe dialog coordinates three pieces of client state while the action is pending: the submit button, the field values, and whether the dialog is open. useActionState handles all three.\n\nHere a form manages submission state manually and calls the Server Function in an onSubmit handler:\n\n'use client'\r\n\r\nimport { useState } from 'react'\r\nimport { createTask } from '@/features/task/task-actions'\r\n\r\nexport function CreateTaskModal() {\r\n  const [isOpen, setIsOpen] = useState(false)\r\n  const [isSubmitting, setIsSubmitting] = useState(false)\r\n\r\n  async function handleSubmit(e) {\r\n    e.preventDefault()\r\n    const formData = new FormData(e.currentTarget)\r\n    const title = formData.get('title')\r\n    if (!title.trim()) return\r\n\r\n    setIsSubmitting(true)\r\n    await createTask({ title /* ... */ })\r\n    setIsSubmitting(false)\r\n    setIsOpen(false)\r\n  }",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 6: Manage form lifecycle",
+    "content": "const title = formData.get('title')\r\n    if (!title.trim()) return\r\n\r\n    setIsSubmitting(true)\r\n    await createTask({ title /* ... */ })\r\n    setIsSubmitting(false)\r\n    setIsOpen(false)\r\n  }\r\n\r\n  return (\r\n    <Dialog open={isOpen} onOpenChange={setIsOpen}>\r\n      <form onSubmit={handleSubmit}>\r\n        <input name=\"title\" placeholder=\"Task title...\" required />\r\n        <button type=\"submit\" disabled={isSubmitting}>\r\n          {isSubmitting ? 'Creating...' : 'Create Task'}\r\n        </button>\r\n      </form>\r\n    </Dialog>\r\n  )\r\n}\n\nWith this version, the submit handler runs, but two separate useState calls manage the pending state. The dialog closes before the board shows the new task, because setIsOpen(false) fires outside of a transition. The form fields also keep their values across submissions unless you track a reset key yourself.\n\nuseActionState handles all three concerns: isPending for the button, key-based reset for the fields, and a wrap around the dialog close:",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 6: Manage form lifecycle",
+    "content": "ues across submissions unless you track a reset key yourself.\n\nuseActionState handles all three concerns: isPending for the button, key-based reset for the fields, and a wrap around the dialog close:\n\n'use client'\r\n\r\nimport { useActionState, startTransition, useState } from 'react'\r\nimport { createTask } from '@/features/task/task-actions'\r\n\r\nexport function CreateTaskModal() {\r\n  const [isOpen, setIsOpen] = useState(false)\r\n\r\n  const [{ key }, formAction, isPending] = useActionState(\r\n    async (prev, formData) => {\r\n      const title = String(formData.get('title'))\r\n      if (!title.trim()) return prev\r\n\r\n      await createTask({\r\n        title,\r\n        description: String(formData.get('description')),\r\n        status: 'todo',\r\n        priority: 'medium',\r\n      })\r\n\r\n      startTransition(() => setIsOpen(false))\r\n      return { key: prev.key + 1 }\r\n    },\r\n    { key: 0 }\r\n  )\r\n\r\n  return (\r\n    <Dialog open={isOpen} onOpenChange={setIsOpen}>\r\n      <form action={formAction}>",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 6: Manage form lifecycle",
+    "content": "ransition(() => setIsOpen(false))\r\n      return { key: prev.key + 1 }\r\n    },\r\n    { key: 0 }\r\n  )\r\n\r\n  return (\r\n    <Dialog open={isOpen} onOpenChange={setIsOpen}>\r\n      <form action={formAction}>\r\n        <div key={key}>\r\n          <input name=\"title\" placeholder=\"Task title...\" required />\r\n          <input name=\"description\" placeholder=\"Describe the task...\" />\r\n        </div>\r\n        <button type=\"submit\" disabled={isPending}>\r\n          {isPending ? 'Creating...' : 'Create Task'}\r\n        </button>\r\n      </form>\r\n    </Dialog>\r\n  )\r\n}\n\nThe key in the returned state controls form reset. On success, key increments, which remounts the <div key={key}> and resets every input inside it.\n\nuseActionState runs the action as a transition, so the dialog stays open and isPending stays true while createTask runs. State updates after the await aren't automatically part of that transition, so wrapping setIsOpen(false) in startTransition runs the close as part of the transition.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 6: Manage form lifecycle",
+    "content": "stays true while createTask runs. State updates after the await aren't automatically part of that transition, so wrapping setIsOpen(false) in startTransition runs the close as part of the transition.\n\nWith that wrap in place, React batches the dialog close with the board update that refresh() triggers inside createTask, so the new task appears at the moment the dialog closes. Without it, the dialog closes first and the board updates a frame later.\n\nGood to know: This limitation is documented in React under React doesn't treat my state update after await as a transition. Until it's fixed, wrapping post-await state updates in startTransition is the recommended workaround.\n\nThe same post-await window is where side effects like toasts belong:\n\nawait createTask({\r\n  /* … */\r\n})\r\n\r\nstartTransition(() => setIsOpen(false))\r\ntoast.success('Task created')",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 6: Manage form lifecycle",
+    "content": "ommended workaround.\n\nThe same post-await window is where side effects like toasts belong:\n\nawait createTask({\r\n  /* … */\r\n})\r\n\r\nstartTransition(() => setIsOpen(false))\r\ntoast.success('Task created')\n\nSide effects that don't affect rendered state, such as analytics, toasts, and focus changes, run after the await resolves. They don't need a transition because they don't update React state.\n\nThe button text now changes to \"Creating...\" and dims on submit. When the server responds, the fields clear, the dialog closes, the new task appears on the board, and a toast confirms the action.\n\nGood to know: The companion app adds status, priority, assignee, and label pickers to the modal. The pattern is the same: hidden inputs track each picker's state, and key resets them all on success.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 7: Signal pending deletion to a parent",
+    "content": "Each comment card has a delete button that removes the comment on the server, and the comment disappears from the list after the next render.\n\nBetween the click and that render, the card still shows the old data. The list itself can't show the pending removal, so the signal has to come from the button.\n\nThis step reuses the data-pending CSS hook from Step 3, but drives it from useOptimistic(false) instead of the isPending from useTransition.\n\nHere the Server Function is called directly:\n\n'use client'\r\n\r\nimport { Trash2 } from 'lucide-react'\r\nimport { deleteComment } from '@/features/task/task-actions'\r\n\r\nexport function DeleteButton({ commentId }) {\r\n  return (\r\n    <button\r\n      onClick={() => deleteComment(commentId)}\r\n      aria-label=\"Delete comment\"\r\n    >\r\n      <Trash2 className=\"size-3\" />\r\n    </button>\r\n  )\r\n}\n\nWith this version, the comment stays fully visible until the next server render.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 7: Signal pending deletion to a parent",
+    "content": "ent(commentId)}\r\n      aria-label=\"Delete comment\"\r\n    >\r\n      <Trash2 className=\"size-3\" />\r\n    </button>\r\n  )\r\n}\n\nWith this version, the comment stays fully visible until the next server render.\n\nWrap the action in a <form>, track pending state with useOptimistic(false), and expose it through a data-pending attribute. Accept the action as a deleteAction prop so the parent comment card can react with CSS:\n\n'use client'\r\n\r\nimport { useOptimistic } from 'react'\r\nimport { Trash2 } from 'lucide-react'\r\n\r\nexport function DeleteButton({\r\n  deleteAction,\r\n}: {\r\n  deleteAction: () => void | Promise<void>\r\n}) {\r\n  const [isPending, setIsPending] = useOptimistic(false)\r\n\r\n  return (\r\n    <form\r\n      action={async () => {\r\n        setIsPending(true)\r\n        await deleteAction()\r\n      }}\r\n    >\r\n      <button\r\n        type=\"submit\"\r\n        disabled={isPending}\r\n        data-pending={isPending ? '' : undefined}\r\n        aria-label=\"Delete comment\"\r\n      >",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 7: Signal pending deletion to a parent",
+    "content": "it deleteAction()\r\n      }}\r\n    >\r\n      <button\r\n        type=\"submit\"\r\n        disabled={isPending}\r\n        data-pending={isPending ? '' : undefined}\r\n        aria-label=\"Delete comment\"\r\n      >\r\n        <Trash2 className=\"size-3\" />\r\n      </button>\r\n    </form>\r\n  )\r\n}\n\nThe parent comment card uses Tailwind's has-data-pending: variant to fade itself when any descendant sets the data-pending attribute. The button is the only component that knows when deletion is pending, so exposing that state as a CSS attribute lets any ancestor dim itself without lifting state or threading callbacks:\n\n<div className=\"rounded-lg px-3 transition-all has-data-pending:opacity-30\">\r\n  {/* comment content */}\r\n  {deleteAction && <DeleteButton deleteAction={deleteAction} />}\r\n</div>\n\nThe parent server component binds the Server Function to the comment ID, which keeps DeleteButton reusable:\n\n<CommentCard\r\n  comment={comment}\r\n  deleteAction={\r\n    comment.userName === 'You'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 7: Signal pending deletion to a parent",
+    "content": "/div>\n\nThe parent server component binds the Server Function to the comment ID, which keeps DeleteButton reusable:\n\n<CommentCard\r\n  comment={comment}\r\n  deleteAction={\r\n    comment.userName === 'You'\r\n      ? deleteComment.bind(null, comment.id)\r\n      : undefined\r\n  }\r\n/>\n\nThe card now fades to 30% opacity the moment the click registers. When the server confirms and the next render arrives, the card unmounts from the list.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Step 8: Make repeat navigation instant",
+    "content": "Every pattern so far smooths a single interaction. Across navigations, the same reads rerun and the same fallbacks paint again. Caching the reusable reads and prefetching them with the real request closes that gap without moving the data model into the browser.\n\nThis step uses Cache Components, introduced in Next.js 16. Steps 1 through 7 work without it. If you aren't using Cache Components, see Caching without Cache Components.\n\nEnable it in next.config.ts:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nexport default nextConfig\n\nEnabling Cache Components applies prerender validation across every route, not just the ones in this step. A route that reads request data such as cookies(), headers(), or searchParams outside <Suspense> now blocks prerendering and needs the Step 1 treatment. To turn it on in an existing app, see Migrating to Cache Components.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Cache reusable reads",
+    "content": "For each server read, ask whether it should be reused across requests and whether each write can invalidate it precisely. A task is stable enough to cache and has a clear per-id tag:\n\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport { getTaskById } from '@/lib/db'\r\n\r\nexport async function getTask(id: string) {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  cacheTag('tasks', `task-${id}`)\r\n\r\n  return getTaskById(id)\r\n}\n\nThe per-id tag task-${id} gives a single task its own handle. The broader tasks tag covers the list. See the Caching guide for cache scoping ('use cache: private', 'use cache: remote'), cache lifetimes, and tag patterns.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Invalidate from mutations",
+    "content": "refresh() reruns dynamic work but leaves cached entries in place. Replace it with updateTag for the tags each write touched:\n\n'use server'\r\n\r\nimport { updateTag } from 'next/cache'\r\n\r\nexport async function updateStatus(taskId: string, newStatus: Status) {\r\n  // …mutate\r\n  updateTag('tasks')\r\n  updateTag(`task-${taskId}`)\r\n}\n\nEvery Server Function follows the same shape: run the write, then call updateTag for the cached reads that changed. Dynamic reads do not have tags to invalidate, so use refresh() for those mutations.\n\nIn this demo, the comment thread stays dynamic because readers expect the current discussion to update immediately on the open task page. Adding or deleting a comment calls refresh(), which reruns the dynamic comment read for the current route while leaving the task caches in place. See the Revalidating guide for tag patterns, time-based revalidation, and on-demand invalidation from route handlers.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Prefetch the destination with the real request",
+    "content": "Under Partial Prefetching (Next.js 16.3 and later), <Link> prefetches the destination's App Shell: the route output that is shared across links for the current user. The shell does not include URL data, because params and searchParams are link-specific. Opt the link into per-link prefetching with prefetch={true} to resolve that URL data ahead of the click:\n\n<Link href={`/task/${id}`} prefetch={true}>\r\n  {/* … */}\r\n</Link>\n\nPer-link prefetching is most valuable when the destination has URL-specific work that users are likely to need next. Cached reads make the prefetched output reusable and tag-invalidatable in the Client Cache; dynamic reads can still resolve before the click, but each prefetch can do real server work. In the companion app, the task cards prefetch the detail page as they scroll into view, so it paints instantly by the time the user clicks.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Next steps",
+    "content": "The patterns in this guide combine a handful of primitives:\n\n| Situation                                                                 | Use                                                                                                                                                                                                                                                                          |\r\n| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Next steps",
+    "content": "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| Slow data should stream in without blocking the page                      | <Suspense>                                                                                                                                                                                                                   |\r\n| A value should update while async work runs                               | useOptimistic                                                                                                                                                                                                           |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Next steps",
+    "content": "|\r\n| Async work needs pending state, error handling, or coordinated UI updates | useTransition                                                                                                                                                                                                           |\r\n| A form needs pending, reset, and result state                             | useActionState                                                                                                                                                                                                         |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Next steps",
+    "content": "|\r\n| An ancestor should show pending state for work happening elsewhere        | data-pending attribute styled with CSS                                                                                                                                                                      |\r\n| Reusable reads should survive across requests and stay fresh after writes | 'use cache' with cacheTag, revalidated by updateTag or revalidateTag |\r\n| Navigation between pages of an interactive app should feel instant        | <Link> prefetching with Partial Prefetching, and per-link prefetching via prefetch={true} for content that depends on URL data    |\n\nMost patterns mix two or more of these. Reach for whichever primitive fits the constraint you're solving.\n\nRelated guides:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  },
+  {
+    "documentTitle": "Building interactive apps",
+    "documentDescription": "Learn how to build responsive interactions with Server Functions, transitions, optimistic UI, and pending feedback.",
+    "sectionTitle": "Next steps",
+    "content": "k prefetching via prefetch={true} for content that depends on URL data    |\n\nMost patterns mix two or more of these. Reach for whichever primitive fits the constraint you're solving.\n\nRelated guides:\n\nClient-side data fetching for direct browser fetching, providing initial data from a Server Component, and client cache coordinationStreaming for loading boundaries and <Suspense> patternsInstant Navigation for validating that navigations stay instantView Transitions for animating state changesSingle-page applications for a shared-reducer useOptimistic example that keeps client and server list updates in sync",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\interactive-apps.mdx"
+  }
+]

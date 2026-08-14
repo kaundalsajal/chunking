@@ -1,0 +1,78 @@
+[
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "Introduction",
+    "content": "You can configure the Next.js cache location if you want to persist cached pages and data to durable storage, or share the cache across multiple containers or instances of your Next.js application.\n\nGood to know: The cacheHandler (singular) configuration is specifically used by Next.js for server cache operations such as storing and revalidating ISR, route handler responses, and optimized images. It is not used by 'use cache' directives. For 'use cache' directives, use cacheHandlers (plural) instead.\n\nmodule.exports = {\r\n  cacheHandler: require.resolve('./cache-handler.js'),\r\n  cacheMaxMemorySize: 0, // disable default in-memory caching\r\n}\n\nView an example of a custom cache handler and learn more about the implementation.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "API Reference",
+    "content": "The cache handler can implement the following methods: get, set, revalidateTag, and resetRequestCache.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "get()",
+    "content": "| Parameter | Type     | Description                             |\r\n| --------- | -------- | --------------------------------------- |\r\n| key     | string | The key to the cached value.            |\r\n| ctx     | object | Context including the cache entry kind. |\n\nThe ctx parameter contains a kind property that indicates the type of cache entry being retrieved. Possible values include 'APP_PAGE', 'APP_ROUTE', 'PAGES', 'FETCH', and 'IMAGE'.\n\nReturns the cached value or null if not found.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "set()",
+    "content": "| Parameter | Type           | Description                      |\r\n| --------- | -------------- | -------------------------------- |\r\n| key     | string       | The key to store the data under. |\r\n| data    | Data or null | The data to be cached.           |\r\n| ctx     | { tags: [] } | The cache tags provided.         |\n\nThe data object contains a kind property that indicates the type of cache entry. For image optimization, kind will be 'IMAGE' and the data will include properties like buffer, etag, extension, and revalidate.\n\nReturns Promise<void>.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "revalidateTag()",
+    "content": "| Parameter | Type                   | Description                   |\r\n| --------- | ---------------------- | ----------------------------- |\r\n| tag     | string or string[] | The cache tags to revalidate. |\n\nReturns Promise<void>. Learn more about revalidating data or the revalidateTag() function.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "resetRequestCache()",
+    "content": "This method resets the temporary in-memory cache for a single request before the next request.\n\nReturns void.\n\nGood to know:\n\nrevalidatePath is a convenience layer on top of cache tags. Calling revalidatePath will call your revalidateTag function, which you can then choose if you want to tag cache keys based on the path.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "Image Optimization Caching",
+    "content": "The cacheHandler can also be used for caching optimized images from next/image. To enable this, set images.customCacheHandler to true in your next.config.js:\n\nmodule.exports = {\r\n  cacheHandler: require.resolve('./cache-handler.js'),\r\n  images: {\r\n    customCacheHandler: true,\r\n  },\r\n}\n\nGood to know: This opt-in flag will become the default behavior in the next major version. Setting it now allows you to prepare your cache handler for image optimization entries.\n\nYou can use the kind property to differentiate between cache entry types and handle images separately if needed, for example to implement an eviction policy or store images in a different location.\n\nWhen handling image cache entries, the kind will be 'IMAGE' and the data will include buffer, etag, extension, and revalidate properties.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "Platform Support",
+    "content": "| Deployment Option                                                   | Supported         |\r\n| ------------------------------------------------------------------- | ----------------- |\r\n| Node.js server | Yes               |\r\n| Docker container      | Yes               |\r\n| Static export  | No                |\r\n| Adapters            | Platform-specific |\n\nLearn how to configure ISR when self-hosting Next.js.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  },
+  {
+    "documentTitle": "Custom Next.js Cache Handler",
+    "documentDescription": "Configure the Next.js cache used for storing and revalidating data to use any external service like Redis, Memcached, or others.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                                      |\r\n| --------- | ------------------------------------------------------------ |\r\n| v16.2.0 | cacheHandler support for image optimization caching.       |\r\n| v14.1.0 | Renamed to cacheHandler and became stable.                 |\r\n| v13.4.0 | incrementalCacheHandlerPath support for revalidateTag.   |\r\n| v13.4.0 | incrementalCacheHandlerPath support for standalone output. |\r\n| v12.2.0 | Experimental incrementalCacheHandlerPath added.            |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\incrementalCacheHandlerPath.mdx"
+  }
+]

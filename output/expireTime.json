@@ -1,0 +1,12 @@
+[
+  {
+    "documentTitle": "expireTime",
+    "documentDescription": "Customize stale-while-revalidate expire time for ISR enabled pages.",
+    "sectionTitle": "Introduction",
+    "content": "/* The content of this doc is shared between the app and pages router. You can use the `<PagesOnly>Content</PagesOnly>` component to add content that is specific to the Pages Router. Any shared content should not be wrapped in a component. */\n\nYou can specify a custom stale-while-revalidate expire time for CDNs to consume in the Cache-Control header for ISR enabled pages.\n\nOpen next.config.js and add the expireTime config:\n\nmodule.exports = {\r\n  // one hour in seconds\r\n  expireTime: 3600,\r\n}\n\nNow when sending the Cache-Control header the expire time will be calculated depending on the specific revalidate period.\n\nFor example, if you have a revalidate of 15 minutes on a path and the expire time is one hour the generated Cache-Control header will be s-maxage=900, stale-while-revalidate=2700 so that it can stay stale for 15 minutes less than the configured expire time.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\expireTime.mdx"
+  }
+]

@@ -1,0 +1,762 @@
+[
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Introduction",
+    "content": "React Server Components improve performance and simplify data fetching, but also shift where and how data is accessed, changing some of the traditional security assumptions for handling data in frontend apps.\n\nThis guide will help you understand how to think about data security in Next.js and how to implement best practices.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Data fetching approaches",
+    "content": "There are three main approaches we recommend for fetching data in Next.js, depending on the size and age of your project:\n\nHTTP APIs: for existing large applications and organizations.Data Access Layer: for new projects.Component-Level Data Access: for prototypes and learning.\n\nWe recommend choosing one data fetching approach and avoiding mixing them. This makes it clear for both developers working in your code base and security auditors what to expect.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "External HTTP APIs",
+    "content": "You should follow a Zero Trust model when adopting Server Components in an existing project. You can continue calling your existing API endpoints such as REST or GraphQL from Server Components using fetch, just as you would in Client Components.\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const token = cookieStore.get('AUTH_TOKEN')?.value\r\n\r\n  const res = await fetch('https://api.example.com/profile', {\r\n    headers: {\r\n      Cookie: `AUTH_TOKEN=${token}`,\r\n      // Other headers\r\n    },\r\n  })\r\n\r\n  // ....\r\n}\n\nThis approach works well when:\n\nYou already have security practices in place.Separate backend teams use other languages or manage APIs independently.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Data Access Layer",
+    "content": "For new projects, we recommend creating a dedicated Data Access Layer (DAL). This is an internal library that controls how and when data is fetched, and what gets passed to your render context.\n\nA Data Access Layer should:\n\nOnly run on the server.Perform authorization checks.Return safe, minimal Data Transfer Objects (DTOs).\n\nThis approach centralizes all data access logic, making it easier to enforce consistent data access and reduces the risk of authorization bugs. You also get the benefit of sharing an in-memory cache across different parts of a request.\n\nimport { cache } from 'react'\r\nimport { cookies } from 'next/headers'\r\n\r\n// Cached helper methods makes it easy to get the same value in many places\r\n// without manually passing it around. This discourages passing it from Server\r\n// Component to Server Component which minimizes risk of passing it to a Client\r\n// Component.\r\nexport const getCurrentUser = cache(async () => {\r\n  const cookieStore = await cookies()",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Data Access Layer",
+    "content": "t from Server\r\n// Component to Server Component which minimizes risk of passing it to a Client\r\n// Component.\r\nexport const getCurrentUser = cache(async () => {\r\n  const cookieStore = await cookies()\r\n  const token = cookieStore.get('AUTH_TOKEN')\r\n  const decodedToken = await decryptAndValidate(token)\r\n  // Don't include secret tokens or private information as public fields.\r\n  // Use classes to avoid accidentally passing the whole object to the client.\r\n  return new User(decodedToken.id)\r\n})\n\nimport 'server-only'\r\nimport { getCurrentUser } from './auth'\r\n\r\nfunction canSeeUsername(viewer: User) {\r\n  // Public info for now, but can change\r\n  return true\r\n}\r\n\r\nfunction canSeePhoneNumber(viewer: User, team: string) {\r\n  // Privacy rules\r\n  return viewer.isAdmin || team === viewer.team\r\n}\r\n\r\nexport async function getProfileDTO(slug: string) {\r\n  // Don't pass values, read back cached values, also solves context and easier to make it lazy",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Data Access Layer",
+    "content": "urn viewer.isAdmin || team === viewer.team\r\n}\r\n\r\nexport async function getProfileDTO(slug: string) {\r\n  // Don't pass values, read back cached values, also solves context and easier to make it lazy\r\n\r\n  // use a database API that supports safe templating of queries\r\n  const [rows] = await sql`SELECT * FROM user WHERE slug = ${slug}`\r\n  const userData = rows[0]\r\n\r\n  const currentUser = await getCurrentUser()\r\n\r\n  // only return the data relevant for this query and not everything\r\n  // <https://www.w3.org/2001/tag/doc/APIMinimization>\r\n  return {\r\n    username: canSeeUsername(currentUser) ? userData.username : null,\r\n    phonenumber: canSeePhoneNumber(currentUser, userData.team)\r\n      ? userData.phonenumber\r\n      : null,\r\n  }\r\n}\n\nimport { getProfileDTO } from '../../data/user-dto'\r\n\r\nexport default async function Page({ params }) {\r\n  const { slug } = await params\r\n  // This page can now safely pass around this profile knowing\r\n  // that it shouldn't contain anything sensitive.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Data Access Layer",
+    "content": "export default async function Page({ params }) {\r\n  const { slug } = await params\r\n  // This page can now safely pass around this profile knowing\r\n  // that it shouldn't contain anything sensitive.\r\n  const profile = await getProfileDTO(slug)\r\n  ...\r\n}\n\nGood to know: Secret keys should be stored in environment variables, but only the Data Access Layer should access process.env. This keeps secrets from being exposed to other parts of the application.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Component-level data access",
+    "content": "For quick prototypes and iteration, database queries can be placed directly in Server Components.\n\nThis approach, however, makes it easier to accidentally expose private data to the client, for example:\n\nimport Profile from './components/profile.tsx'\r\n\r\nexport default async function Page({ params }) {\r\n  const { slug } = await params\r\n  const [rows] = await sql`SELECT * FROM user WHERE slug = ${slug}`\r\n  const userData = rows[0]\r\n  // EXPOSED: This exposes all the fields in userData to the client because\r\n  // we are passing the data from the Server Component to the Client.\r\n  return <Profile user={userData} />\r\n}\n\n'use client'\r\n\r\n// BAD: This is a bad props interface because it accepts way more data than the\r\n// Client Component needs and it encourages server components to pass all that\r\n// data down. A better solution would be to accept a limited object with just\r\n// the fields necessary for rendering the profile.\r\nexport default async function Profile({ user }: { user: User }) {",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Component-level data access",
+    "content": "t\r\n// data down. A better solution would be to accept a limited object with just\r\n// the fields necessary for rendering the profile.\r\nexport default async function Profile({ user }: { user: User }) {\r\n  return (\r\n    <div>\r\n      <h1>{user.name}</h1>\r\n      ...\r\n    </div>\r\n  )\r\n}\n\nYou should sanitize the data before passing it to the Client Component:\n\nimport { sql } from './db'\r\n\r\nexport async function getUser(slug: string) {\r\n  const [rows] = await sql`SELECT * FROM user WHERE slug = ${slug}`\r\n  const user = rows[0]\r\n\r\n  // Return only the public fields\r\n  return {\r\n    name: user.name,\r\n  }\r\n}\n\nimport { getUser } from '../data/user'\r\nimport Profile from './ui/profile'\r\n\r\nexport default async function Page({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n  const publicProfile = await getUser(slug)\r\n  return <Profile user={publicProfile} />\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Passing data from server to client",
+    "content": "On the initial load, both Server and Client Components run on the server to generate HTML. However, they execute in isolated module systems. This ensures that Server Components can access private data and APIs, while Client Components cannot.\n\nServer Components:\n\nRun only on the server.Can safely access environment variables, secrets, databases, and internal APIs.\n\nClient Components:\n\nRun on the server during prerendering, but must follow the same security assumptions as code running in the browser.Must not access privileged data or server-only modules.\n\nThis ensures the app is secure by default, but it's possible to accidentally expose private data through how data is fetched or passed to components.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Tainting",
+    "content": "To prevent accidental exposure of private data to the client, you can use React Taint APIs:\n\nexperimental_taintObjectReference for data objects.experimental_taintUniqueValue for specific values.\n\nYou can enable usage in your Next.js app with the experimental.taint option in next.config.js:\n\nmodule.exports = {\r\n  experimental: {\r\n    taint: true,\r\n  },\r\n}\n\nThis prevents the tainted objects or values from being passed to the client. However, it's an additional layer of protection, you should still filter and sanitize the data in your DAL before passing it to React's render context.\n\nGood to know:By default, environment variables are only available on the Server. Next.js exposes any environment variable prefixed with NEXT_PUBLIC_ to the client. Learn more.Functions and classes are already blocked from being passed to Client Components by default.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Preventing client-side execution of server-only code",
+    "content": "To prevent server-only code from being executed on the client, you can mark a module with the server-only package:\n\nimport 'server-only'\r\n\r\n//...\n\nThis ensures that proprietary code or internal business logic stays on the server by causing a build error if the module is imported in the client environment.\n\nNext.js handles server-only imports internally. The contents of these packages from NPM are not used. However, if your linting rules flag extraneous dependencies, you may install them to avoid issues.\n\nnpm install server-only\n\nyarn add server-only\n\npnpm add server-only\n\nbun add server-only\n\nRead more about server-only in the preventing environment poisoning section.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Mutating Data",
+    "content": "Next.js handles mutations with Server Actions.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Built-in Server Actions Security features",
+    "content": "By default, when a Server Action is created and exported, it is reachable via a direct POST request, not just through your application's UI. This means, even if a Server Action or utility function is not imported elsewhere in your code, it can still be called externally.\n\nTo improve security, Next.js has the following built-in features:\n\nSecure action IDs: Next.js creates encrypted, non-deterministic IDs to allow the client to reference and call the Server Action. These IDs are periodically recalculated between builds for enhanced security.Dead code elimination: Unused Server Actions (referenced by their IDs) are removed from client bundle to avoid public access.\n\nGood to know:The IDs are created during compilation and are cached for a maximum of 14 days. They will be regenerated when a new build is initiated or when the build cache is invalidated.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Built-in Server Actions Security features",
+    "content": "ic access.\n\nGood to know:The IDs are created during compilation and are cached for a maximum of 14 days. They will be regenerated when a new build is initiated or when the build cache is invalidated.\r\nThis security improvement reduces the risk in cases where an authentication layer is missing. However, you should still treat Server Actions as reachable via direct POST requests and verify authentication and authorization inside each one.\n\n// app/actions.js\r\n'use server'\r\n\r\n// If this action **is** used in our application, Next.js\r\n// will create a secure ID to allow the client to reference\r\n// and call the Server Action.\r\nexport async function updateUserAction(formData) {}\r\n\r\n// If this action **is not** used in our application, Next.js\r\n// will automatically remove this code during `next build`\r\n// and will not create a public endpoint.\r\nexport async function deleteUserAction(formData) {}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Validating client input",
+    "content": "You should always validate input from client, as they can be easily modified. For example, form data, URL parameters, headers, and searchParams:\n\n// BAD: Trusting searchParams directly\r\nexport default async function Page({ searchParams }) {\r\n  const isAdmin = (await searchParams).isAdmin\r\n  if (isAdmin === 'true') {\r\n    // Vulnerable: relies on untrusted client data\r\n    return <AdminPanel />\r\n  }\r\n}\r\n\r\n// GOOD: Re-verify every time\r\nimport { cookies } from 'next/headers'\r\nimport { verifyAdmin } from './auth'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const token = cookieStore.get('AUTH_TOKEN')\r\n  const isAdmin = await verifyAdmin(token)\r\n\r\n  if (isAdmin) {\r\n    return <AdminPanel />\r\n  }\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Authentication and authorization",
+    "content": "A page-level authentication check does not extend to the Server Actions defined within it. Always re-verify inside the action:\n\nimport { auth } from '@/lib/auth'\r\nimport { redirect } from 'next/navigation'\r\n\r\nexport default async function AdminPage() {\r\n  const session = await auth()\r\n  if (!session?.user?.isAdmin) {\r\n    redirect('/login')\r\n  }\r\n\r\n  return (\r\n    <form\r\n      action={async () => {\r\n        'use server'\r\n        const session = await auth()\r\n        if (!session?.user?.isAdmin) {\r\n          throw new Error('Unauthorized')\r\n        }\r\n        await db.record.deleteMany()\r\n      }}\r\n    >\r\n      <button>Delete Records</button>\r\n    </form>\r\n  )\r\n}\n\nThe highlighted auth() check inside the action is critical. The page-level redirect on line 6 controls which UI is rendered, but the Server Action is a separate entry point and must verify the caller on its own.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Authentication and authorization",
+    "content": "ted auth() check inside the action is critical. The page-level redirect on line 6 controls which UI is rendered, but the Server Action is a separate entry point and must verify the caller on its own.\n\nBeyond authentication (is the user logged in?), remember to check authorization (does this user have permission to act on this specific resource?). This prevents Insecure Direct Object Reference (IDOR) vulnerabilities:\n\n'use server'\r\n\r\nimport { auth } from '@/lib/auth'\r\nimport { db } from '@/lib/db'\r\n\r\nexport async function deletePost(postId: string) {\r\n  const session = await auth()\r\n  if (!session?.user) {\r\n    throw new Error('Unauthorized')\r\n  }\r\n\r\n  const post = await db.post.findUnique({ where: { id: postId } })\r\n\r\n  // Check that the user owns this resource\r\n  if (post.authorId !== session.user.id) {\r\n    throw new Error('Forbidden')\r\n  }\r\n\r\n  await db.post.delete({ where: { id: postId } })\r\n}\n\nLearn more about Authentication in Next.js.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Using a Data Access Layer for mutations",
+    "content": "Just as we recommend a Data Access Layer for reading data, you can apply the same pattern to mutations. This keeps authentication, authorization, and database logic in a dedicated server-only module, while \"use server\" actions stay thin.\n\nimport 'server-only'\r\n\r\nimport { auth } from '@/lib/auth'\r\nimport { db } from '@/lib/db'\r\n\r\nexport async function deletePost(postId: string) {\r\n  const session = await auth()\r\n  if (!session?.user) {\r\n    throw new Error('Unauthorized')\r\n  }\r\n\r\n  const post = await db.post.findUnique({ where: { id: postId } })\r\n\r\n  if (post.authorId !== session.user.id) {\r\n    throw new Error('Forbidden')\r\n  }\r\n\r\n  await db.post.delete({ where: { id: postId } })\r\n}\n\nThe \"use server\" action then delegates to the DAL:\n\n'use server'\r\n\r\nimport { deletePost } from '@/data/posts'\r\nimport { revalidatePath } from 'next/cache'\r\n\r\nexport async function deletePostAction(postId: string) {\r\n  await deletePost(postId) // Auth + authz happen inside the DAL",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Using a Data Access Layer for mutations",
+    "content": "tePost } from '@/data/posts'\r\nimport { revalidatePath } from 'next/cache'\r\n\r\nexport async function deletePostAction(postId: string) {\r\n  await deletePost(postId) // Auth + authz happen inside the DAL\r\n  revalidatePath('/posts')\r\n}\n\nGood to know: You can use import 'server-only' in both the Data Access Layer and the \"use server\" file itself. Both work when the action is imported into a Client Component (for example, to pass it to useActionState), because \"use server\" modules are resolved in a server-only webpack layer.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Controlling return values",
+    "content": "Server Action return values are serialized and sent to the client. Only return what the UI needs, not raw database records.\n\n'use server'\r\n\r\nimport { auth } from '@/lib/auth'\r\nimport { db } from '@/lib/db'\r\n\r\n// BAD: Returns the full database record, which may include\r\n// internal fields the client should not see.\r\nexport async function updateUser(data: FormData) {\r\n  const session = await auth()\r\n  if (!session?.user) {\r\n    throw new Error('Unauthorized')\r\n  }\r\n  return db.user.update({\r\n    where: { id: session.user.id },\r\n    data: { name: data.get('name') as string },\r\n  })\r\n}\r\n\r\n// GOOD: Returns only what the client needs.\r\nexport async function updateUserSafe(data: FormData) {\r\n  const session = await auth()\r\n  if (!session?.user) {\r\n    throw new Error('Unauthorized')\r\n  }\r\n  await db.user.update({\r\n    where: { id: session.user.id },\r\n    data: { name: data.get('name') as string },\r\n  })\r\n  return { success: true }\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Rate limiting",
+    "content": "For expensive operations (sending emails, writing to a database), consider adding rate limiting to prevent abuse. See the Rate limiting example in the Backend for Frontend guide.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Closures and encryption",
+    "content": "Defining a Server Action inside a component creates a closure where the action has access to the outer function's scope. For example, the publish action has access to the publishVersion variable:\n\nexport default async function Page() {\r\n  const publishVersion = await getLatestVersion();\r\n\r\n  async function publish() {\r\n    \"use server\";\r\n    if (publishVersion !== await getLatestVersion()) {\r\n      throw new Error('The version has changed since pressing publish');\r\n    }\r\n    ...\r\n  }\r\n\r\n  return (\r\n    <form>\r\n      <button formAction={publish}>Publish</button>\r\n    </form>\r\n  );\r\n}\n\nexport default async function Page() {\r\n  const publishVersion = await getLatestVersion();\r\n\r\n  async function publish() {\r\n    \"use server\";\r\n    if (publishVersion !== await getLatestVersion()) {\r\n      throw new Error('The version has changed since pressing publish');\r\n    }\r\n    ...\r\n  }\r\n\r\n  return (\r\n    <form>\r\n      <button formAction={publish}>Publish</button>\r\n    </form>\r\n  );\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Closures and encryption",
+    "content": ") {\r\n      throw new Error('The version has changed since pressing publish');\r\n    }\r\n    ...\r\n  }\r\n\r\n  return (\r\n    <form>\r\n      <button formAction={publish}>Publish</button>\r\n    </form>\r\n  );\r\n}\n\nClosures are useful when you need to capture a snapshot of data (e.g. publishVersion) at the time of rendering so that it can be used later when the action is invoked.\n\nHowever, for this to happen, the captured variables are sent to the client and back to the server when the action is invoked. To prevent sensitive data from being exposed to the client, Next.js automatically encrypts the closed-over variables. A new private key is generated for each action every time a Next.js application is built. This means actions can only be invoked for a specific build.\n\nGood to know: We don't recommend relying on encryption alone to prevent sensitive values from being exposed on the client.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Overwriting encryption keys (advanced)",
+    "content": "When self-hosting your Next.js application across multiple servers, each server instance may end up with a different encryption key, leading to potential inconsistencies.\n\nTo mitigate this, you can overwrite the encryption key using the process.env.NEXT_SERVER_ACTIONS_ENCRYPTION_KEY environment variable. Specifying this variable ensures that your encryption keys are persistent across builds, and all server instances use the same key.\n\nThe key must be a base64-encoded value whose decoded length matches a valid AES key size (16, 24, or 32 bytes). Next.js generates 32-byte keys by default. You can generate a compatible key using your platform’s cryptographic tools, for example:\n\nopenssl rand -base64 32\n\nThis is an advanced use case where consistent encryption behavior across multiple deployments is critical for your application. Follow standard security practices such as key rotation and signing. See the Self-Hosting guide for deployment-specific considerations.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Allowed origins (advanced)",
+    "content": "Since Server Actions can be invoked in a <form> element, this opens them up to CSRF attacks.\n\nBehind the scenes, Server Actions use the POST method, and only this HTTP method is allowed to invoke them. This prevents most CSRF vulnerabilities in modern browsers, particularly with SameSite cookies being the default.\n\nAs an additional protection, Server Actions in Next.js also compare the Origin header to the Host header (or X-Forwarded-Host). If these don't match, the request will be aborted. In other words, Server Actions can only be invoked on the same host as the page that hosts it.\n\nFor large applications that use reverse proxies or multi-layered backend architectures (where the server API differs from the production domain), it's recommended to use the configuration option serverActions.allowedOrigins option to specify a list of safe origins. The option accepts an array of strings.\n\n/** @type {import('next').NextConfig} */\r\nmodule.exports = {\r\n  experimental: {",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Allowed origins (advanced)",
+    "content": "option serverActions.allowedOrigins option to specify a list of safe origins. The option accepts an array of strings.\n\n/** @type {import('next').NextConfig} */\r\nmodule.exports = {\r\n  experimental: {\r\n    serverActions: {\r\n      allowedOrigins: ['my-proxy.com', '*.my-proxy.com'],\r\n    },\r\n  },\r\n}\n\nLearn more about Security and Server Actions.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Avoiding side-effects during rendering",
+    "content": "Mutations (e.g. logging out users, updating databases, invalidating caches) should never be a side-effect, either in Server or Client Components. Next.js explicitly prevents setting cookies or triggering cache revalidation within render methods to avoid unintended side effects.\n\n// BAD: Triggering a mutation during rendering\r\nexport default async function Page({ searchParams }) {\r\n  if ((await searchParams).logout) {\r\n    const cookieStore = await cookies()\r\n    cookieStore.delete('AUTH_TOKEN')\r\n  }\r\n\r\n  return <UserProfile />\r\n}\n\nInstead, you should use Server Actions to handle mutations.\n\n// GOOD: Using Server Actions to handle mutations\r\nimport { logout } from './actions'\r\n\r\nexport default function Page() {\r\n  return (\r\n    <>\r\n      <UserProfile />\r\n      <form action={logout}>\r\n        <button type=\"submit\">Logout</button>\r\n      </form>\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Avoiding side-effects during rendering",
+    "content": "'./actions'\r\n\r\nexport default function Page() {\r\n  return (\r\n    <>\r\n      <UserProfile />\r\n      <form action={logout}>\r\n        <button type=\"submit\">Logout</button>\r\n      </form>\r\n    </>\r\n  )\r\n}\n\nGood to know: Next.js uses POST requests to handle mutations. This prevents accidental side-effects from GET requests, reducing Cross-Site Request Forgery (CSRF) risks.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "If you're doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "f you're doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "you're doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "you're doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ou're doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "u're doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "'re doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "re doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "e doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "doing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "oing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ing an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ng an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "g an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "an audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "n audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "audit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "udit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "dit of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "it of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "t of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "of a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "f a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "a Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "Next.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ext.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "xt.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "t.js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": ".js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "js project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "s project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "project, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "roject, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "oject, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ject, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ect, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ct, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "t, here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": ", here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "here are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ere are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "re are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "e are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "are a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "re a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "e a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "a few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "few things we recommend looking extra at:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  },
+  {
+    "documentTitle": "How to think about data security in Next.js",
+    "documentDescription": "Learn the built-in data security features in Next.js and learn best practices for protecting your application's data.",
+    "sectionTitle": "Auditing",
+    "content": "ew things we recommend looking extra at:\n\nData Access Layer: Is there an established practice for an isolated Data Access Layer? Verify that database packages and environment variables are not imported outside the Data Access Layer.\"use client\" files: Are the Component props expecting private data? Are the type signatures overly broad?\"use server\" files: Are the Action arguments validated in the action or inside the Data Access Layer? Is the user re-authorized inside the action? Does the action check ownership of the resource (authorization, not just authentication)? Are return values filtered to only what the client needs? Is database access delegated to a server-only Data Access Layer?/[param]/. Folders with brackets are user input. Are params validated?proxy.ts and route.ts: Have a lot of power. Spend extra time auditing these using traditional techniques. Perform Penetration Testing or Vulnerability Scanning regularly or in alignment with your team's software development lifecycle.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\data-security.mdx"
+  }
+]

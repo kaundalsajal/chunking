@@ -1,0 +1,56 @@
+[
+  {
+    "documentTitle": "refresh",
+    "documentDescription": "API Reference for the refresh function.",
+    "sectionTitle": "Introduction",
+    "content": "refresh allows you to refresh the client router from within a Server Action.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\refresh.mdx"
+  },
+  {
+    "documentTitle": "refresh",
+    "documentDescription": "API Reference for the refresh function.",
+    "sectionTitle": "Usage",
+    "content": "refresh can only be called from within Server Actions. It cannot be used in Route Handlers, Client Components, or any other context.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\refresh.mdx"
+  },
+  {
+    "documentTitle": "refresh",
+    "documentDescription": "API Reference for the refresh function.",
+    "sectionTitle": "Parameters",
+    "content": "refresh(): void;",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\refresh.mdx"
+  },
+  {
+    "documentTitle": "refresh",
+    "documentDescription": "API Reference for the refresh function.",
+    "sectionTitle": "Returns",
+    "content": "refresh does not return a value.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\refresh.mdx"
+  },
+  {
+    "documentTitle": "refresh",
+    "documentDescription": "API Reference for the refresh function.",
+    "sectionTitle": "Examples",
+    "content": "'use server'\r\n\r\nimport { refresh } from 'next/cache'\r\n\r\nexport async function createPost(formData: FormData) {\r\n  const title = formData.get('title')\r\n  const content = formData.get('content')\r\n\r\n  // Create the post in your database\r\n  const post = await db.post.create({\r\n    data: { title, content },\r\n  })\r\n\r\n  refresh()\r\n}\n\n'use server'\r\n\r\nimport { refresh } from 'next/cache'\r\n\r\nexport async function createPost(formData) {\r\n  const title = formData.get('title')\r\n  const content = formData.get('content')\r\n\r\n  // Create the post in your database\r\n  const post = await db.post.create({\r\n    data: { title, content },\r\n  })\r\n\r\n  refresh()\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\refresh.mdx"
+  },
+  {
+    "documentTitle": "refresh",
+    "documentDescription": "API Reference for the refresh function.",
+    "sectionTitle": "Error when used outside Server Actions",
+    "content": "import { refresh } from 'next/cache'\r\n\r\nexport async function POST() {\r\n  // This will throw an error\r\n  refresh()\r\n}",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\refresh.mdx"
+  }
+]

@@ -1,0 +1,186 @@
+[
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Introduction",
+    "content": "With Cache Components enabled, a session read happens at request time, so it can't be prerendered into the static shell. Authenticated UI streams in behind a <Suspense> boundary instead, and data derived from the session can still be cached.\n\nThe examples use iron-session for encrypted cookie sessions, but the patterns apply to any session or authentication library. For a complete, runnable version, see the with-iron-session-cache-components example.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Prerequisites",
+    "content": "Enable cacheComponents:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nexport default nextConfig\n\nThis guide covers code patterns for authentication with Cache Components: reading the session at request time, streaming authenticated UI, and caching session-derived data. It assumes you're comfortable with Cache Components (if not, read Caching first) and that you already have a session set on login.\n\nFor the fundamentals this builds on, we recommend two guides:\n\nAuthentication covers sign-up, login, session management, authorization, and the Data Access Layer.Data Security covers keeping data access on the server and sensitive data off the client.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Migrating an existing app",
+    "content": "With Cache Components enabled, instant navigation validation flags every route that reads the session, because a request read can't be prerendered into the static shell. You don't have to resolve them all before shipping. Set export const instant = false on the page or layout to let it keep blocking on the server, then adopt the patterns below one route at a time. For the full migration workflow, see Migrating to Cache Components.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 1: Read the current user",
+    "content": "Reading the current user reads the session cookie, then looks the user up. A request read can't be part of the static shell, so it always sits behind a <Suspense> boundary and streams in on every navigation.\n\nBecause a user session is valid for a period of time, adding a cache lifetime lets the framework prefetch that content ahead of time.\n\nThe server-side directives can't give it that lifetime, though: neither a plain use cache nor use cache: remote can call cookies(), and you can't extract the value and pass it in either, because:\n\nA session helper reads the cookie deep inside its own code, so there's nothing to lift out.Validating it compares a token's expiry against the current time (iron-session's unsealData rejects an expired seal), so the read is request- and time-dependent.\n\nThat's what use cache: private is for: it reads cookies() and headers() directly, keeping the result in the browser only, never on the server.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 1: Read the current user",
+    "content": "ired seal), so the read is request- and time-dependent.\n\nThat's what use cache: private is for: it reads cookies() and headers() directly, keeping the result in the browser only, never on the server.\n\nA private scope stays in the browser, so it never caches on the server. To cache on the server instead, extract a value (the userId, for example) and pass it into a plain use cache or use cache: remote. The same pattern caches data derived from the session, covered in Step 4.\n\nimport 'server-only'\r\nimport { cookies } from 'next/headers'\r\nimport { sealData, unsealData } from 'iron-session'\r\n\r\nexport type SessionData = {\r\n  userId?: string\r\n}\r\n\r\nconst COOKIE_NAME = 'app_session'\r\nconst password = process.env.SESSION_PASSWORD!\r\n\r\nexport async function getSession(): Promise<SessionData> {\r\n  const cookie = (await cookies()).get(COOKIE_NAME)?.value\r\n  if (!cookie) {\r\n    return {}\r\n  }\r\n  return unsealData<SessionData>(cookie, { password })\r\n}\n\nimport 'server-only'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 1: Read the current user",
+    "content": "omise<SessionData> {\r\n  const cookie = (await cookies()).get(COOKIE_NAME)?.value\r\n  if (!cookie) {\r\n    return {}\r\n  }\r\n  return unsealData<SessionData>(cookie, { password })\r\n}\n\nimport 'server-only'\r\nimport { redirect } from 'next/navigation'\r\nimport { getSession } from './session'\r\nimport { findUserById } from './data'\r\n\r\nexport type User = {\r\n  id: string\r\n  name: string\r\n}\r\n\r\nexport async function getCurrentUser(): Promise<User> {\r\n  'use cache: private'\r\n\r\n  const { userId } = await getSession()\r\n  if (!userId) {\r\n    redirect('/login')\r\n  }\r\n\r\n  const user = await findUserById(userId)\r\n  if (!user) {\r\n    redirect('/login')\r\n  }\r\n\r\n  return { id: user.id, name: user.name }\r\n}\n\nThe redirect() calls throw to interrupt rendering rather than return a value, so they aren't cached. Only a resolved user is.\n\nGood to know: use cache: private accepts cookies(), headers(), and searchParams, but not connection(). See use cache: private for the full list.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 2: Show the user without blocking the page",
+    "content": "A component that reads the session must sit behind a <Suspense> boundary. With Cache Components, reading cookies() outside a boundary is a build error. The boundary is also what keeps the rest of the page fast. Anything outside it prerenders into the static shell and loads instantly, as long as it's static or wrapped in use cache and doesn't read runtime data of its own. Only the section behind the boundary waits for the request.\n\nimport { Suspense } from 'react'\r\nimport { getCurrentUser } from '@/lib/auth'\r\nimport { getAnnouncements } from '@/lib/data'\r\n\r\nexport default function Page() {\r\n  return (\r\n    <main>\r\n      {/* Cached, so it prerenders into the static shell */}\r\n      <Announcements />\r\n\r\n      {/* Reads the session, so it streams in behind the boundary */}\r\n      <Suspense fallback={<p>Loading your dashboard…</p>}>\r\n        <Dashboard />\r\n      </Suspense>\r\n    </main>\r\n  )\r\n}\r\n\r\nasync function Announcements() {\r\n  'use cache'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 2: Show the user without blocking the page",
+    "content": "n behind the boundary */}\r\n      <Suspense fallback={<p>Loading your dashboard…</p>}>\r\n        <Dashboard />\r\n      </Suspense>\r\n    </main>\r\n  )\r\n}\r\n\r\nasync function Announcements() {\r\n  'use cache'\r\n  const announcements = await getAnnouncements()\r\n  return (\r\n    <ul>\r\n      {announcements.map((announcement) => (\r\n        <li key={announcement}>{announcement}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\r\n\r\nasync function Dashboard() {\r\n  const user = await getCurrentUser()\r\n  return <h1>Welcome, {user.name}</h1>\r\n}\n\nKeep the session read out of a layout's top level, too. A top-level await on the session in a layout holds the whole segment, including {children}, behind that request, so push it into a component inside a boundary. See Push dynamic access down.\n\nGood to know: getCurrentUser reads the session, checks it, and returns a narrow user. Centralizing those reads in one function is the Data Access Layer pattern.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 3: Share the user across components",
+    "content": "You don't have to read the session again in every component that needs the user. Read it once, then hand it to as many Server and Client Components as you like from inside the same boundary.\n\nServer Components can call getCurrentUser() directly. To reach Client Components without prop drilling, create the promise once, pass it through context, and unwrap it with use(). For the general pattern, see Using React's use within a Context Provider. Because getCurrentUser reads the request, create its promise inside the Suspense boundary, not at the top of a layout.\n\n'use client'\r\n\r\nimport { createContext, use } from 'react'\r\nimport type { ReactNode } from 'react'\r\nimport type { User } from '@/lib/auth'\r\n\r\nconst UserContext = createContext<Promise<User> | null>(null)\r\n\r\nexport function UserProvider({\r\n  userPromise,\r\n  children,\r\n}: {\r\n  userPromise: Promise<User>\r\n  children: ReactNode\r\n}) {\r\n  return <UserContext value={userPromise}>{children}</UserContext>\r\n}\r\n\r\nexport function useUser() {",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 3: Share the user across components",
+    "content": "r({\r\n  userPromise,\r\n  children,\r\n}: {\r\n  userPromise: Promise<User>\r\n  children: ReactNode\r\n}) {\r\n  return <UserContext value={userPromise}>{children}</UserContext>\r\n}\r\n\r\nexport function useUser() {\r\n  const userPromise = use(UserContext)\r\n  if (!userPromise) {\r\n    throw new Error('useUser must be used within a UserProvider')\r\n  }\r\n  return use(userPromise)\r\n}\n\nThe Server Component behind the boundary creates the promise and hands it to the provider without awaiting it. Each consumer then resolves it behind its own boundary, so the shared chrome renders without waiting on the session:\n\nfunction Dashboard() {\r\n  const userPromise = getCurrentUser()\r\n\r\n  return (\r\n    <UserProvider userPromise={userPromise}>\r\n      <Suspense fallback={<span>Loading…</span>}>\r\n        <UserBadge />\r\n      </Suspense>\r\n    </UserProvider>\r\n  )\r\n}\n\nClient Components call useUser() to get the current user. Because use() suspends until the promise resolves, keep the component behind a <Suspense> boundary:",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 3: Share the user across components",
+    "content": "</Suspense>\r\n    </UserProvider>\r\n  )\r\n}\n\nClient Components call useUser() to get the current user. Because use() suspends until the promise resolves, keep the component behind a <Suspense> boundary:\n\n'use client'\r\n\r\nimport { useUser } from './user-provider'\r\n\r\nexport function UserBadge() {\r\n  const user = useUser()\r\n  return <span>Signed in as {user.name}</span>\r\n}\n\nGood to know: Expose only what the client needs. The getCurrentUser helper returns a narrow { id, name } rather than the raw session. To keep sensitive fields from reaching the client, see taintUniqueValue.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 4: Cache session-derived data",
+    "content": "Now that you have the user, you can cache the data you fetch for them in one of two ways. Passing the user id into a plain use cache function keeps the result on the server, keyed by the id (it becomes part of the cache key), where a cacheTag can invalidate it later. Reading it inside a use cache: private scope keeps it in the browser only, never on the server, which matters when requirements forbid storing certain data server-side, even ephemerally. The example passes the id, since these notes are tagged and refreshed when they change.\n\nA plain use cache scope can't read cookies(), so the exported function resolves the user and passes just the id to the cached function:\n\nimport 'server-only'\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport { getCurrentUser } from './auth'\r\n\r\nexport async function getNotes() {\r\n  const user = await getCurrentUser()\r\n  return getNotesByUserId(user.id)\r\n}\r\n\r\nasync function getNotesByUserId(userId: string) {\r\n  'use cache'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 4: Cache session-derived data",
+    "content": "} from './auth'\r\n\r\nexport async function getNotes() {\r\n  const user = await getCurrentUser()\r\n  return getNotesByUserId(user.id)\r\n}\r\n\r\nasync function getNotesByUserId(userId: string) {\r\n  'use cache'\r\n  cacheTag(`notes:${userId}`)\r\n  cacheLife('minutes')\r\n\r\n  return db.query.notes.findMany({\r\n    where: (notes, { eq }) => eq(notes.userId, userId),\r\n  })\r\n}\n\nKeep getNotesByUserId unexported so a caller can't request another user's notes by passing a different id. Resolving the user inside the exported getter is what makes that safe. See Data Security.\n\nCall it from a Server Component that renders the notes. There's no user id to pass, and the getCurrentUser() call inside the getter hits the private cache, so the session isn't read again:\n\nasync function Notes() {\r\n  const notes = await getNotes()\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 4: Cache session-derived data",
+    "content": "s no user id to pass, and the getCurrentUser() call inside the getter hits the private cache, so the session isn't read again:\n\nasync function Notes() {\r\n  const notes = await getNotes()\r\n  // ...\r\n}\n\nGood to know: cache keys and tags are stored in plain text. A cached function's arguments and captured variables are serialized into its cache key, and cacheTag values are stored as written. Neither is hashed: the default cache holds them as plain-text map keys and tag lists, and a remote cache receives them the same way. Key and tag on a stable identifier like the user id, and keep secrets and sensitive personal data (tokens, passwords, raw emails) out of arguments and tags.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 4: Cache session-derived data",
+    "content": "a remote cache receives them the same way. Key and tag on a stable identifier like the user id, and keep secrets and sensitive personal data (tokens, passwords, raw emails) out of arguments and tags.\n\nOn the server, plain use cache keeps the entry in memory as a best effort: it's evicted under pressure and, in serverless, doesn't persist across instances. If that data must survive across instances and requests, opt into use cache: remote for durable, shared storage, where the cache key you choose drives your hit rate.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 5: Update session-derived data",
+    "content": "When a Server Action changes a user's data, call updateTag with the same tag to refresh the cached entry. Re-read the session inside the action so it authorizes itself rather than trusting the client. See authentication with Server Actions for why this matters.\n\n'use server'\r\nimport { redirect } from 'next/navigation'\r\nimport { updateTag } from 'next/cache'\r\nimport { getSession } from '@/lib/session'\r\nimport { saveNote } from '@/lib/data'\r\n\r\nexport async function addNote(formData: FormData) {\r\n  const { userId } = await getSession()\r\n  if (!userId) {\r\n    redirect('/login')\r\n  }\r\n\r\n  const note = String(formData.get('note') ?? '').trim()\r\n  if (note) {\r\n    await saveNote(userId, note)\r\n    updateTag(`notes:${userId}`)\r\n  }\r\n}",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 6: Make authenticated navigations instant",
+    "content": "Cached reads already have a lifetime, so this mostly happens on its own. A use cache: private scope uses the default profile (a five-minute stale) unless you set one, and a route that reads the session produces a per-session App Shell with the authenticated content, prefetched and cached per session. Navigations to it are already instant.\n\nTwo things keep it that way:\n\nIf you tune the lifetime with cacheLife, keep stale at 30 seconds or more. Below that, the scope drops out of prefetching. See cacheLife client cache behavior.A route that also depends on the URL (a params or searchParams value) needs <Link prefetch={true}> on the links pointing at it. That opts into per-link prefetching, which resolves the per-link data ahead of the click.\n\n<Link href={`/notes/${note.id}`} prefetch={true}>\r\n  {note.text}\r\n</Link>",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Step 6: Make authenticated navigations instant",
+    "content": "rue}> on the links pointing at it. That opts into per-link prefetching, which resolves the per-link data ahead of the click.\n\n<Link href={`/notes/${note.id}`} prefetch={true}>\r\n  {note.text}\r\n</Link>\n\nThe destination needs Partial Prefetching for this, so enable the partialPrefetching flag or set prefetch = 'partial' on the segment. Add the prop where the wait is worth it: that prefetch costs one server invocation per link, so a sidebar of /chat/[id] links pays that cost per item.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  },
+  {
+    "documentTitle": "How to implement authentication with Cache Components",
+    "documentDescription": "Learn how to read the user session, show authenticated UI without slowing down the page, and cache data derived from the session when Cache Components is enabled.",
+    "sectionTitle": "Common pitfalls",
+    "content": "Reading cookies() or headers() inside a plain use cache function. This throws. Read the request outside and pass the value in, or use use cache: private.Putting secrets or personal data in cache keys or tags. Arguments and cacheTag values are stored in plain text. Key and tag on a stable identifier, not on sensitive input.Trusting the client for authorization. UI checks hide elements, but they don't protect data. Re-verify the session in every Server Action and Route Handler, close to the data. See Authorization.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\authentication-with-cache-components.mdx"
+  }
+]

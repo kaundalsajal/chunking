@@ -1,0 +1,1284 @@
+[
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "Introduction",
+    "content": "When exporting a function called getStaticPaths from a page that uses Dynamic Routes, Next.js will statically prerender all the paths specified by getStaticPaths.\n\nimport type {\r\n  InferGetStaticPropsType,\r\n  GetStaticProps,\r\n  GetStaticPaths,\r\n} from 'next'\r\n\r\ntype Repo = {\r\n  name: string\r\n  stargazers_count: number\r\n}\r\n\r\nexport const getStaticPaths = (async () => {\r\n  return {\r\n    paths: [\r\n      {\r\n        params: {\r\n          name: 'next.js',\r\n        },\r\n      }, // See the \"paths\" section below\r\n    ],\r\n    fallback: true, // false or \"blocking\"\r\n  }\r\n}) satisfies GetStaticPaths\r\n\r\nexport const getStaticProps = (async (context) => {\r\n  const res = await fetch('https://api.github.com/repos/vercel/next.js')\r\n  const repo = await res.json()\r\n  return { props: { repo } }\r\n}) satisfies GetStaticProps<{\r\n  repo: Repo\r\n}>\r\n\r\nexport default function Page({\r\n  repo,\r\n}: InferGetStaticPropsType<typeof getStaticProps>) {\r\n  return repo.stargazers_count\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "Introduction",
+    "content": "props: { repo } }\r\n}) satisfies GetStaticProps<{\r\n  repo: Repo\r\n}>\r\n\r\nexport default function Page({\r\n  repo,\r\n}: InferGetStaticPropsType<typeof getStaticProps>) {\r\n  return repo.stargazers_count\r\n}\n\nexport async function getStaticPaths() {\r\n  return {\r\n    paths: [\r\n      {\r\n        params: {\r\n          name: 'next.js',\r\n        },\r\n      }, // See the \"paths\" section below\r\n    ],\r\n    fallback: true, // false or \"blocking\"\r\n  }\r\n}\r\n\r\nexport async function getStaticProps() {\r\n  const res = await fetch('https://api.github.com/repos/vercel/next.js')\r\n  const repo = await res.json()\r\n  return { props: { repo } }\r\n}\r\n\r\nexport default function Page({ repo }) {\r\n  return repo.stargazers_count\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "getStaticPaths return values",
+    "content": "The getStaticPaths function should return an object with the following required properties:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "paths",
+    "content": "The paths key determines which paths will be prerendered. For example, suppose that you have a page that uses Dynamic Routes named pages/posts/[id].js. If you export getStaticPaths from this page and return the following for paths:\n\nreturn {\r\n  paths: [\r\n    { params: { id: '1' }},\r\n    {\r\n      params: { id: '2' },\r\n      // with i18n configured the locale for the path can be returned as well\r\n      locale: \"en\",\r\n    },\r\n  ],\r\n  fallback: ...\r\n}\n\nThen, Next.js will statically generate /posts/1 and /posts/2 during next build using the page component in pages/posts/[id].js.\n\nThe value for each params object must match the parameters used in the page name:",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "paths",
+    "content": "js will statically generate /posts/1 and /posts/2 during next build using the page component in pages/posts/[id].js.\n\nThe value for each params object must match the parameters used in the page name:\n\nIf the page name is pages/posts/[postId]/[commentId], then params should contain postId and commentId.If the page name uses catch-all routes like pages/[...slug], then params should contain slug (which is an array). If this array is ['hello', 'world'], then Next.js will statically generate the page at /hello/world.If the page uses an optional catch-all route, use null, [], undefined or false to render the root-most route. For example, if you supply slug: false for pages/[[...slug]], Next.js will statically generate the page /.\n\nThe params strings are case-sensitive and ideally should be normalized to ensure the paths are generated correctly. For example, if WoRLD is returned for a param it will only match if WoRLD is the actual path visited, not world or World.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "paths",
+    "content": "and ideally should be normalized to ensure the paths are generated correctly. For example, if WoRLD is returned for a param it will only match if WoRLD is the actual path visited, not world or World.\n\nSeparate of the params object a locale field can be returned when i18n is configured, which configures the locale for the path being generated.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: false",
+    "content": "If fallback is false, then any paths not returned by getStaticPaths will result in a 404 page.\n\nWhen next build is run, Next.js will check if getStaticPaths returned fallback: false, it will then build only the paths returned by getStaticPaths. This option is useful if you have a small number of paths to create, or new page data is not added often. If you find that you need to add more paths, and you have fallback: false, you will need to run next build again so that the new paths can be generated.\n\nThe following example prerenders one blog post per page called pages/posts/[id].js. The list of blog posts will be fetched from a CMS and returned by getStaticPaths. Then, for each page, it fetches the post data from a CMS using getStaticProps.\n\nfunction Post({ post }) {\r\n  // Render post...\r\n}\r\n\r\n// This function gets called at build time\r\nexport async function getStaticPaths() {\r\n  // Call an external API endpoint to get posts\r\n  const res = await fetch('https://.../posts')",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: false",
+    "content": "der post...\r\n}\r\n\r\n// This function gets called at build time\r\nexport async function getStaticPaths() {\r\n  // Call an external API endpoint to get posts\r\n  const res = await fetch('https://.../posts')\r\n  const posts = await res.json()\r\n\r\n  // Get the paths we want to prerender based on posts\r\n  const paths = posts.map((post) => ({\r\n    params: { id: post.id },\r\n  }))\r\n\r\n  // We'll prerender only these paths at build time.\r\n  // { fallback: false } means other routes should 404.\r\n  return { paths, fallback: false }\r\n}\r\n\r\n// This also gets called at build time\r\nexport async function getStaticProps({ params }) {\r\n  // params contains the post `id`.\r\n  // If the route is like /posts/1, then params.id is 1\r\n  const res = await fetch(`https://.../posts/${params.id}`)\r\n  const post = await res.json()\r\n\r\n  // Pass post data to the page via props\r\n  return { props: { post } }\r\n}\r\n\r\nexport default Post",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ExamplesStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "xamplesStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "amplesStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "mplesStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "plesStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "lesStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "esStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "sStatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "Static generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "tatic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "atic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "tic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ic generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "c generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "generation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "eneration of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "neration of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "eration of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ration of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ation of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "tion of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ion of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "on of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "n of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "of a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "f a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "a large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "large number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "arge number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "rge number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ge number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "e number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "number of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "umber of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "mber of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ber of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "er of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "r of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "of pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "f pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "pages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ages\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ges\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "es\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "s\n\nIf fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "If fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "If fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "If fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "f fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "fallback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "allback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "llback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "lback is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "back is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ack is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ck is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "k is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "is true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "s true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "true, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "rue, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ue, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "e, then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": ", then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "then the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "hen the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "en the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "n the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "the behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "he behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "e behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "behavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ehavior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "havior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "avior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "vior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ior of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "or of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "r of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "of getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "f getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "getStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "etStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "tStaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "StaticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "taticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "aticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ticProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "icProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "cProps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "Props changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "rops changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ops changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ps changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "s changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "changes in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "hanges in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "anges in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "nges in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ges in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "es in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "s in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "in the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "n the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "the following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "he following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "e following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "following ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ollowing ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "llowing ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "lowing ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "owing ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "wing ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ing ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ng ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "g ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ways:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ays:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "ys:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "s:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": ":",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "The paths returned from getStaticPaths will be rendered to HTML at build time by getStaticProps.The paths that have not been generated at build time will not result in a 404 page. Instead, Next.js will serve a “fallback” version of the page on the first request to such a path. Web crawlers, such as Google, won't be served a fallback and instead the path will behave as in fallback: 'blocking'.When a page with fallback: true is navigated to through next/link or next/router (client-side) Next.js will not serve a fallback and instead the page will behave as fallback: 'blocking'.In the background, Next.js will statically generate the requested path HTML and JSON. This includes running getStaticProps.When complete, the browser receives the JSON for the generated path. This will be used to automatically render the page with the required props. From the user’s perspective, the page will be swapped from the fallback page to the full page.At the same time, Next.js adds this path to the list of",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: true",
+    "content": "matically render the page with the required props. From the user’s perspective, the page will be swapped from the fallback page to the full page.At the same time, Next.js adds this path to the list of prerendered pages. Subsequent requests to the same path will serve the generated page, like other pages prerendered at build time.\n\nGood to know: fallback: true is not supported when using output: 'export'.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "When is fallback: true useful?",
+    "content": "fallback: true is useful if your app has a very large number of static pages that depend on data (such as a very large e-commerce site). If you want to prerender all product pages, the builds would take a very long time.\n\nInstead, you may statically generate a small subset of pages and use fallback: true for the rest. When someone requests a page that is not generated yet, the user will see the page with a loading indicator or skeleton component.\n\nShortly after, getStaticProps finishes and the page will be rendered with the requested data. From now on, everyone who requests the same page will get the statically prerendered page.\n\nThis ensures that users always have a fast experience while preserving fast builds and the benefits of Static Generation.\n\nfallback: true will not update generated pages, for that take a look at Incremental Static Regeneration.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: 'blocking'",
+    "content": "If fallback is 'blocking', new paths not returned by getStaticPaths will wait for the HTML to be generated, identical to SSR (hence why blocking), and then be cached for future requests so it only happens once per path.\n\ngetStaticProps will behave as follows:\n\nThe paths returned from getStaticPaths will be rendered to HTML at build time by getStaticProps.The paths that have not been generated at build time will not result in a 404 page. Instead, Next.js will SSR on the first request and return the generated HTML.When complete, the browser receives the HTML for the generated path. From the user’s perspective, it will transition from \"the browser is requesting the page\" to \"the full page is loaded\". There is no flash of loading/fallback state.At the same time, Next.js adds this path to the list of prerendered pages. Subsequent requests to the same path will serve the generated page, like other pages prerendered at build time.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "fallback: 'blocking'",
+    "content": "llback state.At the same time, Next.js adds this path to the list of prerendered pages. Subsequent requests to the same path will serve the generated page, like other pages prerendered at build time.\n\nfallback: 'blocking' will not update generated pages by default. To update generated pages, use Incremental Static Regeneration in conjunction with fallback: 'blocking'.\n\nGood to know: fallback: 'blocking' is not supported when using output: 'export'.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "Fallback pages",
+    "content": "In the “fallback” version of a page:\n\nThe page’s props will be empty.Using the router, you can detect if the fallback is being rendered, router.isFallback will be true.\n\nThe following example showcases using isFallback:\n\nimport { useRouter } from 'next/router'\r\n\r\nfunction Post({ post }) {\r\n  const router = useRouter()\r\n\r\n  // If the page is not yet generated, this will be displayed\r\n  // initially until getStaticProps() finishes running\r\n  if (router.isFallback) {\r\n    return <div>Loading...</div>\r\n  }\r\n\r\n  // Render post...\r\n}\r\n\r\n// This function gets called at build time\r\nexport async function getStaticPaths() {\r\n  return {\r\n    // Only `/posts/1` and `/posts/2` are generated at build time\r\n    paths: [{ params: { id: '1' } }, { params: { id: '2' } }],\r\n    // Enable statically generating additional pages\r\n    // For example: `/posts/3`\r\n    fallback: true,\r\n  }\r\n}\r\n\r\n// This also gets called at build time\r\nexport async function getStaticProps({ params }) {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "Fallback pages",
+    "content": "nable statically generating additional pages\r\n    // For example: `/posts/3`\r\n    fallback: true,\r\n  }\r\n}\r\n\r\n// This also gets called at build time\r\nexport async function getStaticProps({ params }) {\r\n  // params contains the post `id`.\r\n  // If the route is like /posts/1, then params.id is 1\r\n  const res = await fetch(`https://.../posts/${params.id}`)\r\n  const post = await res.json()\r\n\r\n  // Pass post data to the page via props\r\n  return {\r\n    props: { post },\r\n    // Re-generate the post at most once per second\r\n    // if a request comes in\r\n    revalidate: 1,\r\n  }\r\n}\r\n\r\nexport default Post",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                                                                                                                                                                           |\r\n| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| v13.4.0 | App Router is now stable with simplified data fetching, including generateStaticParams() |\r\n| v12.2.0 | On-Demand Incremental Static Regeneration is stable.                                             |\r\n| v12.1.0 | On-Demand Incremental Static Regeneration added (beta).                                          |\r\n| v9.5.0  | Stable Incremental Static Regeneration                                                                                                      |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  },
+  {
+    "documentTitle": "getStaticPaths",
+    "documentDescription": "API reference for `getStaticPaths`. Learn how to fetch data and generate static pages with `getStaticPaths`.",
+    "sectionTitle": "Version History",
+    "content": ".                                          |\r\n| v9.5.0  | Stable Incremental Static Regeneration                                                                                                      |\r\n| v9.3.0  | getStaticPaths introduced.                                                                                                                                                                      |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\get-static-paths.mdx"
+  }
+]

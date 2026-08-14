@@ -1,0 +1,10 @@
+[
+  {
+    "documentTitle": "Use Cases",
+    "documentDescription": "Common patterns and examples for deployment adapter implementations.",
+    "sectionTitle": "Introduction",
+    "content": "Common use cases for adapters include:\n\nDeployment Platform Integration: Automatically configure build outputs for specific hosting platformsAsset Processing: Transform or optimize build outputsMonitoring Integration: Collect build metrics and route informationCustom Bundling: Package outputs in platform-specific formatsBuild Validation: Ensure outputs meet specific requirementsRoute Generation: Use processed route information to generate platform-specific routing configs",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\11-use-cases.mdx"
+  }
+]

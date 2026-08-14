@@ -1,0 +1,118 @@
+[
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "Introduction",
+    "content": "The page file allows you to define UI that is unique to a route. You can create a page by default exporting a component from the file:\n\nexport default function Page({\r\n  params,\r\n  searchParams,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}) {\r\n  return <h1>My Page</h1>\r\n}\n\nexport default function Page({ params, searchParams }) {\r\n  return <h1>My Page</h1>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "Good to know",
+    "content": "The .js, .jsx, or .tsx file extensions can be used for page.A page is always the leaf of the route subtree.A page file is required to make a route segment publicly accessible.Pages are Server Components by default, but can be set to a Client Component.In the component hierarchy, page.js is the innermost file convention. It is wrapped by loading.js (Suspense boundary), error.js (error boundary), template.js, and layout.js in the same segment.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "params (optional)",
+    "content": "A promise that resolves to an object containing the dynamic route parameters from the root segment down to that page.\n\nexport default async function Page({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n}\n\nexport default async function Page({ params }) {\r\n  const { slug } = await params\r\n}\n\n| Example Route                        | URL         | params                                |\r\n| ------------------------------------ | ----------- | --------------------------------------- |\r\n| app/shop/[slug]/page.js            | /shop/1   | Promise<{ slug: '1' }>                |\r\n| app/shop/[category]/[item]/page.js | /shop/1/2 | Promise<{ category: '1', item: '2' }> |\r\n| app/shop/[...slug]/page.js         | /shop/1/2 | Promise<{ slug: ['1', '2'] }>         |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "params (optional)",
+    "content": "|\r\n| app/shop/[category]/[item]/page.js | /shop/1/2 | Promise<{ category: '1', item: '2' }> |\r\n| app/shop/[...slug]/page.js         | /shop/1/2 | Promise<{ slug: ['1', '2'] }>         |\n\nSince the params prop is a promise, you must use async/await or React's use function to access the values.In version 14 and earlier, params was a synchronous prop. To help with backwards compatibility, you can still access it synchronously in Next.js 15, but this behavior will be deprecated in the future.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "searchParams (optional)",
+    "content": "A promise that resolves to an object containing the search parameters of the current URL. For example:\n\nexport default async function Page({\r\n  searchParams,\r\n}: {\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}) {\r\n  const filters = (await searchParams).filters\r\n}\n\nexport default async function Page({ searchParams }) {\r\n  const filters = (await searchParams).filters\r\n}\n\nClient Component pages can also access searchParams using React’s use hook:\n\n'use client'\r\nimport { use } from 'react'\r\n\r\nexport default function Page({\r\n  searchParams,\r\n}: {\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}) {\r\n  const filters = use(searchParams).filters\r\n}\n\n'use client'\r\nimport { use } from 'react'\r\n\r\nexport default function Page({ searchParams }) {\r\n  const filters = use(searchParams).filters\r\n}\n\n| Example URL     | searchParams                |\r\n| --------------- | ----------------------------- |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "searchParams (optional)",
+    "content": "xport default function Page({ searchParams }) {\r\n  const filters = use(searchParams).filters\r\n}\n\n| Example URL     | searchParams                |\r\n| --------------- | ----------------------------- |\r\n| /shop?a=1     | Promise<{ a: '1' }>         |\r\n| /shop?a=1&b=2 | Promise<{ a: '1', b: '2' }> |\r\n| /shop?a=1&a=2 | Promise<{ a: ['1', '2'] }>  |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "searchParams (optional)",
+    "content": "| --------------- | ----------------------------- |\r\n| /shop?a=1     | Promise<{ a: '1' }>         |\r\n| /shop?a=1&b=2 | Promise<{ a: '1', b: '2' }> |\r\n| /shop?a=1&a=2 | Promise<{ a: ['1', '2'] }>  |\n\nSince the searchParams prop is a promise. You must use async/await or React's use function to access the values.In version 14 and earlier, searchParams was a synchronous prop. To help with backwards compatibility, you can still access it synchronously in Next.js 15, but this behavior will be deprecated in the future.searchParams is a Request-time API whose values cannot be known ahead of time. Using it will opt the page into dynamic rendering at request time.With Cache Components, where you access searchParams in the component tree determines how much of the page can be prerendered. See Maximizing the static shell.searchParams is a plain JavaScript object, not a URLSearchParams instance.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "Page Props Helper",
+    "content": "You can type pages with PageProps to get strongly typed params and searchParams from the route literal. PageProps is a globally available helper.\n\nexport default async function Page(props: PageProps<'/blog/[slug]'>) {\r\n  const { slug } = await props.params\r\n  const query = await props.searchParams\r\n  return <h1>Blog Post: {slug}</h1>\r\n}\n\nGood to knowUsing a literal route (e.g. '/blog/[slug]') enables autocomplete and strict keys for params.Static routes resolve params to {}.Types are generated during next dev, next build, or with next typegen.After type generation, the PageProps helper is globally available. It doesn't need to be imported.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "Displaying content based on params",
+    "content": "Using dynamic route segments, you can display or fetch specific content for the page based on the params prop.\n\nexport default async function Page({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n  return <h1>Blog Post: {slug}</h1>\r\n}\n\nexport default async function Page({ params }) {\r\n  const { slug } = await params\r\n  return <h1>Blog Post: {slug}</h1>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "Handling filtering with searchParams",
+    "content": "You can use the searchParams prop to handle filtering, pagination, or sorting based on the query string of the URL.\n\nexport default async function Page({\r\n  searchParams,\r\n}: {\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}) {\r\n  const { page = '1', sort = 'asc', query = '' } = await searchParams\r\n\r\n  return (\r\n    <div>\r\n      <h1>Product Listing</h1>\r\n      <p>Search query: {query}</p>\r\n      <p>Current page: {page}</p>\r\n      <p>Sort order: {sort}</p>\r\n    </div>\r\n  )\r\n}\n\nexport default async function Page({ searchParams }) {\r\n  const { page = '1', sort = 'asc', query = '' } = await searchParams\r\n\r\n  return (\r\n    <div>\r\n      <h1>Product Listing</h1>\r\n      <p>Search query: {query}</p>\r\n      <p>Current page: {page}</p>\r\n      <p>Sort order: {sort}</p>\r\n    </div>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "Reading searchParams and params in Client Components",
+    "content": "To use searchParams and params in a Client Component (which cannot be async), you can use React's use function to read the promise:\n\n'use client'\r\n\r\nimport { use } from 'react'\r\n\r\nexport default function Page({\r\n  params,\r\n  searchParams,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}) {\r\n  const { slug } = use(params)\r\n  const { query } = use(searchParams)\r\n}\n\n'use client'\r\n\r\nimport { use } from 'react'\r\n\r\nexport default function Page({ params, searchParams }) {\r\n  const { slug } = use(params)\r\n  const { query } = use(searchParams)\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  },
+  {
+    "documentTitle": "page.js",
+    "documentDescription": "API reference for the page.js file.",
+    "sectionTitle": "Version History",
+    "content": "| Version      | Changes                                                                                                          |\r\n| ------------ | ---------------------------------------------------------------------------------------------------------------- |\r\n| v15.0.0-RC | params and searchParams are now promises. A codemod is available. |\r\n| v13.0.0    | page introduced.                                                                                               |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\page.mdx"
+  }
+]

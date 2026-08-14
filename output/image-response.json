@@ -1,0 +1,94 @@
+[
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Introduction",
+    "content": "The ImageResponse constructor allows you to generate dynamic images using JSX and CSS. This is useful for generating social media images such as Open Graph images, Twitter cards, and more.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Parameters",
+    "content": "The following parameters are available for ImageResponse:\n\nimport { ImageResponse } from 'next/og'\r\n\r\nnew ImageResponse(\r\n  element: ReactElement,\r\n  options: {\r\n    width?: number = 1200\r\n    height?: number = 630\r\n    emoji?: 'twemoji' | 'blobmoji' | 'noto' | 'openmoji' = 'twemoji',\r\n    fonts?: {\r\n      name: string,\r\n      data: ArrayBuffer,\r\n      weight: number,\r\n      style: 'normal' | 'italic'\r\n    }[]\r\n    debug?: boolean = false\r\n\r\n    // Options that will be passed to the HTTP response\r\n    status?: number = 200\r\n    statusText?: string\r\n    headers?: Record<string, string>\r\n  },\r\n)\n\nExamples are available in the Vercel OG Playground.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Supported HTML and CSS features",
+    "content": "ImageResponse supports common CSS properties including flexbox and absolute positioning, custom fonts, text wrapping, centering, and nested images.\n\nPlease refer to Satori’s documentation for a list of supported HTML and CSS features.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Behavior",
+    "content": "ImageResponse uses @vercel/og, Satori, and Resvg to convert HTML and CSS into PNG.Only flexbox and a subset of CSS properties are supported. Advanced layouts (e.g. display: grid) will not work.Maximum bundle size of 500KB. The bundle size includes your JSX, CSS, fonts, images, and any other assets. If you exceed the limit, consider reducing the size of any assets or fetching at runtime.Only ttf, otf, and woff font formats are supported. To maximize the font parsing speed, ttf or otf are preferred over woff.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Route Handlers",
+    "content": "ImageResponse can be used in Route Handlers to generate images dynamically at request time.\n\nimport { ImageResponse } from 'next/og'\r\n\r\nexport async function GET() {\r\n  try {\r\n    return new ImageResponse(\r\n      (\r\n        <div\r\n          style={{\r\n            height: '100%',\r\n            width: '100%',\r\n            display: 'flex',\r\n            flexDirection: 'column',\r\n            alignItems: 'center',\r\n            justifyContent: 'center',\r\n            backgroundColor: 'white',\r\n            padding: '40px',\r\n          }}\r\n        >\r\n          <div\r\n            style={{\r\n              fontSize: 60,\r\n              fontWeight: 'bold',\r\n              color: 'black',\r\n              textAlign: 'center',\r\n            }}\r\n          >\r\n            Welcome to My Site\r\n          </div>\r\n          <div\r\n            style={{\r\n              fontSize: 30,\r\n              color: '#666',\r\n              marginTop: '20px',\r\n            }}\r\n          >\r\n            Generated with Next.js ImageResponse",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Route Handlers",
+    "content": "<div\r\n            style={{\r\n              fontSize: 30,\r\n              color: '#666',\r\n              marginTop: '20px',\r\n            }}\r\n          >\r\n            Generated with Next.js ImageResponse\r\n          </div>\r\n        </div>\r\n      ),\r\n      {\r\n        width: 1200,\r\n        height: 630,\r\n      }\r\n    )\r\n  } catch (e) {\r\n    console.log(`${e.message}`)\r\n    return new Response(`Failed to generate the image`, {\r\n      status: 500,\r\n    })\r\n  }\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "File-based Metadata",
+    "content": "You can use ImageResponse in a opengraph-image.tsx file to generate Open Graph images at build time or dynamically at request time.\n\nimport { ImageResponse } from 'next/og'\r\n\r\n// Image metadata\r\nexport const alt = 'My site'\r\nexport const size = {\r\n  width: 1200,\r\n  height: 630,\r\n}\r\n\r\nexport const contentType = 'image/png'\r\n\r\n// Image generation\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      // ImageResponse JSX element\r\n      <div\r\n        style={{\r\n          fontSize: 128,\r\n          background: 'white',\r\n          width: '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n        }}\r\n      >\r\n        My site\r\n      </div>\r\n    ),\r\n    // ImageResponse options\r\n    {\r\n      // For convenience, we can re-use the exported opengraph-image\r\n      // size config to also set the ImageResponse's width and height.\r\n      ...size,\r\n    }\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Custom fonts",
+    "content": "You can use custom fonts in your ImageResponse by providing a fonts array in the options. The font doesn't depend on request data, so read it once at module scope. See Predictable values.\n\nimport { ImageResponse } from 'next/og'\r\nimport { readFile } from 'node:fs/promises'\r\nimport { join } from 'node:path'\r\n\r\n// Image metadata\r\nexport const alt = 'My site'\r\nexport const size = {\r\n  width: 1200,\r\n  height: 630,\r\n}\r\n\r\nexport const contentType = 'image/png'\r\n\r\nconst interSemiBold = await readFile(\r\n  join(process.cwd(), 'assets/Inter-SemiBold.ttf')\r\n)\r\n\r\n// Image generation\r\nexport default async function Image() {\r\n  return new ImageResponse(\r\n    (\r\n      // ...\r\n    ),\r\n    // ImageResponse options\r\n    {\r\n      // For convenience, we can re-use the exported opengraph-image\r\n      // size config to also set the ImageResponse's width and height.\r\n      ...size,\r\n      fonts: [\r\n        {\r\n          name: 'Inter',\r\n          data: interSemiBold,\r\n          style: 'normal',",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Custom fonts",
+    "content": "// size config to also set the ImageResponse's width and height.\r\n      ...size,\r\n      fonts: [\r\n        {\r\n          name: 'Inter',\r\n          data: interSemiBold,\r\n          style: 'normal',\r\n          weight: 400,\r\n        },\r\n      ],\r\n    }\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  },
+  {
+    "documentTitle": "ImageResponse",
+    "documentDescription": "API Reference for the ImageResponse constructor.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                               |\r\n| --------- | ----------------------------------------------------- |\r\n| v14.0.0 | ImageResponse moved from next/server to next/og |\r\n| v13.3.0 | ImageResponse can be imported from next/server.   |\r\n| v13.0.0 | ImageResponse introduced via @vercel/og package.  |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\image-response.mdx"
+  }
+]

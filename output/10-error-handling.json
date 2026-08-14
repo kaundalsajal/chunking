@@ -1,0 +1,156 @@
+[
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Introduction",
+    "content": "Errors can be divided into two categories: expected errors and uncaught exceptions. This page will walk you through how you can handle these errors in your Next.js application.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Handling expected errors",
+    "content": "Expected errors are those that can occur during the normal operation of the application, such as those from server-side form validation or failed requests. These errors should be handled explicitly and returned to the client.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Server Functions",
+    "content": "You can use the useActionState hook to handle expected errors in Server Functions.\n\nFor these errors, avoid using try/catch blocks and throw errors. Instead, model expected errors as return values.\n\n'use server'\r\n\r\nexport async function createPost(prevState: any, formData: FormData) {\r\n  const title = formData.get('title')\r\n  const content = formData.get('content')\r\n\r\n  const res = await fetch('https://api.vercel.app/posts', {\r\n    method: 'POST',\r\n    body: { title, content },\r\n  })\r\n  const json = await res.json()\r\n\r\n  if (!res.ok) {\r\n    return { message: 'Failed to create post' }\r\n  }\r\n}\n\n'use server'\r\n\r\nexport async function createPost(prevState, formData) {\r\n  const title = formData.get('title')\r\n  const content = formData.get('content')\r\n\r\n  const res = await fetch('https://api.vercel.app/posts', {\r\n    method: 'POST',\r\n    body: { title, content },\r\n  })\r\n  const json = await res.json()\r\n\r\n  if (!res.ok) {\r\n    return { message: 'Failed to create post' }\r\n  }\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Server Functions",
+    "content": "ttps://api.vercel.app/posts', {\r\n    method: 'POST',\r\n    body: { title, content },\r\n  })\r\n  const json = await res.json()\r\n\r\n  if (!res.ok) {\r\n    return { message: 'Failed to create post' }\r\n  }\r\n}\n\nYou can pass your action to the useActionState hook and use the returned state to display an error message.\n\n'use client'\r\n\r\nimport { useActionState } from 'react'\r\nimport { createPost } from '@/app/actions'\r\n\r\nconst initialState = {\r\n  message: '',\r\n}\r\n\r\nexport function Form() {\r\n  const [state, formAction, pending] = useActionState(createPost, initialState)\r\n\r\n  return (\r\n    <form action={formAction}>\r\n      <label htmlFor=\"title\">Title</label>\r\n      <input type=\"text\" id=\"title\" name=\"title\" required />\r\n      <label htmlFor=\"content\">Content</label>\r\n      <textarea id=\"content\" name=\"content\" required />\r\n      {state?.message && <p aria-live=\"polite\">{state.message}</p>}\r\n      <button disabled={pending}>Create Post</button>\r\n    </form>\r\n  )\r\n}\n\n'use client'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Server Functions",
+    "content": "d=\"content\" name=\"content\" required />\r\n      {state?.message && <p aria-live=\"polite\">{state.message}</p>}\r\n      <button disabled={pending}>Create Post</button>\r\n    </form>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useActionState } from 'react'\r\nimport { createPost } from '@/app/actions'\r\n\r\nconst initialState = {\r\n  message: '',\r\n}\r\n\r\nexport function Form() {\r\n  const [state, formAction, pending] = useActionState(createPost, initialState)\r\n\r\n  return (\r\n    <form action={formAction}>\r\n      <label htmlFor=\"title\">Title</label>\r\n      <input type=\"text\" id=\"title\" name=\"title\" required />\r\n      <label htmlFor=\"content\">Content</label>\r\n      <textarea id=\"content\" name=\"content\" required />\r\n      {state?.message && <p aria-live=\"polite\">{state.message}</p>}\r\n      <button disabled={pending}>Create Post</button>\r\n    </form>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Server Components",
+    "content": "When fetching data inside of a Server Component, you can use the response to conditionally render an error message or redirect.\n\nexport default async function Page() {\r\n  const res = await fetch(`https://...`)\r\n  const data = await res.json()\r\n\r\n  if (!res.ok) {\r\n    return 'There was an error.'\r\n  }\r\n\r\n  return '...'\r\n}\n\nexport default async function Page() {\r\n  const res = await fetch(`https://...`)\r\n  const data = await res.json()\r\n\r\n  if (!res.ok) {\r\n    return 'There was an error.'\r\n  }\r\n\r\n  return '...'\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Not found",
+    "content": "You can call the notFound function within a route segment and use the not-found.js file to show a 404 UI.\n\nimport { notFound } from 'next/navigation'\r\nimport { getPostBySlug } from '@/lib/posts'\r\n\r\nexport default async function Page({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n  const post = getPostBySlug(slug)\r\n\r\n  if (!post) {\r\n    notFound()\r\n  }\r\n\r\n  return <div>{post.title}</div>\r\n}\n\nimport { notFound } from 'next/navigation'\r\nimport { getPostBySlug } from '@/lib/posts'\r\n\r\nexport default async function Page({ params }) {\r\n  const { slug } = await params\r\n  const post = getPostBySlug(slug)\r\n\r\n  if (!post) {\r\n    notFound()\r\n  }\r\n\r\n  return <div>{post.title}</div>\r\n}\n\nexport default function NotFound() {\r\n  return <div>404 - Page Not Found</div>\r\n}\n\nexport default function NotFound() {\r\n  return <div>404 - Page Not Found</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Handling uncaught exceptions",
+    "content": "Uncaught exceptions are unexpected errors that indicate bugs or issues that should not occur during the normal flow of your application. These should be handled by throwing errors, which will then be caught by error boundaries.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Nested error boundaries",
+    "content": "Next.js uses error boundaries to handle uncaught exceptions. Error boundaries catch errors in their child components and display a fallback UI instead of the component tree that crashed.\n\nCreate an error boundary by adding an error.js file inside a route segment and exporting a React component:\n\n'use client' // Error boundaries must be Client Components\r\n\r\nimport { useEffect } from 'react'\r\n\r\nexport default function ErrorPage({\r\n  error,\r\n  retry,\r\n}: {\r\n  error: Error & { digest?: string }\r\n  retry: () => void\r\n}) {\r\n  useEffect(() => {\r\n    // Log the error to an error reporting service\r\n    console.error(error)\r\n  }, [error])\r\n\r\n  return (\r\n    <div>\r\n      <h2>Something went wrong!</h2>\r\n      <button\r\n        onClick={\r\n          // Attempt to recover by re-fetching and re-rendering the segment\r\n          () => retry()\r\n        }\r\n      >\r\n        Try again\r\n      </button>\r\n    </div>\r\n  )\r\n}\n\n'use client' // Error boundaries must be Client Components",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Nested error boundaries",
+    "content": "etching and re-rendering the segment\r\n          () => retry()\r\n        }\r\n      >\r\n        Try again\r\n      </button>\r\n    </div>\r\n  )\r\n}\n\n'use client' // Error boundaries must be Client Components\r\n\r\nimport { useEffect } from 'react'\r\n\r\nexport default function ErrorPage({ error, retry }) {\r\n  useEffect(() => {\r\n    // Log the error to an error reporting service\r\n    console.error(error)\r\n  }, [error])\r\n\r\n  return (\r\n    <div>\r\n      <h2>Something went wrong!</h2>\r\n      <button\r\n        onClick={\r\n          // Attempt to recover by re-fetching and re-rendering the segment\r\n          () => retry()\r\n        }\r\n      >\r\n        Try again\r\n      </button>\r\n    </div>\r\n  )\r\n}\n\nErrors will bubble up to the nearest parent error boundary. This allows for granular error handling by placing error.tsx files at different levels in the route hierarchy.\n\nFor component-level error recovery, the catchError function lets you create error boundaries that can wrap any part of your component tree:",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Nested error boundaries",
+    "content": "rror.tsx files at different levels in the route hierarchy.\n\nFor component-level error recovery, the catchError function lets you create error boundaries that can wrap any part of your component tree:\n\n'use client'\r\n\r\nimport { catchError, type ErrorInfo } from 'next/error'\r\n\r\nfunction ErrorFallback(props: { title: string }, { error, retry }: ErrorInfo) {\r\n  return (\r\n    <div>\r\n      <h2>{props.title}</h2>\r\n      <p>{error.message}</p>\r\n      <button onClick={() => retry()}>Try again</button>\r\n    </div>\r\n  )\r\n}\r\n\r\nexport default catchError(ErrorFallback)\n\n'use client'\r\n\r\nimport { catchError } from 'next/error'\r\n\r\nfunction ErrorFallback(props, { error, retry }) {\r\n  return (\r\n    <div>\r\n      <h2>{props.title}</h2>\r\n      <p>{error.message}</p>\r\n      <button onClick={() => retry()}>Try again</button>\r\n    </div>\r\n  )\r\n}\r\n\r\nexport default catchError(ErrorFallback)\n\nThen use the returned component as a wrapper in any layout or page:\n\nimport ErrorBoundary from './custom-error-boundary'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Nested error boundaries",
+    "content": "in</button>\r\n    </div>\r\n  )\r\n}\r\n\r\nexport default catchError(ErrorFallback)\n\nThen use the returned component as a wrapper in any layout or page:\n\nimport ErrorBoundary from './custom-error-boundary'\r\n\r\nexport default function Component({ children }: { children: React.ReactNode }) {\r\n  return <ErrorBoundary title=\"Dashboard Error\">{children}</ErrorBoundary>\r\n}\n\nimport ErrorBoundary from './custom-error-boundary'\r\n\r\nexport default function Component({ children }) {\r\n  return <ErrorBoundary title=\"Dashboard Error\">{children}</ErrorBoundary>\r\n}\n\nError boundaries don't catch errors inside event handlers. They're designed to catch errors during rendering to show a fallback UI instead of crashing the whole app.\n\nIn general, errors in event handlers or async code aren’t handled by error boundaries because they run after rendering.\n\nTo handle these cases, catch the error manually and store it using useState or useReducer, then update the UI to inform the user.\n\n'use client'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Nested error boundaries",
+    "content": "y error boundaries because they run after rendering.\n\nTo handle these cases, catch the error manually and store it using useState or useReducer, then update the UI to inform the user.\n\n'use client'\r\n\r\nimport { useState } from 'react'\r\n\r\nexport function Button() {\r\n  const [error, setError] = useState(null)\r\n\r\n  const handleClick = () => {\r\n    try {\r\n      // do some work that might fail\r\n      throw new Error('Exception')\r\n    } catch (reason) {\r\n      setError(reason)\r\n    }\r\n  }\r\n\r\n  if (error) {\r\n    /* render fallback UI */\r\n  }\r\n\r\n  return (\r\n    <button type=\"button\" onClick={handleClick}>\r\n      Click me\r\n    </button>\r\n  )\r\n}\n\nNote that unhandled errors inside startTransition from useTransition, will bubble up to the nearest error boundary.\n\n'use client'\r\n\r\nimport { useTransition } from 'react'\r\n\r\nexport function Button() {\r\n  const [pending, startTransition] = useTransition()\r\n\r\n  const handleClick = () =>\r\n    startTransition(() => {\r\n      throw new Error('Exception')",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Nested error boundaries",
+    "content": "tion } from 'react'\r\n\r\nexport function Button() {\r\n  const [pending, startTransition] = useTransition()\r\n\r\n  const handleClick = () =>\r\n    startTransition(() => {\r\n      throw new Error('Exception')\r\n    })\r\n\r\n  return (\r\n    <button type=\"button\" onClick={handleClick}>\r\n      Click me\r\n    </button>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Global errors",
+    "content": "While less common, you can handle errors in the root layout using the global-error.js file, located in the root app directory, even when leveraging internationalization. Global error UI must define its own <html> and <body> tags, since it is replacing the root layout or template when active.\n\n'use client' // Error boundaries must be Client Components\r\n\r\nexport default function GlobalError({\r\n  error,\r\n  retry,\r\n}: {\r\n  error: Error & { digest?: string }\r\n  retry: () => void\r\n}) {\r\n  return (\r\n    // global-error must include html and body tags\r\n    <html>\r\n      <body>\r\n        <h2>Something went wrong!</h2>\r\n        <button onClick={() => retry()}>Try again</button>\r\n      </body>\r\n    </html>\r\n  )\r\n}\n\n'use client' // Error boundaries must be Client Components\r\n\r\nexport default function GlobalError({ error, retry }) {\r\n  return (\r\n    // global-error must include html and body tags\r\n    <html>\r\n      <body>\r\n        <h2>Something went wrong!</h2>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  },
+  {
+    "documentTitle": "Error Handling",
+    "documentDescription": "Learn how to display expected errors and handle uncaught exceptions.",
+    "sectionTitle": "Global errors",
+    "content": "omponents\r\n\r\nexport default function GlobalError({ error, retry }) {\r\n  return (\r\n    // global-error must include html and body tags\r\n    <html>\r\n      <body>\r\n        <h2>Something went wrong!</h2>\r\n        <button onClick={() => retry()}>Try again</button>\r\n      </body>\r\n    </html>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\10-error-handling.mdx"
+  }
+]

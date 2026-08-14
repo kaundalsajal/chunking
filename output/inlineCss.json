@@ -1,0 +1,748 @@
+[
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "Usage",
+    "content": "Experimental support for inlining CSS in the <head>. When this flag is enabled, all places where we normally generate a <link> tag will instead have a generated <style> tag.\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  experimental: {\r\n    inlineCss: true,\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  experimental: {\r\n    inlineCss: true,\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "Trade-Offs",
+    "content": "Enable if you use atomic CSS (like Tailwind) and want to optimize first-load performance for new visitorsSkip if returning visitors are common and you want them to benefit from cached stylesheets",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "Normally, the browser must download HTML, parse it, discover CSS <link> tags, then request stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "then request stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "hen request stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "en request stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "n request stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "request stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "request stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "equest stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "quest stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "uest stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "est stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "st stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "t stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "stylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "tylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ylesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "lesheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "esheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "sheets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "heets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "eets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ets before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ts before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "s before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "before it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "efore it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "fore it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ore it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "re it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "e it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "it can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "t can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "can render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "an render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "n render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "render. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ender. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "nder. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "der. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "er. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "r. Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": ". Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "Inlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "nlining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "lining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ining eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ning eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ing eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ng eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "g eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "eliminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "liminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "iminates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "minates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "inates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "nates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ates this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "tes this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "es this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "s this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "this request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "his request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "is request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "s request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "request waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "equest waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "quest waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "uest waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "est waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "st waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "t waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "waterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "aterfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "terfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "erfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "rfall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "fall, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "all, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When Inline CSS Helps",
+    "content": "ll, so that styles arrive with the HTML, so the browser can render immediately.\n\nThis benefit is strongest with:\n\nFirst-time visitors: Since CSS files are render-blocking, inlining eliminates the initial download delay that first-time visitors experience. Returning visitors with cached stylesheets won't see this benefit.Performance metrics: By removing additional network requests for CSS files, inlining can significantly improve First Contentful Paint (FCP) and Largest Contentful Paint (LCP).Slow connections: For users on high-latency networks, each additional request adds delay. Inlining reduces round trips, which matters most when connections are slow.Atomic CSS (Tailwind): Utility-first frameworks generate only the classes you use, keeping CSS small. The styles for a page don't grow proportionally with page complexity—they're typically compact regardless of how much UI you build. This makes inlining practical since you get the performance benefit without significantly bloating HTML.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When External CSS is Better",
+    "content": "Inlined styles cannot be cached separately from HTML. Every page load re-downloads the same CSS.\n\nThis trade-off matters most with:\n\nReturning visitors: Users who visit your site repeatedly would benefit from cached external stylesheets. With inlining, they re-download styles on every visit.Large CSS bundles: External stylesheets cache independently and load efficiently on modern infrastructure. Inlined CSS arrives with every HTML response, increasing Time to First Byte (TTFB) and preventing browsers from caching styles separately. This trade-off works for small CSS (atomic frameworks like Tailwind), but adds overhead for larger bundles (component libraries like Bootstrap or Material UI).Many pages sharing styles: External stylesheets cached on one page speed up navigation to other pages. Inlined styles provide no cross-page caching benefit.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  },
+  {
+    "documentTitle": "inlineCss",
+    "documentDescription": "Enable inline CSS support.",
+    "sectionTitle": "When External CSS is Better",
+    "content": "t libraries like Bootstrap or Material UI).Many pages sharing styles: External stylesheets cached on one page speed up navigation to other pages. Inlined styles provide no cross-page caching benefit.\n\nGood to know:This feature is currently experimental and has some known limitations:CSS inlining is applied globally and cannot be configured on a per-page basisStyles are duplicated during initial page load - once within <style> tags for SSR and once in the RSC payloadWhen navigating to prerendered pages, styles will use <link> tags instead of inline CSS to avoid duplicationThis feature is not available in development mode and only works in production builds",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\inlineCss.mdx"
+  }
+]

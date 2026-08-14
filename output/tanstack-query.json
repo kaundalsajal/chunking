@@ -1,0 +1,280 @@
+[
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Introduction",
+    "content": "Use TanStack Query to fetch data in Client Components, provide initial data from Server Components, and coordinate browser mutations with cached server data. See Client-side data fetching to choose a pattern.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Set up the provider",
+    "content": "Wrap the routes that use TanStack Query in a QueryClientProvider. Create a new query client for each server render and reuse one query client in the browser:\n\n'use client'\r\n\r\nimport type { ReactNode } from 'react'\r\nimport { QueryClient, QueryClientProvider } from '@tanstack/react-query'\r\n\r\nlet browserQueryClient: QueryClient | undefined\r\n\r\nfunction getQueryClient() {\r\n  // Keep server requests isolated and preserve the browser cache across renders.\r\n  if (typeof window === 'undefined') return new QueryClient()\r\n  browserQueryClient ??= new QueryClient()\r\n  return browserQueryClient\r\n}\r\n\r\nexport function Providers({ children }: { children: ReactNode }) {\r\n  return (\r\n    <QueryClientProvider client={getQueryClient()}>\r\n      {children}\r\n    </QueryClientProvider>\r\n  )\r\n}\n\nRender the provider from the nearest shared layout:\n\nimport { Providers } from './providers'\r\n\r\nexport default function Layout({ children }: LayoutProps<'/products'>) {\r\n  return <Providers>{children}</Providers>\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Set up the provider",
+    "content": "der from the nearest shared layout:\n\nimport { Providers } from './providers'\r\n\r\nexport default function Layout({ children }: LayoutProps<'/products'>) {\r\n  return <Providers>{children}</Providers>\r\n}\n\nSee the complete provider setup in the demo source or learn about provider options in the TanStack Query Advanced SSR guide.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Fetch data on the client",
+    "content": "TanStack Query can fetch entirely in the browser when the initial view can wait for a browser request after hydration. Choose an inline or Suspense loading state based on where the loading UI should appear. In these examples, query starts empty and updates from client state after hydration.\n\nUse useQuery when the component should render its own loading and error states. The enabled option delays the request until the interaction provides an input:\n\n'use client'\r\n\r\nimport { useQuery } from '@tanstack/react-query'\r\n\r\ntype Product = { id: string; name: string }\r\n\r\nasync function searchProducts(query: string): Promise<Product[]> {\r\n  const response = await fetch(\r\n    `/api/products?query=${encodeURIComponent(query)}`\r\n  )\r\n  if (!response.ok) throw new Error('Failed to fetch products')\r\n  return response.json()\r\n}\r\n\r\nexport function ProductAutocomplete({ query }: { query: string }) {\r\n  const {\r\n    data = [],\r\n    error,\r\n    isPending,\r\n  } = useQuery({",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Fetch data on the client",
+    "content": "Failed to fetch products')\r\n  return response.json()\r\n}\r\n\r\nexport function ProductAutocomplete({ query }: { query: string }) {\r\n  const {\r\n    data = [],\r\n    error,\r\n    isPending,\r\n  } = useQuery({\r\n    queryKey: ['product-search', query],\r\n    queryFn: () => searchProducts(query),\r\n    enabled: query.length > 0,\r\n  })\r\n\r\n  if (!query) return null\r\n  if (error) return <p>Failed to load products.</p>\r\n  if (isPending) return <p>Loading products...</p>\r\n\r\n  return (\r\n    <ul>\r\n      {data.map((product) => (\r\n        <li key={product.id}>{product.name}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\nLearn more: TanStack Query queries.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Use Suspense for client data",
+    "content": "Use useSuspenseQuery when the nearest Suspense boundary should define the loading UI. Keep the interactive shell outside the boundary so it remains available while the results load:\n\n'use client'\r\n\r\nimport { useSuspenseQuery } from '@tanstack/react-query'\r\nimport { Suspense } from 'react'\r\n\r\ntype Product = { id: string; name: string }\r\n\r\nasync function searchProducts(query: string): Promise<Product[]> {\r\n  const response = await fetch(\r\n    `/api/products?query=${encodeURIComponent(query)}`\r\n  )\r\n  if (!response.ok) throw new Error('Failed to fetch products')\r\n  return response.json()\r\n}\r\n\r\nexport function ProductAutocomplete({ query }: { query: string }) {\r\n  if (!query) return null\r\n\r\n  return (\r\n    <Suspense fallback={<p>Loading products...</p>}>\r\n      <ProductResults query={query} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nfunction ProductResults({ query }: { query: string }) {\r\n  const { data } = useSuspenseQuery({\r\n    queryKey: ['product-search', query],",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Use Suspense for client data",
+    "content": "<ProductResults query={query} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nfunction ProductResults({ query }: { query: string }) {\r\n  const { data } = useSuspenseQuery({\r\n    queryKey: ['product-search', query],\r\n    queryFn: () => searchProducts(query),\r\n  })\r\n\r\n  return (\r\n    <ul>\r\n      {data.map((product) => (\r\n        <li key={product.id}>{product.name}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\nIf the initial request fails, useSuspenseQuery propagates the error to the nearest error boundary.\n\nAfter a query has data, later refetches for the same query keep the cached data rendered instead of showing the Suspense fallback again. Use isFetching to provide background refresh feedback.\n\nIf the initial view needs the data, provide it from a Server Component as shown below.\n\nGood to know: Multiple useSuspenseQuery calls in one component run sequentially. Put independent queries in sibling components, or use useSuspenseQueries. Learn more about request waterfalls.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Provide initial data from a Server Component",
+    "content": "Use the server-provided data pattern when the initial render needs the data and TanStack Query should continue managing it in the browser. A Server Component can provide initial query data before the client takes over.\n\nTanStack Query 5.40.0 or later can dehydrate pending queries. Start prefetchQuery without awaiting it, then pass the dehydrated state to <HydrationBoundary>. Override queryFn on the server because the Route Handler's relative URL only resolves in the browser:\n\nimport { Suspense } from 'react'\r\nimport {\r\n  defaultShouldDehydrateQuery,\r\n  dehydrate,\r\n  HydrationBoundary,\r\n  QueryClient,\r\n} from '@tanstack/react-query'\r\nimport { getProduct } from './data'\r\nimport { productCache } from './product-cache'\r\nimport { ProductView } from './product-view'\r\n\r\nexport default function Page({ params }: PageProps<'/products/[id]'>) {\r\n  return (\r\n    <Suspense fallback={<p>Loading…</p>}>\r\n      {params.then(({ id }) => (\r\n        <ProductData id={id} />\r\n      ))}\r\n    </Suspense>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Provide initial data from a Server Component",
+    "content": "n Page({ params }: PageProps<'/products/[id]'>) {\r\n  return (\r\n    <Suspense fallback={<p>Loading…</p>}>\r\n      {params.then(({ id }) => (\r\n        <ProductData id={id} />\r\n      ))}\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nfunction ProductData({ id }: { id: string }) {\r\n  const queryClient = new QueryClient()\r\n\r\n  // Not awaited, so rendering is not blocked.\r\n  void queryClient.prefetchQuery({\r\n    ...productCache.options(id),\r\n    queryFn: () => getProduct(id),\r\n  })\r\n\r\n  return (\r\n    <HydrationBoundary\r\n      state={dehydrate(queryClient, {\r\n        shouldDehydrateQuery: (query) =>\r\n          defaultShouldDehydrateQuery(query) ||\r\n          query.state.status === 'pending',\r\n      })}\r\n    >\r\n      <ProductView id={id} />\r\n    </HydrationBoundary>\r\n  )\r\n}\n\nimport { Suspense } from 'react'\r\nimport {\r\n  defaultShouldDehydrateQuery,\r\n  dehydrate,\r\n  HydrationBoundary,\r\n  QueryClient,\r\n} from '@tanstack/react-query'\r\nimport { getProduct } from './data'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Provide initial data from a Server Component",
+    "content": "}\n\nimport { Suspense } from 'react'\r\nimport {\r\n  defaultShouldDehydrateQuery,\r\n  dehydrate,\r\n  HydrationBoundary,\r\n  QueryClient,\r\n} from '@tanstack/react-query'\r\nimport { getProduct } from './data'\r\nimport { productCache } from './product-cache'\r\nimport { ProductView } from './product-view'\r\n\r\nexport default function Page({ params }) {\r\n  return (\r\n    <Suspense fallback={<p>Loading…</p>}>\r\n      {params.then(({ id }) => (\r\n        <ProductData id={id} />\r\n      ))}\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nfunction ProductData({ id }) {\r\n  const queryClient = new QueryClient()\r\n\r\n  // Not awaited, so rendering is not blocked.\r\n  void queryClient.prefetchQuery({\r\n    ...productCache.options(id),\r\n    queryFn: () => getProduct(id),\r\n  })\r\n\r\n  return (\r\n    <HydrationBoundary\r\n      state={dehydrate(queryClient, {\r\n        shouldDehydrateQuery: (query) =>\r\n          defaultShouldDehydrateQuery(query) ||\r\n          query.state.status === 'pending',\r\n      })}\r\n    >\r\n      <ProductView id={id} />",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Provide initial data from a Server Component",
+    "content": "queryClient, {\r\n        shouldDehydrateQuery: (query) =>\r\n          defaultShouldDehydrateQuery(query) ||\r\n          query.state.status === 'pending',\r\n      })}\r\n    >\r\n      <ProductView id={id} />\r\n    </HydrationBoundary>\r\n  )\r\n}\n\nThe server and Client Component must use the same query key. Keep the key and query options together so both call sites share the same identity:\n\nimport { queryOptions } from '@tanstack/react-query'\r\n\r\nexport type Product = { id: string; name: string }\r\n\r\nexport const productCache = {\r\n  key: (id: string) => ['product', id] as const,\r\n  options: (id: string) =>\r\n    queryOptions({\r\n      queryKey: productCache.key(id),\r\n      queryFn: async (): Promise<Product> => {\r\n        const res = await fetch(`/api/products/${id}`)\r\n        if (!res.ok) throw new Error('Failed to fetch product')\r\n        return res.json()\r\n      },\r\n      staleTime: 30_000,\r\n    }),\r\n}\n\nimport { queryOptions } from '@tanstack/react-query'\r\n\r\nexport const productCache = {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Provide initial data from a Server Component",
+    "content": "new Error('Failed to fetch product')\r\n        return res.json()\r\n      },\r\n      staleTime: 30_000,\r\n    }),\r\n}\n\nimport { queryOptions } from '@tanstack/react-query'\r\n\r\nexport const productCache = {\r\n  key: (id) => ['product', id],\r\n  options: (id) =>\r\n    queryOptions({\r\n      queryKey: productCache.key(id),\r\n      queryFn: async () => {\r\n        const res = await fetch(`/api/products/${id}`)\r\n        if (!res.ok) throw new Error('Failed to fetch product')\r\n        return res.json()\r\n      },\r\n      staleTime: 30_000,\r\n    }),\r\n}\n\nThe query function fetches a Route Handler so it can run on the client. The staleTime prevents an immediate client refetch by keeping the hydrated data fresh for 30 seconds. Choose a duration based on how quickly the data can change.\n\nLarger features can place query options in a separate client-facing module as long as every caller imports the key from the same cache contract. Learn more about TanStack Query defaults.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Provide initial data from a Server Component",
+    "content": "can change.\n\nLarger features can place query options in a separate client-facing module as long as every caller imports the key from the same cache contract. Learn more about TanStack Query defaults.\n\nAs with SWR, params.then() resolves the id inside <Suspense>, and ProductData prefetches below the boundary.\n\nThe Client Component reads the same query key with useSuspenseQuery (or useQuery to render isPending and error states inline):\n\n'use client'\r\n\r\nimport { useSuspenseQuery } from '@tanstack/react-query'\r\nimport { productCache } from './product-cache'\r\n\r\nexport function ProductView({ id }: { id: string }) {\r\n  const { data } = useSuspenseQuery(productCache.options(id))\r\n\r\n  return <h1>{data.name}</h1>\r\n}\n\n'use client'\r\n\r\nimport { useSuspenseQuery } from '@tanstack/react-query'\r\nimport { productCache } from './product-cache'\r\n\r\nexport function ProductView({ id }) {\r\n  const { data } = useSuspenseQuery(productCache.options(id))\r\n\r\n  return <h1>{data.name}</h1>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Provide initial data from a Server Component",
+    "content": "eact-query'\r\nimport { productCache } from './product-cache'\r\n\r\nexport function ProductView({ id }) {\r\n  const { data } = useSuspenseQuery(productCache.options(id))\r\n\r\n  return <h1>{data.name}</h1>\r\n}\n\nLearn more: TanStack Query Advanced SSR.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Cache server-provided data with Cache Components",
+    "content": "Enable cacheComponents in next.config.ts before using this pattern. You can then cache the server data provided to TanStack Query. Add use cache, choose a cacheLife profile, and apply cacheTag so mutations can invalidate it:\n\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport type { Product } from './product-cache'\r\n\r\nexport async function getProduct(id: string): Promise<Product> {\r\n  'use cache'\r\n  cacheLife('max')\r\n  cacheTag(`product:${id}`)\r\n\r\n  const product = await db.product.findUnique({ where: { id } })\r\n  if (!product) throw new Error('Product not found')\r\n  return product\r\n}\n\nimport { cacheLife, cacheTag } from 'next/cache'\r\n\r\nexport async function getProduct(id) {\r\n  'use cache'\r\n  cacheLife('max')\r\n  cacheTag(`product:${id}`)\r\n\r\n  const product = await db.product.findUnique({ where: { id } })\r\n  if (!product) throw new Error('Product not found')\r\n  return product\r\n}",
+    "metadata": {
+      "language": "diff"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Cache server-provided data with Cache Components",
+    "content": "cache'\r\n  cacheLife('max')\r\n  cacheTag(`product:${id}`)\r\n\r\n  const product = await db.product.findUnique({ where: { id } })\r\n  if (!product) throw new Error('Product not found')\r\n  return product\r\n}\n\nThis example uses cacheLife('max') because writes invalidate the product tag. Within the cache profile, stale controls how long the Next.js client cache can reuse a prefetched payload, while revalidate and expire control the server cache. Choose a shorter profile when the server value should refresh with time.\n\nTanStack Query owns a separate browser cache, so its staleTime does not need to match cacheLife.\n\nWith Cache Components enabled, Next.js also prerenders Client Components. Keep a query needed during the initial render behind Suspense. TanStack Query can read the current time while creating active query state, and the boundary lets Next.js defer that work instead of raising a current-time prerender error.",
+    "metadata": {
+      "language": "diff"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Cache server-provided data with Cache Components",
+    "content": "al render behind Suspense. TanStack Query can read the current time while creating active query state, and the boundary lets Next.js defer that work instead of raising a current-time prerender error.\n\nWhen the same mutation updates the browser cache and invalidates cached server data, you may define both identities in one shared contract:\n\n export const productCache = {\r\n   key: (id: string) => ['product', id] as const,\r\n+  tag: (id: string) => `product:${id}`,\r\n   // ...\r\n }\n\n export const productCache = {\r\n   key: (id) => ['product', id],\r\n+  tag: (id) => `product:${id}`,\r\n   // ...\r\n }\n\nThe server function can then call cacheTag(productCache.tag(id)). Keep this contract free of server-only and client-only imports so both cache layers can reuse it.\n\nGood to know: TanStack Query's dehydrate() reads the current time during Cache Components prerendering. Use the prerenderable hydration helper for cached initial data.",
+    "metadata": {
+      "language": "diff"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Coordinate server and client caches after mutations",
+    "content": "Hydration provides the initial client cache value. After hydration, TanStack Query owns the browser copy and its revalidation. For reused data, keep the query key and server tag in the same cache contract:\n\nexport const activityCache = {\r\n  key: ['activity', 'unread'] as const,\r\n  tag: (userId: string) => `activity:${userId}`,\r\n}\n\nexport const activityCache = {\r\n  key: ['activity', 'unread'],\r\n  tag: (userId) => `activity:${userId}`,\r\n}\n\nOn mutation, use useMutation's onMutate callback to update the cache immediately and restore the previous value in onError if the write fails. This example keeps the optimistic value after the action succeeds because the final value is known:\n\n'use client'\r\n\r\nimport { useMutation, useQueryClient } from '@tanstack/react-query'\r\nimport { markActivityReadAction } from './actions'\r\nimport { activityCache } from './activity-cache'\r\n\r\nexport function MarkReadButton() {\r\n  const queryClient = useQueryClient()\r\n  const queryKey = activityCache.key",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Coordinate server and client caches after mutations",
+    "content": "tyReadAction } from './actions'\r\nimport { activityCache } from './activity-cache'\r\n\r\nexport function MarkReadButton() {\r\n  const queryClient = useQueryClient()\r\n  const queryKey = activityCache.key\r\n\r\n  const markRead = useMutation({\r\n    mutationFn: markActivityReadAction,\r\n    onMutate: async () => {\r\n      await queryClient.cancelQueries({ queryKey })\r\n      const previous = queryClient.getQueryData(queryKey)\r\n      queryClient.setQueryData(queryKey, { count: 0 })\r\n      return { previous }\r\n    },\r\n    onError: (_error, _variables, context) => {\r\n      queryClient.setQueryData(queryKey, context?.previous)\r\n    },\r\n  })\r\n\r\n  return <button onClick={() => markRead.mutate()}>Mark read</button>\r\n}\n\n'use client'\r\n\r\nimport { useMutation, useQueryClient } from '@tanstack/react-query'\r\nimport { markActivityReadAction } from './actions'\r\nimport { activityCache } from './activity-cache'\r\n\r\nexport function MarkReadButton() {\r\n  const queryClient = useQueryClient()",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Coordinate server and client caches after mutations",
+    "content": "nstack/react-query'\r\nimport { markActivityReadAction } from './actions'\r\nimport { activityCache } from './activity-cache'\r\n\r\nexport function MarkReadButton() {\r\n  const queryClient = useQueryClient()\r\n  const queryKey = activityCache.key\r\n\r\n  const markRead = useMutation({\r\n    mutationFn: markActivityReadAction,\r\n    onMutate: async () => {\r\n      await queryClient.cancelQueries({ queryKey })\r\n      const previous = queryClient.getQueryData(queryKey)\r\n      queryClient.setQueryData(queryKey, { count: 0 })\r\n      return { previous }\r\n    },\r\n    onError: (_error, _variables, context) => {\r\n      queryClient.setQueryData(queryKey, context?.previous)\r\n    },\r\n  })\r\n\r\n  return <button onClick={() => markRead.mutate()}>Mark read</button>\r\n}\n\nThe Server Action writes to the database and expires the tagged server data with updateTag. Tag the cached server query with cacheTag so the tag matches:\n\n'use server'\r\n\r\nimport { updateTag } from 'next/cache'\r\nimport {\r\n  getCurrentUserId,",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Coordinate server and client caches after mutations",
+    "content": "and expires the tagged server data with updateTag. Tag the cached server query with cacheTag so the tag matches:\n\n'use server'\r\n\r\nimport { updateTag } from 'next/cache'\r\nimport {\r\n  getCurrentUserId,\r\n  markActivityRead as markActivityReadInDatabase,\r\n} from './data'\r\nimport { activityCache } from './activity-cache'\r\n\r\nexport async function markActivityReadAction() {\r\n  const userId = await getCurrentUserId()\r\n  await markActivityReadInDatabase(userId)\r\n  updateTag(activityCache.tag(userId))\r\n}\n\n'use server'\r\n\r\nimport { updateTag } from 'next/cache'\r\nimport {\r\n  getCurrentUserId,\r\n  markActivityRead as markActivityReadInDatabase,\r\n} from './data'\r\nimport { activityCache } from './activity-cache'\r\n\r\nexport async function markActivityReadAction() {\r\n  const userId = await getCurrentUserId()\r\n  await markActivityReadInDatabase(userId)\r\n  updateTag(activityCache.tag(userId))\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Coordinate server and client caches after mutations",
+    "content": "./activity-cache'\r\n\r\nexport async function markActivityReadAction() {\r\n  const userId = await getCurrentUserId()\r\n  await markActivityReadInDatabase(userId)\r\n  updateTag(activityCache.tag(userId))\r\n}\n\nThe optimistic query value updates the current screen. updateTag ensures the next cached server read returns fresh activity.\n\nGood to know: Call updateTag when a Server Action changes a cached read that must reflect the write immediately. An uncached read does not have a server tag to update. See Client-side data fetching for other invalidation behaviors.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Build a prerenderable hydration state",
+    "content": "The TanStack Query pattern above uses dehydrate() to create the hydration state. With Cache Components, dehydrate() reads the current time (Date.now()) while prerendering and causes a current-time prerender error.\n\nInstead, cache only that timestamp and build the dehydrated state by hand. Wrap the time read in use cache with the same tags as the data reads. When a mutation invalidates those tags, the data and its timestamp advance together, so <HydrationBoundary> overwrites the client query on the next navigation:\n\nimport 'server-only'\r\n\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport {\r\n  defaultShouldDehydrateQuery,\r\n  QueryClient,\r\n  type DehydratedState,\r\n  type QueryKey,\r\n} from '@tanstack/react-query'\r\n\r\ntype HydratedQuery = {\r\n  queryKey: QueryKey\r\n  data: unknown\r\n}\r\n\r\ntype HydrationOptions = {\r\n  tags: string[]\r\n}\r\n\r\nasync function getHydrationUpdatedAt(tags: string[]) {\r\n  'use cache'\r\n  cacheTag(...tags)\r\n  cacheLife('max')\r\n  return Date.now()\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Build a prerenderable hydration state",
+    "content": "nknown\r\n}\r\n\r\ntype HydrationOptions = {\r\n  tags: string[]\r\n}\r\n\r\nasync function getHydrationUpdatedAt(tags: string[]) {\r\n  'use cache'\r\n  cacheTag(...tags)\r\n  cacheLife('max')\r\n  return Date.now()\r\n}\r\n\r\nexport async function dehydrate(\r\n  queries: HydratedQuery[],\r\n  options: HydrationOptions\r\n): Promise<DehydratedState> {\r\n  const updatedAt = await getHydrationUpdatedAt(options.tags)\r\n\r\n  const queryClient = new QueryClient()\r\n\r\n  for (const query of queries) {\r\n    queryClient.setQueryData(query.queryKey, query.data, { updatedAt })\r\n  }\r\n\r\n  return {\r\n    mutations: [],\r\n    queries: queryClient\r\n      .getQueryCache()\r\n      .getAll()\r\n      .filter((query) => defaultShouldDehydrateQuery(query))\r\n      .map((query) => ({\r\n        dehydratedAt: updatedAt,\r\n        queryHash: query.queryHash,\r\n        queryKey: query.queryKey,\r\n        state: query.state,\r\n        ...(query.meta ? { meta: query.meta } : {}),\r\n      })),\r\n  }\r\n}\n\nimport 'server-only'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Build a prerenderable hydration state",
+    "content": "queryHash: query.queryHash,\r\n        queryKey: query.queryKey,\r\n        state: query.state,\r\n        ...(query.meta ? { meta: query.meta } : {}),\r\n      })),\r\n  }\r\n}\n\nimport 'server-only'\r\n\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'\r\n\r\nasync function getHydrationUpdatedAt(tags) {\r\n  'use cache'\r\n  cacheTag(...tags)\r\n  cacheLife('max')\r\n  return Date.now()\r\n}\r\n\r\nexport async function dehydrate(queries, options) {\r\n  const updatedAt = await getHydrationUpdatedAt(options.tags)\r\n\r\n  const queryClient = new QueryClient()\r\n\r\n  for (const query of queries) {\r\n    queryClient.setQueryData(query.queryKey, query.data, { updatedAt })\r\n  }\r\n\r\n  return {\r\n    mutations: [],\r\n    queries: queryClient\r\n      .getQueryCache()\r\n      .getAll()\r\n      .filter((query) => defaultShouldDehydrateQuery(query))\r\n      .map((query) => ({\r\n        dehydratedAt: updatedAt,\r\n        queryHash: query.queryHash,",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Build a prerenderable hydration state",
+    "content": ".getQueryCache()\r\n      .getAll()\r\n      .filter((query) => defaultShouldDehydrateQuery(query))\r\n      .map((query) => ({\r\n        dehydratedAt: updatedAt,\r\n        queryHash: query.queryHash,\r\n        queryKey: query.queryKey,\r\n        state: query.state,\r\n        ...(query.meta ? { meta: query.meta } : {}),\r\n      })),\r\n  }\r\n}\n\nAwait the helper in the segment that owns the data, passing the data and the same tags used on the underlying getProduct read. Hand the result to <HydrationBoundary> inside ProductData:\n\nimport { HydrationBoundary } from '@tanstack/react-query'\r\nimport { dehydrate } from '@/app/lib/hydrate'\r\nimport { getProduct } from './data'\r\nimport { productCache } from './product-cache'\r\nimport { ProductView } from './product-view'\r\n\r\nasync function ProductData({ id }: { id: string }) {\r\n  const product = await getProduct(id)\r\n  const state = await dehydrate(\r\n    [{ queryKey: productCache.key(id), data: product }],\r\n    { tags: [productCache.tag(id)] }\r\n  )",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Build a prerenderable hydration state",
+    "content": "d }: { id: string }) {\r\n  const product = await getProduct(id)\r\n  const state = await dehydrate(\r\n    [{ queryKey: productCache.key(id), data: product }],\r\n    { tags: [productCache.tag(id)] }\r\n  )\r\n\r\n  return (\r\n    <HydrationBoundary state={state}>\r\n      <ProductView id={id} />\r\n    </HydrationBoundary>\r\n  )\r\n}\n\nimport { HydrationBoundary } from '@tanstack/react-query'\r\nimport { dehydrate } from '@/app/lib/hydrate'\r\nimport { getProduct } from './data'\r\nimport { productCache } from './product-cache'\r\nimport { ProductView } from './product-view'\r\n\r\nasync function ProductData({ id }) {\r\n  const product = await getProduct(id)\r\n  const state = await dehydrate(\r\n    [{ queryKey: productCache.key(id), data: product }],\r\n    { tags: [productCache.tag(id)] }\r\n  )\r\n\r\n  return (\r\n    <HydrationBoundary state={state}>\r\n      <ProductView id={id} />\r\n    </HydrationBoundary>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  },
+  {
+    "documentTitle": "How to fetch client-side data with TanStack Query",
+    "documentDescription": "Fetch client-side data with TanStack Query, optionally provide initial data from a Server Component, and coordinate server and client caches.",
+    "sectionTitle": "Build a prerenderable hydration state",
+    "content": "roductCache.key(id), data: product }],\r\n    { tags: [productCache.tag(id)] }\r\n  )\r\n\r\n  return (\r\n    <HydrationBoundary state={state}>\r\n      <ProductView id={id} />\r\n    </HydrationBoundary>\r\n  )\r\n}\n\nGood to know: The timestamp must advance whenever the hydrated data changes. The helper suits tag-driven server data because both use the same tags. For time-driven server data, derive the data and hydration timestamp from the same cached snapshot instead of maintaining unrelated time windows.\n\nSee the live next-spa-patterns demo and its source code. Learn more about TanStack Query optimistic updates and the TanStack Query documentation.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\client-side-data-fetching\\tanstack-query.mdx"
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "Introduction",
+    "content": "Fast refresh is a React feature integrated into Next.js that allows you to live reload the browser page while maintaining temporary client-side state when you save changes to a file. It's enabled by default in all Next.js applications on 9.4 or newer. With Fast Refresh enabled, most edits should be visible within a second.",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "How It Works",
+    "content": "If you edit a file that only exports React component(s), Fast Refresh will\r\nupdate the code only for that file, and re-render your component. You can edit\r\nanything in that file, including styles, rendering logic, event handlers, or\r\neffects.If you edit a file with exports that aren't React components, Fast Refresh\r\nwill re-run both that file, and the other files importing it. So if both\r\nButton.js and Modal.js import theme.js, editing theme.js will update\r\nboth components.Finally, if you edit a file that's imported by files outside of the\r\nReact tree, Fast Refresh will fall back to doing a full reload. You\r\nmight have a file which renders a React component but also exports a value\r\nthat is imported by a non-React component. For example, maybe your\r\ncomponent also exports a constant, and a non-React utility file imports it. In\r\nthat case, consider migrating the constant to a separate file and importing it\r\ninto both files. This will re-enable Fast Refresh to work. Other cases can",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "How It Works",
+    "content": "and a non-React utility file imports it. In\r\nthat case, consider migrating the constant to a separate file and importing it\r\ninto both files. This will re-enable Fast Refresh to work. Other cases can\r\nusually be solved in a similar way.",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "Syntax Errors",
+    "content": "If you make a syntax error during development, you can fix it and save the file\r\nagain. The error will disappear automatically, so you won't need to reload the\r\napp. You will not lose component state.",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "Runtime Errors",
+    "content": "If you make a mistake that leads to a runtime error inside your component,\r\nyou'll be greeted with a contextual overlay. Fixing the error will automatically\r\ndismiss the overlay, without reloading the app.\n\nComponent state will be retained if the error did not occur during rendering. If\r\nthe error did occur during rendering, React will remount your application using\r\nthe updated code.\n\nIf you have error boundaries\r\nin your app (which is a good idea for graceful failures in production), they\r\nwill retry rendering on the next edit after a rendering error. This means having\r\nan error boundary can prevent you from always getting reset to the root app\r\nstate. However, keep in mind that error boundaries shouldn't be too granular.\r\nThey are used by React in production, and should always be designed\r\nintentionally.",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "Limitations",
+    "content": "Fast Refresh tries to preserve local React state in the component you're\r\nediting, but only if it's safe to do so. Here's a few reasons why you might see\r\nlocal state being reset on every edit to a file:\n\nLocal state is not preserved for class components (only function components\r\nand Hooks preserve state).The file you're editing might have other exports in addition to a React\r\ncomponent.Sometimes, a file would export the result of calling a higher-order component\r\nlike HOC(WrappedComponent). If the returned component is a\r\nclass, its state will be reset.Anonymous arrow functions like export default () => <div />; cause Fast Refresh to not preserve local component state. For large codebases you can use our name-default-component codemod.\n\nAs more of your codebase moves to function components and Hooks, you can expect\r\nstate to be preserved in more cases.",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "Tips",
+    "content": "Fast Refresh preserves React local state in function components (and Hooks) by\r\ndefault.Sometimes you might want to force the state to be reset, and a component to\r\nbe remounted. For example, this can be handy if you're tweaking an animation\r\nthat only happens on mount. To do this, you can add // @refresh reset\r\nanywhere in the file you're editing. This directive is local to the file, and\r\ninstructs Fast Refresh to remount components defined in that file on every\r\nedit.You can put console.log or debugger; into the components you edit during\r\ndevelopment.Remember that imports are case sensitive. Both fast and full refresh can fail,\r\nwhen your import doesn't match the actual filename.\r\nFor example, './header' vs './Header'.",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "Fast Refresh and Hooks",
+    "content": "When possible, Fast Refresh attempts to preserve the state of your component\r\nbetween edits. In particular, useState and useRef preserve their previous\r\nvalues as long as you don't change their arguments or the order of the Hook\r\ncalls.\n\nHooks with dependencies—such as useEffect, useMemo, and useCallback—will\r\nalways update during Fast Refresh. Their list of dependencies will be ignored\r\nwhile Fast Refresh is happening.\n\nFor example, when you edit useMemo(() => x * 2, [x]) to\r\nuseMemo(() => x * 10, [x]), it will re-run even though x (the dependency)\r\nhas not changed. If React didn't do that, your edit wouldn't reflect on the\r\nscreen!\n\nSometimes, this can lead to unexpected results. For example, even a useEffect\r\nwith an empty array of dependencies would still re-run once during Fast Refresh.\n\nHowever, writing code resilient to occasional re-running of useEffect is a good practice even\r\nwithout Fast Refresh. It will make it easier for you to introduce new dependencies to it later on",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  },
+  {
+    "documentTitle": "Fast Refresh",
+    "documentDescription": "Fast Refresh is a hot module reloading experience that gives you instantaneous feedback on edits made to your React components.",
+    "sectionTitle": "Fast Refresh and Hooks",
+    "content": "resh.\n\nHowever, writing code resilient to occasional re-running of useEffect is a good practice even\r\nwithout Fast Refresh. It will make it easier for you to introduce new dependencies to it later on\r\nand it's enforced by React Strict Mode,\r\nwhich we highly recommend enabling.",
+    "metadata": {},
+    "sourceFile": "docs\\03-architecture\\fast-refresh.mdx"
+  }
+]

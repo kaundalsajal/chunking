@@ -1,0 +1,72 @@
+[
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Introduction",
+    "content": "useSelectedLayoutSegments is a Client Component hook that lets you read the active route segments below the Layout it is called from.\n\nIt is useful for creating UI in parent Layouts that need knowledge of active child segments such as breadcrumbs.\n\n'use client'\r\n\r\nimport { useSelectedLayoutSegments } from 'next/navigation'\r\n\r\nexport default function ExampleClientComponent() {\r\n  const segments = useSelectedLayoutSegments()\r\n\r\n  return (\r\n    <ul>\r\n      {segments.map((segment, index) => (\r\n        <li key={index}>{segment}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useSelectedLayoutSegments } from 'next/navigation'\r\n\r\nexport default function ExampleClientComponent() {\r\n  const segments = useSelectedLayoutSegments()\r\n\r\n  return (\r\n    <ul>\r\n      {segments.map((segment, index) => (\r\n        <li key={index}>{segment}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  },
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Introduction",
+    "content": "tComponent() {\r\n  const segments = useSelectedLayoutSegments()\r\n\r\n  return (\r\n    <ul>\r\n      {segments.map((segment, index) => (\r\n        <li key={index}>{segment}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\nGood to know:Since useSelectedLayoutSegments is a Client Component hook, and Layouts are Server Components by default, useSelectedLayoutSegments is usually called via a Client Component that is imported into a Layout.The returned segments include Route Groups, which you might not want to be included in your UI. You can use the filter array method to remove items that start with a bracket.For catch-all routes, the matched segments are returned as a single joined string within the array. For example, given app/blog/[...slug]/page.js, calling from app/layout.js when visiting /blog/a/b/c returns ['blog', 'a/b/c'], not ['blog', 'a', 'b', 'c'].",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  },
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Parameters",
+    "content": "const segments = useSelectedLayoutSegments(parallelRoutesKey?: string)\n\nuseSelectedLayoutSegments optionally accepts a parallelRoutesKey, which allows you to read the active route segment within that slot.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  },
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Returns",
+    "content": "useSelectedLayoutSegments returns an array of strings containing the active segments one level down from the layout the hook was called from. Or an empty array if none exist.\n\nFor example, given the Layouts and URLs below, the returned segments would be:\n\n| Layout                    | Visited URL           | Returned Segments           |\r\n| ------------------------- | --------------------- | --------------------------- |\r\n| app/layout.js           | /                   | []                        |\r\n| app/layout.js           | /dashboard          | ['dashboard']             |\r\n| app/layout.js           | /dashboard/settings | ['dashboard', 'settings'] |\r\n| app/dashboard/layout.js | /dashboard          | []                        |\r\n| app/dashboard/layout.js | /dashboard/settings | ['settings']              |\n\nFor catch-all routes ([...slug]), all matched path segments are returned as a single joined string within the array:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  },
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Returns",
+    "content": "|\r\n| app/dashboard/layout.js | /dashboard/settings | ['settings']              |\n\nFor catch-all routes ([...slug]), all matched path segments are returned as a single joined string within the array:\n\n| Layout               | Visited URL   | Returned Segments   |\r\n| -------------------- | ------------- | ------------------- |\r\n| app/layout.js      | /blog/a/b/c | ['blog', 'a/b/c'] |\r\n| app/blog/layout.js | /blog/a/b/c | ['a/b/c']         |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  },
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Cache Components",
+    "content": "When cacheComponents is enabled, useSelectedLayoutSegments may require a Suspense boundary. This depends on whether the active segments can be resolved during prerendering.\n\nStatic routes and routes with generateStaticParams: every route segment, including dynamic params, is known at build time. The active segments can be resolved during prerendering, so useSelectedLayoutSegments resolves on the server and no Suspense boundary is required.Routes with dynamic params not covered by generateStaticParams: the param is a fallback param that is not known until request time. The active segments cannot be resolved during prerendering, so useSelectedLayoutSegments suspends. Wrap the component (or a parent) in a Suspense boundary so its fallback can be rendered during prerendering; otherwise, the build fails.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  },
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Cache Components",
+    "content": "ed during prerendering, so useSelectedLayoutSegments suspends. Wrap the component (or a parent) in a Suspense boundary so its fallback can be rendered during prerendering; otherwise, the build fails.\n\nThis applies even when the component that calls useSelectedLayoutSegments is itself static. For example, a breadcrumb component rendered in a parent layout suspends on any page below it that has an unknown dynamic param. To keep the rest of the layout prerendered, wrap the component that calls useSelectedLayoutSegments (or a parent) in a Suspense boundary with a fallback.\n\nSee Next.js encountered URL data in a Client Component outside of Suspense for full fix options and trade-offs.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  },
+  {
+    "documentTitle": "useSelectedLayoutSegments",
+    "documentDescription": "API Reference for the useSelectedLayoutSegments hook.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                 |\r\n| --------- | --------------------------------------- |\r\n| v13.0.0 | useSelectedLayoutSegments introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-selected-layout-segments.mdx"
+  }
+]

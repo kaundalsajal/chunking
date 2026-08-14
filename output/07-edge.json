@@ -1,0 +1,280 @@
+[
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Introduction",
+    "content": "/* The content of this doc is shared between the app and pages router. You can use the `<PagesOnly>Content</PagesOnly>` component to add content that is specific to the Pages Router. Any shared content should not be wrapped in a component. */\n\nNext.js has two server runtimes you can use in your application:\n\nThe Node.js Runtime (default), which has access to all Node.js APIs and is used for rendering your application.The Edge Runtime which contains a more limited set of APIs, used in Proxy.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Caveats",
+    "content": "The Edge Runtime does not support all Node.js APIs. Some packages may not work as expected.The Edge Runtime does not support Incremental Static Regeneration (ISR).Both runtimes can support streaming depending on your deployment adapter.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Reference",
+    "content": "The Edge Runtime supports the following APIs:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Network APIs",
+    "content": "| API                                                                             | Description                       |\r\n| ------------------------------------------------------------------------------- | --------------------------------- |\r\n| Blob                       | Represents a blob                 |\r\n| fetch                 | Fetches a resource                |\r\n| FetchEvent           | Represents a fetch event          |\r\n| File                       | Represents a file                 |\r\n| FormData               | Represents form data              |\r\n| Headers                 | Represents HTTP headers           |\r\n| Request                 | Represents an HTTP request        |\r\n| Response               | Represents an HTTP response       |\r\n| URLSearchParams | Represents URL search parameters  |\r\n| WebSocket             | Represents a websocket connection |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Encoding APIs",
+    "content": "| API                                                                                 | Description                        |\r\n| ----------------------------------------------------------------------------------- | ---------------------------------- |\r\n| atob                     | Decodes a base-64 encoded string   |\r\n| btoa                     | Encodes a string in base-64        |\r\n| TextDecoder             | Decodes a Uint8Array into a string |\r\n| TextDecoderStream | Chainable decoder for streams      |\r\n| TextEncoder             | Encodes a string into a Uint8Array |\r\n| TextEncoderStream | Chainable encoder for streams      |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Stream APIs",
+    "content": "| API                                                                                                     | Description                             |\r\n| ------------------------------------------------------------------------------------------------------- | --------------------------------------- |\r\n| ReadableStream                           | Represents a readable stream            |\r\n| ReadableStreamBYOBReader       | Represents a reader of a ReadableStream |\r\n| ReadableStreamDefaultReader | Represents a reader of a ReadableStream |\r\n| TransformStream                         | Represents a transform stream           |\r\n| WritableStream                           | Represents a writable stream            |\r\n| WritableStreamDefaultWriter | Represents a writer of a WritableStream |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Crypto APIs",
+    "content": "| API                                                                       | Description                                                                                         |\r\n| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |\r\n| crypto      | Provides access to the cryptographic functionality of the platform                                  |\r\n| CryptoKey       | Represents a cryptographic key                                                                      |\r\n| SubtleCrypto | Provides access to common cryptographic primitives, like hashing, signing, encryption or decryption |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "| API                                                                                                                   | Description                                                                                                                                                                                          |\r\n| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| AbortController                                       | Allows you to abort one or more DOM requests as and when desired                                                                                                                                     |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Allows you to abort one or more DOM requests as and when desired                                                                                                                                     |\r\n| Array                           | Represents an array of values                                                                                                                                                                        |\r\n| ArrayBuffer               | Represents a generic, fixed-length raw binary data buffer                                                                                                                                            |\r\n| Atomics                       | Provides atomic operations as static methods                                                                                                                                                         |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Provides atomic operations as static methods                                                                                                                                                         |\r\n| BigInt                         | Represents a whole number with arbitrary precision                                                                                                                                                   |\r\n| BigInt64Array           | Represents a typed array of 64-bit signed integers                                                                                                                                                   |\r\n| BigUint64Array         | Represents a typed array of 64-bit unsigned integers                                                                                                                                                 |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a typed array of 64-bit unsigned integers                                                                                                                                                 |\r\n| Boolean                       | Represents a logical entity and can have two values: true and false                                                                                                                              |\r\n| clearInterval                 | Cancels a timed, repeating action which was previously established by a call to setInterval()                                                                                                      |\r\n| clearTimeout                   | Cancels a timed, repeating action which was previously established by a call to setTimeout()                                                                                                       |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "| Cancels a timed, repeating action which was previously established by a call to setTimeout()                                                                                                       |\r\n| console                                                       | Provides access to the browser's debugging console                                                                                                                                                   |\r\n| DataView                     | Represents a generic view of an ArrayBuffer                                                                                                                                                        |\r\n| Date                             | Represents a single moment in time in a platform-independent format                                                                                                                                  |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a single moment in time in a platform-independent format                                                                                                                                  |\r\n| decodeURI                   | Decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine                                                                                                |\r\n| decodeURIComponent | Decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine                                                                             |\r\n| DOMException                                             | Represents an error that occurs in the DOM                                                                                                                                                           |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents an error that occurs in the DOM                                                                                                                                                           |\r\n| encodeURI                   | Encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character           |\r\n| encodeURIComponent | Encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character |\r\n| Error                           | Represents an error when trying to execute a statement or accessing a property                                                                                                                       |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents an error when trying to execute a statement or accessing a property                                                                                                                       |\r\n| EvalError                   | Represents an error that occurs regarding the global function eval()                                                                                                                               |\r\n| Float32Array             | Represents a typed array of 32-bit floating point numbers                                                                                                                                            |\r\n| Float64Array             | Represents a typed array of 64-bit floating point numbers                                                                                                                                            |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a typed array of 64-bit floating point numbers                                                                                                                                            |\r\n| Function                     | Represents a function                                                                                                                                                                                |\r\n| Infinity                     | Represents the mathematical Infinity value                                                                                                                                                           |\r\n| Int8Array                   | Represents a typed array of 8-bit signed integers                                                                                                                                                    |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a typed array of 8-bit signed integers                                                                                                                                                    |\r\n| Int16Array                 | Represents a typed array of 16-bit signed integers                                                                                                                                                   |\r\n| Int32Array                 | Represents a typed array of 32-bit signed integers                                                                                                                                                   |\r\n| Intl                             | Provides access to internationalization and localization functionality                                                                                                                               |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Provides access to internationalization and localization functionality                                                                                                                               |\r\n| isFinite                     | Determines whether a value is a finite number                                                                                                                                                        |\r\n| isNaN                           | Determines whether a value is NaN or not                                                                                                                                                           |\r\n| JSON                             | Provides functionality to convert JavaScript values to and from the JSON format                                                                                                                      |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Provides functionality to convert JavaScript values to and from the JSON format                                                                                                                      |\r\n| Map                               | Represents a collection of values, where each value may occur only once                                                                                                                              |\r\n| Math                             | Provides access to mathematical functions and constants                                                                                                                                              |\r\n| Number                         | Represents a numeric value                                                                                                                                                                           |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a numeric value                                                                                                                                                                           |\r\n| Object                         | Represents the object that is the base of all JavaScript objects                                                                                                                                     |\r\n| parseFloat                 | Parses a string argument and returns a floating point number                                                                                                                                         |\r\n| parseInt                     | Parses a string argument and returns an integer of the specified radix                                                                                                                               |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Parses a string argument and returns an integer of the specified radix                                                                                                                               |\r\n| Promise                       | Represents the eventual completion (or failure) of an asynchronous operation, and its resulting value                                                                                                |\r\n| Proxy                           | Represents an object that is used to define custom behavior for fundamental operations (e.g. property lookup, assignment, enumeration, function invocation, etc)                                     |\r\n| queueMicrotask                                         | Queues a microtask to be executed                                                                                                                                                                    |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Queues a microtask to be executed                                                                                                                                                                    |\r\n| RangeError                 | Represents an error when a value is not in the set or range of allowed values                                                                                                                        |\r\n| ReferenceError         | Represents an error when a non-existent variable is referenced                                                                                                                                       |\r\n| Reflect                       | Provides methods for interceptable JavaScript operations                                                                                                                                             |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Provides methods for interceptable JavaScript operations                                                                                                                                             |\r\n| RegExp                         | Represents a regular expression, allowing you to match combinations of characters                                                                                                                    |\r\n| Set                               | Represents a collection of values, where each value may occur only once                                                                                                                              |\r\n| setInterval                                               | Repeatedly calls a function, with a fixed time delay between each call                                                                                                                               |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Repeatedly calls a function, with a fixed time delay between each call                                                                                                                               |\r\n| setTimeout                                                 | Calls a function or evaluates an expression after a specified number of milliseconds                                                                                                                 |\r\n| SharedArrayBuffer   | Represents a generic, fixed-length raw binary data buffer                                                                                                                                            |\r\n| String                         | Represents a sequence of characters                                                                                                                                                                  |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a sequence of characters                                                                                                                                                                  |\r\n| structuredClone            | Creates a deep copy of a value                                                                                                                                                                       |\r\n| Symbol                         | Represents a unique and immutable data type that is used as the key of an object property                                                                                                            |\r\n| SyntaxError               | Represents an error when trying to interpret syntactically invalid code                                                                                                                              |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents an error when trying to interpret syntactically invalid code                                                                                                                              |\r\n| TypeError                   | Represents an error when a value is not of the expected type                                                                                                                                         |\r\n| Uint8Array                 | Represents a typed array of 8-bit unsigned integers                                                                                                                                                  |\r\n| Uint8ClampedArray   | Represents a typed array of 8-bit unsigned integers clamped to 0-255                                                                                                                                 |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a typed array of 8-bit unsigned integers clamped to 0-255                                                                                                                                 |\r\n| Uint32Array               | Represents a typed array of 32-bit unsigned integers                                                                                                                                                 |\r\n| URIError                     | Represents an error when a global URI handling function was used in a wrong way                                                                                                                      |\r\n| URL                                                               | Represents an object providing static methods used for creating object URLs                                                                                                                          |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents an object providing static methods used for creating object URLs                                                                                                                          |\r\n| URLPattern                                                 | Represents a URL pattern                                                                                                                                                                             |\r\n| URLSearchParams                                       | Represents a collection of key/value pairs                                                                                                                                                           |\r\n| WeakMap                       | Represents a collection of key/value pairs in which the keys are weakly referenced                                                                                                                   |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Web Standard APIs",
+    "content": "Represents a collection of key/value pairs in which the keys are weakly referenced                                                                                                                   |\r\n| WeakSet                       | Represents a collection of objects in which each object may occur only once                                                                                                                          |\r\n| WebAssembly               | Provides access to WebAssembly                                                                                                                                                                       |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Next.js Specific Polyfills",
+    "content": "AsyncLocalStorage",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Environment Variables",
+    "content": "You can use process.env to access Environment Variables for both next dev and next build.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Unsupported APIs",
+    "content": "The Edge Runtime has some restrictions including:\n\nNative Node.js APIs are not supported. For example, you can't read or write to the filesystem.node_modules can be used, as long as they implement ES Modules and do not use native Node.js APIs.Calling require directly is not allowed. Use ES Modules instead.\n\nThe following JavaScript language features are disabled, and will not work:\n\n| API                                                                                                                             | Description                                                         |\r\n| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |\r\n| eval                                       | Evaluates JavaScript code represented as a string                   |",
+    "metadata": {
+      "language": "javascript"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Unsupported APIs",
+    "content": "--------- | ------------------------------------------------------------------- |\r\n| eval                                       | Evaluates JavaScript code represented as a string                   |\r\n| new Function(evalString)               | Creates a new function with the code provided as an argument        |\r\n| WebAssembly.compile         | Compiles a WebAssembly module from a buffer source                  |\r\n| WebAssembly.instantiate | Compiles and instantiates a WebAssembly module from a buffer source |\n\nIn rare cases, your code could contain (or import) some dynamic code evaluation statements which cannot be reached at runtime and which cannot be removed by treeshaking.\r\nYou can relax the check to allow specific files with your Proxy configuration:\n\nexport const config = {\r\n  unstable_allowDynamic: [\r\n    // allows a single file\r\n    '/lib/utilities.js',\r\n    // use a glob to allow anything in the function-bind 3rd party module\r\n    '**/node_modules/function-bind/**',\r\n  ],\r\n}",
+    "metadata": {
+      "language": "javascript"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  },
+  {
+    "documentTitle": "Edge Runtime",
+    "documentDescription": "API Reference for the Edge Runtime.",
+    "sectionTitle": "Unsupported APIs",
+    "content": "ble_allowDynamic: [\r\n    // allows a single file\r\n    '/lib/utilities.js',\r\n    // use a glob to allow anything in the function-bind 3rd party module\r\n    '**/node_modules/function-bind/**',\r\n  ],\r\n}\n\nunstable_allowDynamic is a glob, or an array of globs, ignoring dynamic code evaluation for specific files. The globs are relative to your application root folder.\n\nBe warned that if these statements are executed on the Edge, they will throw and cause a runtime error.",
+    "metadata": {
+      "language": "javascript"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-edge.mdx"
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Introduction",
+    "content": "The useLinkStatus hook lets you track the pending state of a <Link>. Use it for subtle, inline feedback, for example a shimmer effect over the clicked link, while navigation completes. Prefer route-level fallbacks with loading.js, and prefetching for instant transitions.\n\nuseLinkStatus is useful when:\n\nPrefetching is disabled or in progress meaning navigation is blocked.The destination route is dynamic and doesn't include a loading.js file that would allow an instant navigation.\n\n'use client'\r\n\r\nimport Link from 'next/link'\r\nimport { useLinkStatus } from 'next/link'\r\n\r\nfunction Hint() {\r\n  const { pending } = useLinkStatus()\r\n  return (\r\n    <span aria-hidden className={`link-hint ${pending ? 'is-pending' : ''}`} />\r\n  )\r\n}\r\n\r\nexport default function Header() {\r\n  return (\r\n    <header>\r\n      <Link href=\"/dashboard\" prefetch={false}>\r\n        <span className=\"label\">Dashboard</span> <Hint />\r\n      </Link>\r\n    </header>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport Link from 'next/link'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Introduction",
+    "content": "header>\r\n      <Link href=\"/dashboard\" prefetch={false}>\r\n        <span className=\"label\">Dashboard</span> <Hint />\r\n      </Link>\r\n    </header>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport Link from 'next/link'\r\nimport { useLinkStatus } from 'next/link'\r\n\r\nfunction Hint() {\r\n  const { pending } = useLinkStatus()\r\n  return (\r\n    <span aria-hidden className={`link-hint ${pending ? 'is-pending' : ''}`} />\r\n  )\r\n}\r\n\r\nexport default function Header() {\r\n  return (\r\n    <header>\r\n      <Link href=\"/dashboard\" prefetch={false}>\r\n        <span className=\"label\">Dashboard</span> <Hint />\r\n      </Link>\r\n    </header>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Introduction",
+    "content": "default function Header() {\r\n  return (\r\n    <header>\r\n      <Link href=\"/dashboard\" prefetch={false}>\r\n        <span className=\"label\">Dashboard</span> <Hint />\r\n      </Link>\r\n    </header>\r\n  )\r\n}\n\nGood to know:useLinkStatus must be used within a descendant component of a Link componentThe hook is most useful when prefetch={false} is set on the Link componentIf the linked route has been prefetched, the pending state will be skippedWhen clicking multiple links in quick succession, only the last link's pending state is shownThis hook is not supported in the Pages Router and always returns { pending: false }Inline indicators can easily introduce layout shifts. Prefer a fixed-size, always-rendered hint element and toggle its opacity, or use an animation.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "You might not need useLinkStatus",
+    "content": "Before adding inline feedback, consider if:\n\nThe destination is static and prefetched in production, so the pending phase may be skipped.The route has a loading.js file, enabling instant transitions with a route-level fallback.\n\nNavigation is typically fast. Use useLinkStatus as a quick patch when you identify a slow transition, then iterate to fix the root cause with prefetching or a loading.js fallback.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Parameters",
+    "content": "const { pending } = useLinkStatus()\n\nuseLinkStatus does not take any parameters.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Returns",
+    "content": "useLinkStatus returns an object with a single property:\n\n| Property | Type    | Description                                  |\r\n| -------- | ------- | -------------------------------------------- |\r\n| pending  | boolean | true before history updates, false after |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Inline link hint",
+    "content": "Add a subtle, fixed-size hint that doesn’t affect layout to confirm a click when prefetching hasn’t completed.\n\n'use client'\r\n\r\nimport { useLinkStatus } from 'next/link'\r\n\r\nexport default function LoadingIndicator() {\r\n  const { pending } = useLinkStatus()\r\n  return (\r\n    <span aria-hidden className={`link-hint ${pending ? 'is-pending' : ''}`} />\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useLinkStatus } from 'next/link'\r\n\r\nexport default function LoadingIndicator() {\r\n  const { pending } = useLinkStatus()\r\n  return (\r\n    <span aria-hidden className={`link-hint ${pending ? 'is-pending' : ''}`} />\r\n  )\r\n}\n\nimport Link from 'next/link'\r\nimport LoadingIndicator from './components/loading-indicator'\r\n\r\nconst links = [\r\n  { href: '/shop/electronics', label: 'Electronics' },\r\n  { href: '/shop/clothing', label: 'Clothing' },\r\n  { href: '/shop/books', label: 'Books' },\r\n]\r\n\r\nfunction Menubar() {\r\n  return (\r\n    <div>\r\n      {links.map((link) => (\r\n        <Link key={link.label} href={link.href}>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Inline link hint",
+    "content": "ng', label: 'Clothing' },\r\n  { href: '/shop/books', label: 'Books' },\r\n]\r\n\r\nfunction Menubar() {\r\n  return (\r\n    <div>\r\n      {links.map((link) => (\r\n        <Link key={link.label} href={link.href}>\r\n          <span className=\"label\">{link.label}</span> <LoadingIndicator />\r\n        </Link>\r\n      ))}\r\n    </div>\r\n  )\r\n}\r\n\r\nexport default function Layout({ children }: { children: React.ReactNode }) {\r\n  return (\r\n    <div>\r\n      <Menubar />\r\n      {children}\r\n    </div>\r\n  )\r\n}\n\nimport Link from 'next/link'\r\nimport LoadingIndicator from './components/loading-indicator'\r\n\r\nconst links = [\r\n  { href: '/shop/electronics', label: 'Electronics' },\r\n  { href: '/shop/clothing', label: 'Clothing' },\r\n  { href: '/shop/books', label: 'Books' },\r\n]\r\n\r\nfunction Menubar() {\r\n  return (\r\n    <div>\r\n      {links.map((link) => (\r\n        <Link key={link.label} href={link.href}>\r\n          <span className=\"label\">{link.label}</span> <LoadingIndicator />\r\n        </Link>\r\n      ))}\r\n    </div>\r\n  )",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Inline link hint",
+    "content": "{links.map((link) => (\r\n        <Link key={link.label} href={link.href}>\r\n          <span className=\"label\">{link.label}</span> <LoadingIndicator />\r\n        </Link>\r\n      ))}\r\n    </div>\r\n  )\r\n}\r\n\r\nexport default function Layout({ children }) {\r\n  return (\r\n    <div>\r\n      <Menubar />\r\n      {children}\r\n    </div>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Gracefully handling fast navigation",
+    "content": "If the navigation to a new route is fast, users may see an unnecessary flash of the hint. One way to improve the user experience and only show the hint when the navigation takes time to complete is to add an initial animation delay (e.g. 100ms) and start the animation as invisible (e.g. opacity: 0).\n\n.link-hint {\r\n  display: inline-block;\r\n  width: 0.6em;\r\n  height: 0.6em;\r\n  margin-left: 0.25rem;\r\n  border-radius: 9999px;\r\n  background: currentColor;\r\n  opacity: 0;\r\n  visibility: hidden; /* reserve space without showing the hint */\r\n}\r\n\r\n.link-hint.is-pending {\r\n  /* Animation 1: fade in after 100ms and keep final opacity */\r\n  /* Animation 2: subtle pulsing while pending */\r\n  visibility: visible;\r\n  animation-name: fadeIn, pulse;\r\n  animation-duration: 200ms, 1s;\r\n  /* Appear only if navigation actually takes time */\r\n  animation-delay: 100ms, 100ms;\r\n  animation-timing-function: ease, ease-in-out;\r\n  animation-iteration-count: 1, infinite;\r\n  animation-fill-mode: forwards, none;",
+    "metadata": {
+      "language": "css"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Gracefully handling fast navigation",
+    "content": "navigation actually takes time */\r\n  animation-delay: 100ms, 100ms;\r\n  animation-timing-function: ease, ease-in-out;\r\n  animation-iteration-count: 1, infinite;\r\n  animation-fill-mode: forwards, none;\r\n}\r\n\r\n@keyframes fadeIn {\r\n  to {\r\n    opacity: 0.35;\r\n  }\r\n}\r\n@keyframes pulse {\r\n  50% {\r\n    opacity: 0.15;\r\n  }\r\n}",
+    "metadata": {
+      "language": "css"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  },
+  {
+    "documentTitle": "useLinkStatus",
+    "documentDescription": "API Reference for the useLinkStatus hook.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                     |\r\n| --------- | --------------------------- |\r\n| v15.3.0 | useLinkStatus introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-link-status.mdx"
+  }
+]

@@ -1,0 +1,84 @@
+[
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Introduction",
+    "content": "Next.js can be deployed as a Node.js server, Docker container, static export, or adapted to run on different platforms.\n\n| Deployment Option                | Feature Support                                                     |\r\n| -------------------------------- | ------------------------------------------------------------------- |\r\n| Node.js server | All                                                                 |\r\n| Docker container      | All                                                                 |\r\n| Static export  | Limited                                                             |\r\n| Adapters            | Varies (verified adapters run the test suite) |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Node.js server",
+    "content": "Next.js can be deployed to any provider that supports Node.js. Ensure your package.json has the \"build\" and \"start\" scripts:\n\n{\r\n  \"scripts\": {\r\n    \"dev\": \"next dev\",\r\n    \"build\": \"next build\",\r\n    \"start\": \"next start\"\r\n  }\r\n}\n\nThen, run npm run build to build your application and npm run start to start the Node.js server. This server supports all Next.js features. If needed, you can also eject to a custom server.\n\nNode.js deployments support all Next.js features. Learn how to configure them for your infrastructure.",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Templates",
+    "content": "FlightcontrolRailwayReplitHostinger",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Docker",
+    "content": "Next.js can be deployed to any provider that supports Docker containers. This includes container orchestrators like Kubernetes or a cloud provider that runs Docker. For best practices on containerizing your app, refer to Docker's official Next.js and React.js guides.\n\nDocker deployments support all Next.js features. Learn how to configure them for your infrastructure.\n\nNote for development: While Docker is excellent for production deployments, consider using local development (npm run dev) instead of Docker during development on Mac and Windows for better performance. Learn more about optimizing local development.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Templates",
+    "content": "The following examples demonstrate best practices for containerizing Next.js applications:\n\nDocker Standalone Output - Deploy a Next.js application using output: \"standalone\" to generate a minimal, production-ready Docker image with only the required runtime files and dependencies.Docker Export Output - Deploy a fully static Next.js application using output: \"export\" to generate optimized HTML files that can be served from a lightweight container or any static hosting environment.Docker Multi-Environment - Manage separate Docker configurations for development, staging, and production environments with different environment variables.\n\nAdditionally, hosting providers offer guidance on deploying Next.js:\n\nDigitalOceanFly.ioGoogle Cloud RunRenderSST",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Static export",
+    "content": "Next.js enables starting as a static site or Single-Page Application (SPA), then later optionally upgrading to use features that require a server.\n\nSince Next.js supports static exports, it can be deployed and hosted on any web server that can serve HTML/CSS/JS static assets. This includes tools like AWS S3, Nginx, or Apache.\n\nRunning as a static export does not support Next.js features that require a server. Learn more.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Templates",
+    "content": "GitHub Pages",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Adapters",
+    "content": "Next.js can be adapted to run on different platforms to support their infrastructure capabilities. The Deployment Adapter API lets platforms customize how Next.js applications are built and deployed.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Verified Adapters",
+    "content": "Verified adapters are open source, run the full Next.js compatibility test suite, and are hosted under the Next.js GitHub organization. The Next.js team coordinates testing with these platforms before major releases. Publicly visible test results for each adapter are coming soon. Learn more about verified adapters.\n\nVercelBun\n\nCloudflare and Netlify are working on verified adapters built on the Adapter API. In the meantime, they offer their own Next.js integrations (see below).",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  },
+  {
+    "documentTitle": "Deploying",
+    "documentDescription": "Learn how to deploy your Next.js application.",
+    "sectionTitle": "Other Platforms",
+    "content": "The following platforms offer their own Next.js integrations. These are not built on the public Adapter API and are not verified by the Next.js team, so feature support and compatibility may vary. Refer to each provider's documentation for details:\n\nAppwrite SitesAWS Amplify HostingCloudflareDeno DeployFirebase App HostingNetlify\n\nFor details on which Next.js features require specific platform capabilities, see Deploying to Platforms.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\17-deploying.mdx"
+  }
+]

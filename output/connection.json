@@ -1,0 +1,64 @@
+[
+  {
+    "documentTitle": "connection",
+    "documentDescription": "API Reference for the connection function.",
+    "sectionTitle": "Introduction",
+    "content": "The connection() function allows you to indicate rendering should wait for an incoming user request before continuing.\n\nIt's useful when a component doesn't use Request-time APIs like cookies or headers, but still needs to produce different output per request, such as Math.random() or new Date().\n\nimport { connection } from 'next/server'\r\n\r\nexport default async function Page() {\r\n  await connection() // prerendering stops here\r\n  // the following code only runs at request time\r\n  const rand = Math.random()\r\n  return <span>{rand}</span>\r\n}\n\nimport { connection } from 'next/server'\r\n\r\nexport default async function Page() {\r\n  await connection() // prerendering stops here\r\n  // the following code only runs at request time\r\n  const rand = Math.random()\r\n  return <span>{rand}</span>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\connection.mdx"
+  },
+  {
+    "documentTitle": "connection",
+    "documentDescription": "API Reference for the connection function.",
+    "sectionTitle": "Synchronous database drivers",
+    "content": "Queries from synchronous database drivers like better-sqlite3 complete during prerendering. If you are not already using Request-time APIs, call connection() before your query to exclude them from prerendering:\n\nimport { connection } from 'next/server'\r\nimport Database from 'better-sqlite3'\r\n\r\nconst db = new Database('app.db')\r\n\r\nexport async function getVisitorCount() {\r\n  await connection()\r\n  return db.prepare('SELECT value FROM counters WHERE name = ?').get('visitors')\r\n}\n\nimport { connection } from 'next/server'\r\nimport Database from 'better-sqlite3'\r\n\r\nconst db = new Database('app.db')\r\n\r\nexport async function getVisitorCount() {\r\n  await connection()\r\n  return db.prepare('SELECT value FROM counters WHERE name = ?').get('visitors')\r\n}\n\nNow any component that calls getVisitorCount() will be excluded from prerendering, along with the rest of its output.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\connection.mdx"
+  },
+  {
+    "documentTitle": "connection",
+    "documentDescription": "API Reference for the connection function.",
+    "sectionTitle": "Type",
+    "content": "function connection(): Promise<void>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\connection.mdx"
+  },
+  {
+    "documentTitle": "connection",
+    "documentDescription": "API Reference for the connection function.",
+    "sectionTitle": "Parameters",
+    "content": "The function does not accept any parameters.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\connection.mdx"
+  },
+  {
+    "documentTitle": "connection",
+    "documentDescription": "API Reference for the connection function.",
+    "sectionTitle": "Returns",
+    "content": "The function returns a void Promise. It is not meant to be consumed.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\connection.mdx"
+  },
+  {
+    "documentTitle": "connection",
+    "documentDescription": "API Reference for the connection function.",
+    "sectionTitle": "Good to know",
+    "content": "connection replaces unstable_noStore to better align with the future of Next.js.The function is only necessary when dynamic rendering is required and common Request-time APIs are not used.With Cache Components, prefer io() for excluding content from the static shell. It works the same way but can also be cached and prefetched. Reach for connection() only when rendering should wait for a real user request.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\connection.mdx"
+  },
+  {
+    "documentTitle": "connection",
+    "documentDescription": "API Reference for the connection function.",
+    "sectionTitle": "Version History",
+    "content": "| Version      | Changes                  |\r\n| ------------ | ------------------------ |\r\n| v15.0.0    | connection stabilized. |\r\n| v15.0.0-RC | connection introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\connection.mdx"
+  }
+]

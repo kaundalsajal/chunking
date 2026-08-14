@@ -1,0 +1,136 @@
+[
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Introduction",
+    "content": "useSearchParams is a hook that lets you read the current URL's query string.\n\nuseSearchParams returns a read-only version of the URLSearchParams interface.\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function Dashboard() {\r\n  const searchParams = useSearchParams()\r\n\r\n  if (!searchParams) {\r\n    // Render fallback UI while search params are not yet available\r\n    return null\r\n  }\r\n\r\n  const search = searchParams.get('search')\r\n\r\n  // URL -> `/dashboard?search=my-project`\r\n  // `search` -> 'my-project'\r\n  return <>Search: {search}</>\r\n}\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function Dashboard() {\r\n  const searchParams = useSearchParams()\r\n\r\n  if (!searchParams) {\r\n    // Render fallback UI while search params are not yet available\r\n    return null\r\n  }\r\n\r\n  const search = searchParams.get('search')\r\n\r\n  // URL -> `/dashboard?search=my-project`\r\n  // `search` -> 'my-project'\r\n  return <>Search: {search}</>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Parameters",
+    "content": "const searchParams = useSearchParams()\n\nuseSearchParams does not take any parameters.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Returns",
+    "content": "useSearchParams returns a read-only version of the URLSearchParams interface, or null during prerendering.\n\nThe interface includes utility methods for reading the URL's query string:\n\nURLSearchParams.get(): Returns the first value associated with the search parameter. For example:| URL                  | searchParams.get(\"a\")                                                                                         |\r\n| -------------------- | --------------------------------------------------------------------------------------------------------------- |\r\n| /dashboard?a=1     | '1'                                                                                                           |\r\n| /dashboard?a=      | ''                                                                                                            |\r\n| /dashboard?b=3     | null                                                                                                          |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Returns",
+    "content": "|\r\n| /dashboard?b=3     | null                                                                                                          |\r\n| /dashboard?a=1&a=2 | '1' - use getAll() to get all values |URLSearchParams.has(): Returns a boolean value indicating if the given parameter exists. For example:| URL              | searchParams.has(\"a\") |\r\n| ---------------- | ----------------------- |\r\n| /dashboard?a=1 | true                  |\r\n| /dashboard?b=3 | false                 |Learn more about other read-only methods of URLSearchParams, including the getAll(), keys(), values(), entries(), forEach(), and toString().\n\nGood to know: useSearchParams is a React Hook and cannot be used with classes.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Behavior during prerendering",
+    "content": "For pages that are statically optimized (not using getServerSideProps), useSearchParams will return null during prerendering. After hydration, the value will be updated to the actual search params.\n\nThis is because search params cannot be known during static generation as they depend on the request.\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function Dashboard() {\r\n  const searchParams = useSearchParams()\r\n\r\n  if (!searchParams) {\r\n    // Return a fallback UI while search params are loading\r\n    // This prevents hydration mismatches\r\n    return <DashboardSkeleton />\r\n  }\r\n\r\n  const search = searchParams.get('search')\r\n\r\n  return <>Search: {search}</>\r\n}\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function Dashboard() {\r\n  const searchParams = useSearchParams()\r\n\r\n  if (!searchParams) {\r\n    // Return a fallback UI while search params are loading\r\n    // This prevents hydration mismatches\r\n    return <DashboardSkeleton />\r\n  }",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Behavior during prerendering",
+    "content": "chParams = useSearchParams()\r\n\r\n  if (!searchParams) {\r\n    // Return a fallback UI while search params are loading\r\n    // This prevents hydration mismatches\r\n    return <DashboardSkeleton />\r\n  }\r\n\r\n  const search = searchParams.get('search')\r\n\r\n  return <>Search: {search}</>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Using with getServerSideProps",
+    "content": "When using getServerSideProps, the page is server-rendered on each request and useSearchParams will return the actual search params immediately:\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function Dashboard() {\r\n  const searchParams = useSearchParams()\r\n\r\n  // With getServerSideProps, this fallback is never rendered because\r\n  // searchParams is always available on the server. However, keeping\r\n  // the fallback allows this component to be reused on other pages\r\n  // that may not use getServerSideProps.\r\n  if (!searchParams) {\r\n    return null\r\n  }\r\n\r\n  const search = searchParams.get('search')\r\n\r\n  return <>Search: {search}</>\r\n}\r\n\r\nexport async function getServerSideProps() {\r\n  return { props: {} }\r\n}\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function Dashboard() {\r\n  const searchParams = useSearchParams()\r\n\r\n  // With getServerSideProps, this fallback is never rendered because",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Using with getServerSideProps",
+    "content": "{ useSearchParams } from 'next/navigation'\r\n\r\nexport default function Dashboard() {\r\n  const searchParams = useSearchParams()\r\n\r\n  // With getServerSideProps, this fallback is never rendered because\r\n  // searchParams is always available on the server. However, keeping\r\n  // the fallback allows this component to be reused on other pages\r\n  // that may not use getServerSideProps.\r\n  if (!searchParams) {\r\n    return null\r\n  }\r\n\r\n  const search = searchParams.get('search')\r\n\r\n  return <>Search: {search}</>\r\n}\r\n\r\nexport async function getServerSideProps() {\r\n  return { props: {} }\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Updating search params",
+    "content": "You can use the useRouter hook to update search params:\n\nimport { useRouter } from 'next/router'\r\nimport { useSearchParams } from 'next/navigation'\r\nimport { useCallback } from 'react'\r\n\r\nexport default function Dashboard() {\r\n  const router = useRouter()\r\n  const searchParams = useSearchParams()\r\n\r\n  const createQueryString = useCallback(\r\n    (name: string, value: string) => {\r\n      const params = new URLSearchParams(searchParams?.toString())\r\n      params.set(name, value)\r\n      return params.toString()\r\n    },\r\n    [searchParams]\r\n  )\r\n\r\n  if (!searchParams) {\r\n    return null\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <p>Sort By</p>\r\n      <button\r\n        onClick={() => {\r\n          router.push(router.pathname + '?' + createQueryString('sort', 'asc'))\r\n        }}\r\n      >\r\n        ASC\r\n      </button>\r\n      <button\r\n        onClick={() => {\r\n          router.push(router.pathname + '?' + createQueryString('sort', 'desc'))\r\n        }}\r\n      >\r\n        DESC\r\n      </button>\r\n    </>\r\n  )",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Updating search params",
+    "content": "</button>\r\n      <button\r\n        onClick={() => {\r\n          router.push(router.pathname + '?' + createQueryString('sort', 'desc'))\r\n        }}\r\n      >\r\n        DESC\r\n      </button>\r\n    </>\r\n  )\r\n}\n\nimport { useRouter } from 'next/router'\r\nimport { useSearchParams } from 'next/navigation'\r\nimport { useCallback } from 'react'\r\n\r\nexport default function Dashboard() {\r\n  const router = useRouter()\r\n  const searchParams = useSearchParams()\r\n\r\n  const createQueryString = useCallback(\r\n    (name, value) => {\r\n      const params = new URLSearchParams(searchParams?.toString())\r\n      params.set(name, value)\r\n      return params.toString()\r\n    },\r\n    [searchParams]\r\n  )\r\n\r\n  if (!searchParams) {\r\n    return null\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <p>Sort By</p>\r\n      <button\r\n        onClick={() => {\r\n          router.push(router.pathname + '?' + createQueryString('sort', 'asc'))\r\n        }}\r\n      >\r\n        ASC\r\n      </button>\r\n      <button\r\n        onClick={() => {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Updating search params",
+    "content": "onClick={() => {\r\n          router.push(router.pathname + '?' + createQueryString('sort', 'asc'))\r\n        }}\r\n      >\r\n        ASC\r\n      </button>\r\n      <button\r\n        onClick={() => {\r\n          router.push(router.pathname + '?' + createQueryString('sort', 'desc'))\r\n        }}\r\n      >\r\n        DESC\r\n      </button>\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Sharing components with App Router",
+    "content": "useSearchParams from next/navigation works in both the Pages Router and App Router. This allows you to create shared components that work in either context:\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\n// This component works in both pages/ and app/\r\nexport function SearchBar() {\r\n  const searchParams = useSearchParams()\r\n\r\n  if (!searchParams) {\r\n    // Fallback for Pages Router during prerendering\r\n    return <input defaultValue=\"\" placeholder=\"Search...\" />\r\n  }\r\n\r\n  const search = searchParams.get('search') ?? ''\r\n\r\n  return <input defaultValue={search} placeholder=\"Search...\" />\r\n}\n\nimport { useSearchParams } from 'next/navigation'\r\n\r\n// This component works in both pages/ and app/\r\nexport function SearchBar() {\r\n  const searchParams = useSearchParams()\r\n\r\n  if (!searchParams) {\r\n    // Fallback for Pages Router during prerendering\r\n    return <input defaultValue=\"\" placeholder=\"Search...\" />\r\n  }\r\n\r\n  const search = searchParams.get('search') ?? ''",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Sharing components with App Router",
+    "content": "if (!searchParams) {\r\n    // Fallback for Pages Router during prerendering\r\n    return <input defaultValue=\"\" placeholder=\"Search...\" />\r\n  }\r\n\r\n  const search = searchParams.get('search') ?? ''\r\n\r\n  return <input defaultValue={search} placeholder=\"Search...\" />\r\n}\n\nGood to know: When using this component in the App Router, wrap it in a <Suspense> boundary for prerendering support.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  },
+  {
+    "documentTitle": "useSearchParams",
+    "documentDescription": "API Reference for the useSearchParams hook in the Pages Router.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                       |\r\n| --------- | ----------------------------- |\r\n| v13.0.0 | useSearchParams introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\04-api-reference\\03-functions\\use-search-params.mdx"
+  }
+]

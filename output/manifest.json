@@ -1,0 +1,48 @@
+[
+  {
+    "documentTitle": "manifest.json",
+    "documentDescription": "API Reference for manifest.json file.",
+    "sectionTitle": "Introduction",
+    "content": "Add or generate a manifest.(json|webmanifest) file that matches the Web Manifest Specification in the root of app directory to provide information about your web application for the browser.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\manifest.mdx"
+  },
+  {
+    "documentTitle": "manifest.json",
+    "documentDescription": "API Reference for manifest.json file.",
+    "sectionTitle": "Static Manifest file",
+    "content": "{\r\n  \"name\": \"My Next.js Application\",\r\n  \"short_name\": \"Next.js App\",\r\n  \"description\": \"An application built with Next.js\",\r\n  \"start_url\": \"/\"\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\manifest.mdx"
+  },
+  {
+    "documentTitle": "manifest.json",
+    "documentDescription": "API Reference for manifest.json file.",
+    "sectionTitle": "Generate a Manifest file",
+    "content": "Add a manifest.js or manifest.ts file that returns a Manifest object.\n\nGood to know: manifest.js is a special Route Handlers that is cached by default unless it uses a Request-time API or dynamic config option.\n\nimport type { MetadataRoute } from 'next'\r\n\r\nexport default function manifest(): MetadataRoute.Manifest {\r\n  return {\r\n    name: 'Next.js App',\r\n    short_name: 'Next.js App',\r\n    description: 'Next.js App',\r\n    start_url: '/',\r\n    display: 'standalone',\r\n    background_color: '#fff',\r\n    theme_color: '#fff',\r\n    icons: [\r\n      {\r\n        src: '/favicon.ico',\r\n        sizes: 'any',\r\n        type: 'image/x-icon',\r\n      },\r\n    ],\r\n  }\r\n}\n\nexport default function manifest() {\r\n  return {\r\n    name: 'Next.js App',\r\n    short_name: 'Next.js App',\r\n    description: 'Next.js App',\r\n    start_url: '/',\r\n    display: 'standalone',\r\n    background_color: '#fff',\r\n    theme_color: '#fff',\r\n    icons: [\r\n      {\r\n        src: '/favicon.ico',\r\n        sizes: 'any',",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\manifest.mdx"
+  },
+  {
+    "documentTitle": "manifest.json",
+    "documentDescription": "API Reference for manifest.json file.",
+    "sectionTitle": "Generate a Manifest file",
+    "content": "n: 'Next.js App',\r\n    start_url: '/',\r\n    display: 'standalone',\r\n    background_color: '#fff',\r\n    theme_color: '#fff',\r\n    icons: [\r\n      {\r\n        src: '/favicon.ico',\r\n        sizes: 'any',\r\n        type: 'image/x-icon',\r\n      },\r\n    ],\r\n  }\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\manifest.mdx"
+  },
+  {
+    "documentTitle": "manifest.json",
+    "documentDescription": "API Reference for manifest.json file.",
+    "sectionTitle": "Manifest Object",
+    "content": "The manifest object contains an extensive list of options that may be updated due to new web standards. For information on all the current options, refer to the MetadataRoute.Manifest type in your code editor if using TypeScript or see the MDN docs.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\01-metadata\\manifest.mdx"
+  }
+]

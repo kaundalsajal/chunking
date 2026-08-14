@@ -1,0 +1,50 @@
+[
+  {
+    "documentTitle": "Custom Document",
+    "documentDescription": "Extend the default document markup added by Next.js.",
+    "sectionTitle": "Introduction",
+    "content": "A custom Document can update the <html> and <body> tags used to render a Page.\n\nTo override the default Document, create the file pages/_document as shown below:\n\nimport { Html, Head, Main, NextScript } from 'next/document'\r\n\r\nexport default function Document() {\r\n  return (\r\n    <Html lang=\"en\">\r\n      <Head />\r\n      <body>\r\n        <Main />\r\n        <NextScript />\r\n      </body>\r\n    </Html>\r\n  )\r\n}\n\nimport { Html, Head, Main, NextScript } from 'next/document'\r\n\r\nexport default function Document() {\r\n  return (\r\n    <Html lang=\"en\">\r\n      <Head />\r\n      <body>\r\n        <Main />\r\n        <NextScript />\r\n      </body>\r\n    </Html>\r\n  )\r\n}\n\nGood to know:_document is only rendered on the server, so event handlers like onClick cannot be used in this file.<Html>, <Head />, <Main /> and <NextScript /> are required for the page to be properly rendered.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\06-custom-document.mdx"
+  },
+  {
+    "documentTitle": "Custom Document",
+    "documentDescription": "Extend the default document markup added by Next.js.",
+    "sectionTitle": "Caveats",
+    "content": "The <Head /> component used in _document is not the same as next/head. The <Head /> component used here should only be used for any <head> code that is common for all pages. For all other cases, such as <title> tags, we recommend using next/head in your pages or components.React components outside of <Main /> will not be initialized by the browser. Do not add application logic here or custom CSS (like styled-jsx). If you need shared components in all your pages (like a menu or a toolbar), read Layouts instead.Document currently does not support Next.js Data Fetching methods like getStaticProps or getServerSideProps.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\06-custom-document.mdx"
+  },
+  {
+    "documentTitle": "Custom Document",
+    "documentDescription": "Extend the default document markup added by Next.js.",
+    "sectionTitle": "Customizing renderPage",
+    "content": "Customizing renderPage is advanced and only needed for libraries like CSS-in-JS to support server-side rendering. This is not needed for built-in styled-jsx support.\n\nWe do not recommend using this pattern. Instead, consider incrementally adopting the App Router, which allows you to more easily fetch data for pages and layouts.\n\nimport Document, {\r\n  Html,\r\n  Head,\r\n  Main,\r\n  NextScript,\r\n  DocumentContext,\r\n  DocumentInitialProps,\r\n} from 'next/document'\r\n\r\nclass MyDocument extends Document {\r\n  static async getInitialProps(\r\n    ctx: DocumentContext\r\n  ): Promise<DocumentInitialProps> {\r\n    const originalRenderPage = ctx.renderPage\r\n\r\n    // Run the React rendering logic synchronously\r\n    ctx.renderPage = () =>\r\n      originalRenderPage({\r\n        // Useful for wrapping the whole react tree\r\n        enhanceApp: (App) => App,\r\n        // Useful for wrapping in a per-page basis\r\n        enhanceComponent: (Component) => Component,\r\n      })",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\06-custom-document.mdx"
+  },
+  {
+    "documentTitle": "Custom Document",
+    "documentDescription": "Extend the default document markup added by Next.js.",
+    "sectionTitle": "Customizing renderPage",
+    "content": "// Useful for wrapping the whole react tree\r\n        enhanceApp: (App) => App,\r\n        // Useful for wrapping in a per-page basis\r\n        enhanceComponent: (Component) => Component,\r\n      })\r\n\r\n    // Run the parent `getInitialProps`, it now includes the custom `renderPage`\r\n    const initialProps = await Document.getInitialProps(ctx)\r\n\r\n    return initialProps\r\n  }\r\n\r\n  render() {\r\n    return (\r\n      <Html lang=\"en\">\r\n        <Head />\r\n        <body>\r\n          <Main />\r\n          <NextScript />\r\n        </body>\r\n      </Html>\r\n    )\r\n  }\r\n}\r\n\r\nexport default MyDocument\n\nimport Document, { Html, Head, Main, NextScript } from 'next/document'\r\n\r\nclass MyDocument extends Document {\r\n  static async getInitialProps(ctx) {\r\n    const originalRenderPage = ctx.renderPage\r\n\r\n    // Run the React rendering logic synchronously\r\n    ctx.renderPage = () =>\r\n      originalRenderPage({\r\n        // Useful for wrapping the whole react tree\r\n        enhanceApp: (App) => App,",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\06-custom-document.mdx"
+  },
+  {
+    "documentTitle": "Custom Document",
+    "documentDescription": "Extend the default document markup added by Next.js.",
+    "sectionTitle": "Customizing renderPage",
+    "content": "e\r\n\r\n    // Run the React rendering logic synchronously\r\n    ctx.renderPage = () =>\r\n      originalRenderPage({\r\n        // Useful for wrapping the whole react tree\r\n        enhanceApp: (App) => App,\r\n        // Useful for wrapping in a per-page basis\r\n        enhanceComponent: (Component) => Component,\r\n      })\r\n\r\n    // Run the parent `getInitialProps`, it now includes the custom `renderPage`\r\n    const initialProps = await Document.getInitialProps(ctx)\r\n\r\n    return initialProps\r\n  }\r\n\r\n  render() {\r\n    return (\r\n      <Html lang=\"en\">\r\n        <Head />\r\n        <body>\r\n          <Main />\r\n          <NextScript />\r\n        </body>\r\n      </Html>\r\n    )\r\n  }\r\n}\r\n\r\nexport default MyDocument\n\nGood to know:getInitialProps in _document is not called during client-side transitions.The ctx object for _document is equivalent to the one received in getInitialProps, with the addition of renderPage.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\06-custom-document.mdx"
+  }
+]

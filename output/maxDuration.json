@@ -1,0 +1,28 @@
+[
+  {
+    "documentTitle": "maxDuration",
+    "documentDescription": "API reference for the maxDuration route segment config option.",
+    "sectionTitle": "Introduction",
+    "content": "The maxDuration option allows you to set the maximum execution time (in seconds) for server-side logic in a route segment. Deployment platforms can use maxDuration from the Next.js build output to add specific execution limits.\n\nexport const maxDuration = 5\n\nexport const maxDuration = 5",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\maxDuration.mdx"
+  },
+  {
+    "documentTitle": "maxDuration",
+    "documentDescription": "API reference for the maxDuration route segment config option.",
+    "sectionTitle": "Server Actions",
+    "content": "If using Server Actions, set the maxDuration at the page level to change the default timeout of all Server Actions used on the page.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\maxDuration.mdx"
+  },
+  {
+    "documentTitle": "maxDuration",
+    "documentDescription": "API reference for the maxDuration route segment config option.",
+    "sectionTitle": "Version History",
+    "content": "| Version    | Changes                   |\r\n| ---------- | ------------------------- |\r\n| v13.4.10 | maxDuration introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\02-route-segment-config\\maxDuration.mdx"
+  }
+]

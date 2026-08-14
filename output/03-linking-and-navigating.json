@@ -1,0 +1,80 @@
+[
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Introduction",
+    "content": "The Next.js router allows you to do client-side route transitions between pages, similar to a single-page application.\n\nA React component called Link is provided to do this client-side route transition.\n\nimport Link from 'next/link'\r\n\r\nfunction Home() {\r\n  return (\r\n    <ul>\r\n      <li>\r\n        <Link href=\"/\">Home</Link>\r\n      </li>\r\n      <li>\r\n        <Link href=\"/about\">About Us</Link>\r\n      </li>\r\n      <li>\r\n        <Link href=\"/blog/hello-world\">Blog Post</Link>\r\n      </li>\r\n    </ul>\r\n  )\r\n}\r\n\r\nexport default Home\n\nThe example above uses multiple links. Each one maps a path (href) to a known page:\n\n/ → pages/index.js/about → pages/about.js/blog/hello-world → pages/blog/[slug].js\n\nAny <Link /> in the viewport (initially or through scroll) will be prefetched by default (including the corresponding data) for pages using Static Generation. The corresponding data for server-rendered routes is fetched only when the <Link /> is clicked.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  },
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Linking to dynamic paths",
+    "content": "You can also use interpolation to create the path, which comes in handy for dynamic route segments. For example, to show a list of posts which have been passed to the component as a prop:\n\nimport Link from 'next/link'\r\n\r\nfunction Posts({ posts }) {\r\n  return (\r\n    <ul>\r\n      {posts.map((post) => (\r\n        <li key={post.id}>\r\n          <Link href={`/blog/${encodeURIComponent(post.slug)}`}>\r\n            {post.title}\r\n          </Link>\r\n        </li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\r\n\r\nexport default Posts\n\nencodeURIComponent is used in the example to keep the path utf-8 compatible.\n\nAlternatively, using a URL Object:\n\nimport Link from 'next/link'\r\n\r\nfunction Posts({ posts }) {\r\n  return (\r\n    <ul>\r\n      {posts.map((post) => (\r\n        <li key={post.id}>\r\n          <Link\r\n            href={{\r\n              pathname: '/blog/[slug]',\r\n              query: { slug: post.slug },\r\n            }}\r\n          >\r\n            {post.title}\r\n          </Link>\r\n        </li>\r\n      ))}\r\n    </ul>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  },
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Linking to dynamic paths",
+    "content": "f={{\r\n              pathname: '/blog/[slug]',\r\n              query: { slug: post.slug },\r\n            }}\r\n          >\r\n            {post.title}\r\n          </Link>\r\n        </li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\r\n\r\nexport default Posts\n\nNow, instead of using interpolation to create the path, we use a URL object in href where:\n\npathname is the name of the page in the pages directory. /blog/[slug] in this case.query is an object with the dynamic segment. slug in this case.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  },
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Injecting the router",
+    "content": "To access the router object in a React component you can use useRouter or withRouter.\n\nIn general we recommend using useRouter.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  },
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Imperative Routing",
+    "content": "next/link should be able to cover most of your routing needs, but you can also do client-side navigations without it, take a look at the documentation for next/router.\n\nThe following example shows how to do basic page navigations with useRouter:\n\nimport { useRouter } from 'next/router'\r\n\r\nexport default function ReadMore() {\r\n  const router = useRouter()\r\n\r\n  return (\r\n    <button onClick={() => router.push('/about')}>\r\n      Click here to read more\r\n    </button>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  },
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Shallow Routing",
+    "content": "ExamplesShallow Routing\n\nShallow routing allows you to change the URL without running data fetching methods again, that includes getServerSideProps, getStaticProps, and getInitialProps.\n\nYou'll receive the updated pathname and the query via the router object (added by useRouter or withRouter), without losing state.\n\nTo enable shallow routing, set the shallow option to true. Consider the following example:\n\nimport { useEffect } from 'react'\r\nimport { useRouter } from 'next/router'\r\n\r\n// Current URL is '/'\r\nfunction Page() {\r\n  const router = useRouter()\r\n\r\n  useEffect(() => {\r\n    // Always do navigations after the first render\r\n    router.push('/?counter=10', undefined, { shallow: true })\r\n  }, [])\r\n\r\n  useEffect(() => {\r\n    // The counter changed!\r\n  }, [router.query.counter])\r\n}\r\n\r\nexport default Page\n\nThe URL will get updated to /?counter=10 and the page won't get replaced, only the state of the route is changed.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  },
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Shallow Routing",
+    "content": "// The counter changed!\r\n  }, [router.query.counter])\r\n}\r\n\r\nexport default Page\n\nThe URL will get updated to /?counter=10 and the page won't get replaced, only the state of the route is changed.\n\nYou can also watch for URL changes via componentDidUpdate as shown below:\n\ncomponentDidUpdate(prevProps) {\r\n  const { pathname, query } = this.props.router\r\n  // verify props have changed to avoid an infinite loop\r\n  if (query.counter !== prevProps.router.query.counter) {\r\n    // fetch data based on the new query\r\n  }\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  },
+  {
+    "documentTitle": "Linking and Navigating",
+    "documentDescription": "Learn how navigation works in Next.js, and how to use the Link Component and `useRouter` hook.",
+    "sectionTitle": "Caveats",
+    "content": "Shallow routing only works for URL changes in the current page. For example, let's assume we have another page called pages/about.js, and you run this:\n\nrouter.push('/?counter=10', '/about?counter=10', { shallow: true })\n\nSince that's a new page, it'll unload the current page, load the new one and wait for data fetching even though we asked to do shallow routing.\n\nWhen shallow routing is used with proxy it will not ensure the new page matches the current page like previously done without proxy. This is due to proxy being able to rewrite dynamically and can't be verified client-side without a data fetch which is skipped with shallow, so a shallow route change must always be treated as shallow.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\01-routing\\03-linking-and-navigating.mdx"
+  }
+]

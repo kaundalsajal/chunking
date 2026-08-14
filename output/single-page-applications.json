@@ -1,0 +1,252 @@
+[
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Introduction",
+    "content": "Build Single-Page Applications (SPAs) with client-side navigation and data fetching. Next.js supports client and server patterns in the same app, and existing SPAs can migrate without a full rewrite.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "What is a Single-Page Application?",
+    "content": "The definition of a SPA varies. We'll define a \"strict SPA\" as:\n\nClient-side rendering (CSR): The app is served by one HTML file (e.g. index.html). Every route, page transition, and data fetch is handled by JavaScript in the browser.No full-page reloads: Rather than requesting a new document for each route, client-side JavaScript manipulates the current page's DOM and fetches data as needed.\n\nStrict SPAs often require large amounts of JavaScript to load before the page can be interactive. Further, client data waterfalls can be challenging to manage. Building SPAs with Next.js can address these issues.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Why use Next.js for SPAs?",
+    "content": "Next.js can automatically code split your JavaScript bundles, and generate multiple HTML entry points into different routes. This avoids loading unnecessary JavaScript code on the client-side, reducing the bundle size and enabling faster page loads.\n\nThe next/link component automatically prefetches routes, giving you the fast page transitions of a strict SPA, but with the advantage of persisting application routing state to the URL for linking and sharing.\n\nNext.js can start as a static site or even a strict SPA where everything is rendered client-side. If your project grows, you can progressively add more server features (e.g. React Server Components, Server Actions, and more) as needed.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Build common SPA patterns",
+    "content": "The following examples cover common patterns for building an SPA with Next.js. The companion demo (source) shows each pattern in action.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Using React's use within a Context Provider",
+    "content": "You can use React's use API to stream data from the server to a Client Component. Fetch the data in a Server Component (a parent or layout) and pass the Promise down. The Client Component unwraps it with use(), since it cannot await during render.\n\nStarting the request on the server, before the rest of the app renders, lets the response stream immediately and avoids client-side request waterfalls.\n\nYou can pass a single Promise as a prop and unwrap it with use(), or pair it with a React context provider so any Client Component can read the value through a custom hook.\n\nWhen a Client Component needs focus revalidation, polling, mutations, or request deduplication, use a library such as SWR or TanStack Query. See Client-side data fetching for direct browser fetching, providing initial data from a Server Component, and coordinating the library cache with the Next.js server and client caches.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Using React's use within a Context Provider",
+    "content": "anStack Query. See Client-side data fetching for direct browser fetching, providing initial data from a Server Component, and coordinating the library cache with the Next.js server and client caches.\n\nStart the request in a Server Component (here, the root layout) without awaiting it, and pass the Promise to the provider:\n\nimport { UserProvider } from './user-provider'\r\nimport { getUser } from './user' // some server-side function\r\n\r\nexport default function RootLayout({ children }: LayoutProps<'/'>) {\r\n  let userPromise = getUser() // do NOT await\r\n\r\n  return (\r\n    <html lang=\"en\">\r\n      <body>\r\n        <UserProvider userPromise={userPromise}>{children}</UserProvider>\r\n      </body>\r\n    </html>\r\n  )\r\n}\n\nimport { UserProvider } from './user-provider'\r\nimport { getUser } from './user' // some server-side function\r\n\r\nexport default function RootLayout({ children }) {\r\n  let userPromise = getUser() // do NOT await\r\n\r\n  return (\r\n    <html lang=\"en\">\r\n      <body>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Using React's use within a Context Provider",
+    "content": "ser } from './user' // some server-side function\r\n\r\nexport default function RootLayout({ children }) {\r\n  let userPromise = getUser() // do NOT await\r\n\r\n  return (\r\n    <html lang=\"en\">\r\n      <body>\r\n        <UserProvider userPromise={userPromise}>{children}</UserProvider>\r\n      </body>\r\n    </html>\r\n  )\r\n}\n\nGood to know: Refetching a Promise set high in the tree re-runs the Server Component that set it, so for data only part of the app needs, place the provider on that subtree instead of the root layout. See React's caveat on reading a Promise from context.\n\nIf several components read the same data in one request, wrap getUser in React's cache so they share a single call. See Reusing data with React.cache for more on this pattern.\n\nThe provider forwards the Promise through context:\n\n'use client'\r\n\r\nimport { createContext, useContext } from 'react'\r\n\r\ntype User = { id: string; name: string }\r\n\r\nconst UserContext = createContext<Promise<User> | null>(null)",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Using React's use within a Context Provider",
+    "content": "mise through context:\n\n'use client'\r\n\r\nimport { createContext, useContext } from 'react'\r\n\r\ntype User = { id: string; name: string }\r\n\r\nconst UserContext = createContext<Promise<User> | null>(null)\r\n\r\nexport function useUser() {\r\n  const userPromise = useContext(UserContext)\r\n  if (!userPromise) {\r\n    throw new Error('useUser must be used within a UserProvider')\r\n  }\r\n  return userPromise\r\n}\r\n\r\nexport function UserProvider({\r\n  children,\r\n  userPromise,\r\n}: {\r\n  children: React.ReactNode\r\n  userPromise: Promise<User>\r\n}) {\r\n  return (\r\n    <UserContext.Provider value={userPromise}>{children}</UserContext.Provider>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { createContext, useContext } from 'react'\r\n\r\nconst UserContext = createContext(null)\r\n\r\nexport function useUser() {\r\n  const userPromise = useContext(UserContext)\r\n  if (!userPromise) {\r\n    throw new Error('useUser must be used within a UserProvider')\r\n  }\r\n  return userPromise\r\n}\r\n\r\nexport function UserProvider({ children, userPromise }) {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Using React's use within a Context Provider",
+    "content": "ntext(UserContext)\r\n  if (!userPromise) {\r\n    throw new Error('useUser must be used within a UserProvider')\r\n  }\r\n  return userPromise\r\n}\r\n\r\nexport function UserProvider({ children, userPromise }) {\r\n  return (\r\n    <UserContext.Provider value={userPromise}>{children}</UserContext.Provider>\r\n  )\r\n}\n\nFinally, call the useUser() hook in any Client Component and unwrap the Promise with use(), which suspends the component until the data is ready:\n\n'use client'\r\n\r\nimport { use } from 'react'\r\nimport { useUser } from './user-provider'\r\n\r\nexport function Profile() {\r\n  const userPromise = useUser()\r\n  const user = use(userPromise)\r\n\r\n  return <p>{user.name}</p>\r\n}\n\n'use client'\r\n\r\nimport { use } from 'react'\r\nimport { useUser } from './user-provider'\r\n\r\nexport function Profile() {\r\n  const userPromise = useUser()\r\n  const user = use(userPromise)\r\n\r\n  return <p>{user.name}</p>\r\n}\n\nWrap the consumer in a <Suspense> boundary to show a fallback while the Promise resolves:",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Using React's use within a Context Provider",
+    "content": "file() {\r\n  const userPromise = useUser()\r\n  const user = use(userPromise)\r\n\r\n  return <p>{user.name}</p>\r\n}\n\nWrap the consumer in a <Suspense> boundary to show a fallback while the Promise resolves:\n\nimport { Suspense } from 'react'\r\nimport { Profile } from './profile'\r\n\r\nexport default function Page() {\r\n  return (\r\n    <Suspense fallback={<p>Loading…</p>}>\r\n      <Profile />\r\n    </Suspense>\r\n  )\r\n}\n\nimport { Suspense } from 'react'\r\nimport { Profile } from './profile'\r\n\r\nexport default function Page() {\r\n  return (\r\n    <Suspense fallback={<p>Loading…</p>}>\r\n      <Profile />\r\n    </Suspense>\r\n  )\r\n}\n\nThe component that consumes the Promise (e.g. Profile above) suspends while the Promise resolves, so you see the streamed, prerendered HTML before JavaScript has finished loading.\n\nSee the live demo and its source code.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Rendering components only in the browser",
+    "content": "Client components are prerendered during next build. If you want to disable prerendering for a Client Component and only load it in the browser environment, you can use next/dynamic:\n\nimport dynamic from 'next/dynamic'\r\n\r\nconst ClientOnlyComponent = dynamic(() => import('./component'), {\r\n  ssr: false,\r\n})\n\nThis can be useful for third-party libraries that rely on browser APIs like window or document. You can also add a useEffect that checks for the existence of these APIs, and if they do not exist, return null or a loading state which would be prerendered.\n\nSee the live demo and its source code.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Shallow routing on the client",
+    "content": "If you are migrating from a strict SPA like Create React App or Vite, you might have existing code which shallow routes to update the URL state. This can be useful for manual transitions between views in your application without using the default Next.js file-system routing.\n\nNext.js lets you use the native window.history.pushState and window.history.replaceState methods to update the browser's history stack without reloading the page.\n\nThe pushState and replaceState calls integrate into the Next.js Router, allowing you to sync with usePathname and useSearchParams.\n\n'use client'\r\n\r\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function SortProducts() {\r\n  const searchParams = useSearchParams()\r\n\r\n  function updateSorting(sortOrder: string) {\r\n    const urlSearchParams = new URLSearchParams(searchParams.toString())\r\n    urlSearchParams.set('sort', sortOrder)\r\n    window.history.pushState(null, '', `?${urlSearchParams.toString()}`)\r\n  }\r\n\r\n  return (\r\n    <>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Shallow routing on the client",
+    "content": "hParams = new URLSearchParams(searchParams.toString())\r\n    urlSearchParams.set('sort', sortOrder)\r\n    window.history.pushState(null, '', `?${urlSearchParams.toString()}`)\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <button onClick={() => updateSorting('asc')}>Sort Ascending</button>\r\n      <button onClick={() => updateSorting('desc')}>Sort Descending</button>\r\n    </>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useSearchParams } from 'next/navigation'\r\n\r\nexport default function SortProducts() {\r\n  const searchParams = useSearchParams()\r\n\r\n  function updateSorting(sortOrder) {\r\n    const urlSearchParams = new URLSearchParams(searchParams.toString())\r\n    urlSearchParams.set('sort', sortOrder)\r\n    window.history.pushState(null, '', `?${urlSearchParams.toString()}`)\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <button onClick={() => updateSorting('asc')}>Sort Ascending</button>\r\n      <button onClick={() => updateSorting('desc')}>Sort Descending</button>\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Shallow routing on the client",
+    "content": ")\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <button onClick={() => updateSorting('asc')}>Sort Ascending</button>\r\n      <button onClick={() => updateSorting('desc')}>Sort Descending</button>\r\n    </>\r\n  )\r\n}\n\nLearn more about how routing and navigation work in Next.js.\n\nSee the live demo and its source code.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "Interactivity often requires writing data. A Client Component can call a Server Action to run the mutation on the server. A client data-fetching library can coordinate an optimistic browser update around the same Server Action, as shown in the client-side data fetching guide. The rest of this section coordinates the Server Action with React's built-in state APIs.\n\nA Server Action takes time and can fail. React has useful tools to keep the UI responsive while it runs, so a mutation can feel as instant as a client-rendered SPA: transitions, useOptimistic, useActionState, and useFormStatus.\n\nAt its simplest, a Client Component calls a Server Action inside a transition and uses the pending state for feedback:\n\n'use client'\r\n\r\nimport { useTransition } from 'react'\r\nimport { deletePost } from './actions'\r\n\r\nexport function DeletePost({ id }: { id: string }) {\r\n  const [isPending, startTransition] = useTransition()\r\n\r\n  return (\r\n    <button\r\n      disabled={isPending}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "{ deletePost } from './actions'\r\n\r\nexport function DeletePost({ id }: { id: string }) {\r\n  const [isPending, startTransition] = useTransition()\r\n\r\n  return (\r\n    <button\r\n      disabled={isPending}\r\n      onClick={() => startTransition(() => deletePost(id))}\r\n    >\r\n      {isPending ? 'Deleting…' : 'Delete'}\r\n    </button>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useTransition } from 'react'\r\nimport { deletePost } from './actions'\r\n\r\nexport function DeletePost({ id }) {\r\n  const [isPending, startTransition] = useTransition()\r\n\r\n  return (\r\n    <button\r\n      disabled={isPending}\r\n      onClick={() => startTransition(() => deletePost(id))}\r\n    >\r\n      {isPending ? 'Deleting…' : 'Delete'}\r\n    </button>\r\n  )\r\n}\n\nFor list-like state where each change should appear instantly, you can combine useActionState with useOptimistic. The example below is a to-do list: a pure reducer defines how each action changes the list, so the client and server share one copy of that logic:",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": ", you can combine useActionState with useOptimistic. The example below is a to-do list: a pure reducer defines how each action changes the list, so the client and server share one copy of that logic:\n\nexport type Todo = { id: string; text: string; done: boolean }\r\n\r\nexport type TodoAction =\r\n  | { type: 'add'; id: string; text: string }\r\n  | { type: 'toggle'; id: string }\r\n  | { type: 'edit'; id: string; text: string }\r\n  | { type: 'delete'; id: string }\r\n\r\nexport function applyAction(todos: Todo[], action: TodoAction): Todo[] {\r\n  switch (action.type) {\r\n    case 'add':\r\n      return [...todos, { id: action.id, text: action.text, done: false }]\r\n    case 'toggle':\r\n      return todos.map((todo) =>\r\n        todo.id === action.id ? { ...todo, done: !todo.done } : todo\r\n      )\r\n    case 'edit':\r\n      return todos.map((todo) =>\r\n        todo.id === action.id ? { ...todo, text: action.text } : todo\r\n      )\r\n    case 'delete':\r\n      return todos.filter((todo) => todo.id !== action.id)",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "dit':\r\n      return todos.map((todo) =>\r\n        todo.id === action.id ? { ...todo, text: action.text } : todo\r\n      )\r\n    case 'delete':\r\n      return todos.filter((todo) => todo.id !== action.id)\r\n    default:\r\n      return todos\r\n  }\r\n}\n\nexport function applyAction(todos, action) {\r\n  switch (action.type) {\r\n    case 'add':\r\n      return [...todos, { id: action.id, text: action.text, done: false }]\r\n    case 'toggle':\r\n      return todos.map((todo) =>\r\n        todo.id === action.id ? { ...todo, done: !todo.done } : todo\r\n      )\r\n    case 'edit':\r\n      return todos.map((todo) =>\r\n        todo.id === action.id ? { ...todo, text: action.text } : todo\r\n      )\r\n    case 'delete':\r\n      return todos.filter((todo) => todo.id !== action.id)\r\n    default:\r\n      return todos\r\n  }\r\n}\n\nThe Server Action applies the reducer, persists the result, and returns the next list:\n\n'use server'\r\n\r\nimport { db } from './db'\r\nimport { applyAction, type Todo, type TodoAction } from './reducer'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "he Server Action applies the reducer, persists the result, and returns the next list:\n\n'use server'\r\n\r\nimport { db } from './db'\r\nimport { applyAction, type Todo, type TodoAction } from './reducer'\r\n\r\nexport async function todosReducer(\r\n  todos: Todo[],\r\n  action: TodoAction\r\n): Promise<Todo[]> {\r\n  const next = applyAction(todos, action)\r\n  await db.saveTodos(next)\r\n  return next\r\n}\n\n'use server'\r\n\r\nimport { db } from './db'\r\nimport { applyAction } from './reducer'\r\n\r\nexport async function todosReducer(todos, action) {\r\n  const next = applyAction(todos, action)\r\n  await db.saveTodos(next)\r\n  return next\r\n}\n\nThe client passes the same reducer to useOptimistic, so the optimistic update and the server compute the next state identically. A runAction helper applies the optimistic change and dispatches the Server Action in the same transition, so every change shows immediately:\n\n'use client'\r\n\r\nimport { useActionState, useOptimistic, startTransition } from 'react'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "e optimistic change and dispatches the Server Action in the same transition, so every change shows immediately:\n\n'use client'\r\n\r\nimport { useActionState, useOptimistic, startTransition } from 'react'\r\nimport { todosReducer } from './actions'\r\nimport { applyAction, type Todo, type TodoAction } from './reducer'\r\n\r\nexport function TodoList({ initialTodos }: { initialTodos: Todo[] }) {\r\n  const [todos, dispatch, isPending] = useActionState(\r\n    todosReducer,\r\n    initialTodos\r\n  )\r\n  const [optimisticTodos, addOptimistic] = useOptimistic(todos, applyAction)\r\n\r\n  function runAction(action: TodoAction) {\r\n    startTransition(() => {\r\n      addOptimistic(action)\r\n      dispatch(action)\r\n    })\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <form\r\n        action={(formData) =>\r\n          runAction({\r\n            type: 'add',\r\n            id: crypto.randomUUID(),\r\n            text: String(formData.get('text')),\r\n          })\r\n        }\r\n      >\r\n        <input name=\"text\" />\r\n        <button>Add</button>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "type: 'add',\r\n            id: crypto.randomUUID(),\r\n            text: String(formData.get('text')),\r\n          })\r\n        }\r\n      >\r\n        <input name=\"text\" />\r\n        <button>Add</button>\r\n      </form>\r\n      <ul>\r\n        {optimisticTodos.map((todo) => (\r\n          <li key={todo.id}>\r\n            <input\r\n              type=\"checkbox\"\r\n              checked={todo.done}\r\n              onChange={() => runAction({ type: 'toggle', id: todo.id })}\r\n            />\r\n            <span\r\n              style={{ textDecoration: todo.done ? 'line-through' : 'none' }}\r\n            >\r\n              {todo.text}\r\n            </span>\r\n            <button onClick={() => runAction({ type: 'delete', id: todo.id })}>\r\n              Delete\r\n            </button>\r\n          </li>\r\n        ))}\r\n      </ul>\r\n      {isPending && <p>Syncing to server…</p>}\r\n    </>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useActionState, useOptimistic, startTransition } from 'react'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "on>\r\n          </li>\r\n        ))}\r\n      </ul>\r\n      {isPending && <p>Syncing to server…</p>}\r\n    </>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useActionState, useOptimistic, startTransition } from 'react'\r\nimport { todosReducer } from './actions'\r\nimport { applyAction } from './reducer'\r\n\r\nexport function TodoList({ initialTodos }) {\r\n  const [todos, dispatch, isPending] = useActionState(\r\n    todosReducer,\r\n    initialTodos\r\n  )\r\n  const [optimisticTodos, addOptimistic] = useOptimistic(todos, applyAction)\r\n\r\n  function runAction(action) {\r\n    startTransition(() => {\r\n      addOptimistic(action)\r\n      dispatch(action)\r\n    })\r\n  }\r\n\r\n  return (\r\n    <>\r\n      <form\r\n        action={(formData) =>\r\n          runAction({\r\n            type: 'add',\r\n            id: crypto.randomUUID(),\r\n            text: String(formData.get('text')),\r\n          })\r\n        }\r\n      >\r\n        <input name=\"text\" />\r\n        <button>Add</button>\r\n      </form>\r\n      <ul>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "id: crypto.randomUUID(),\r\n            text: String(formData.get('text')),\r\n          })\r\n        }\r\n      >\r\n        <input name=\"text\" />\r\n        <button>Add</button>\r\n      </form>\r\n      <ul>\r\n        {optimisticTodos.map((todo) => (\r\n          <li key={todo.id}>\r\n            <input\r\n              type=\"checkbox\"\r\n              checked={todo.done}\r\n              onChange={() => runAction({ type: 'toggle', id: todo.id })}\r\n            />\r\n            <span\r\n              style={{ textDecoration: todo.done ? 'line-through' : 'none' }}\r\n            >\r\n              {todo.text}\r\n            </span>\r\n            <button onClick={() => runAction({ type: 'delete', id: todo.id })}>\r\n              Delete\r\n            </button>\r\n          </li>\r\n        ))}\r\n      </ul>\r\n      {isPending && <p>Syncing to server…</p>}\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Mutating data with Server Actions",
+    "content": "> runAction({ type: 'delete', id: todo.id })}>\r\n              Delete\r\n            </button>\r\n          </li>\r\n        ))}\r\n      </ul>\r\n      {isPending && <p>Syncing to server…</p>}\r\n    </>\r\n  )\r\n}\n\nThe optimistic update shows instantly, while useActionState's pending flag lets you display a subtle indicator (such as Syncing to server…) until the Server Action resolves.\n\nSee the live demo and its source code.\n\nTo learn more about adding interactivity on top of server-rendered apps so they feel like SPAs, see the Building interactive apps guide and its runnable demo.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Static export (optional)",
+    "content": "Next.js also supports generating a fully static site. This has some advantages over strict SPAs:\n\nAutomatic code-splitting: Instead of shipping a single index.html, Next.js will generate an HTML file per route, so your visitors get the content faster without waiting for the client JavaScript bundle.Improved user experience: Instead of a minimal skeleton for all routes, you get fully rendered pages for each route. When users navigate client side, transitions are still instant and SPA-like.\n\nTo enable a static export, update your configuration:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  output: 'export',\r\n}\r\n\r\nexport default nextConfig\n\nAfter running next build, Next.js will create an out folder with the HTML/CSS/JS assets for your application.\n\nNote: Next.js server features are not supported with static exports. Learn more.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  },
+  {
+    "documentTitle": "How to build single-page applications with Next.js",
+    "documentDescription": "Next.js fully supports building Single-Page Applications (SPAs).",
+    "sectionTitle": "Migrating existing projects to Next.js",
+    "content": "You can incrementally migrate to Next.js by following our guides:\n\nMigrating from Create React AppMigrating from Vite\n\nIf you are already using a SPA with the Pages Router, you can learn how to incrementally adopt the App Router.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\single-page-applications.mdx"
+  }
+]

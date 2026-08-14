@@ -1,0 +1,50 @@
+[
+  {
+    "documentTitle": "Implementing PPR in an Adapter",
+    "documentDescription": "Implement Partial Prerendering support in an adapter using fallback output and cache hooks.",
+    "sectionTitle": "Introduction",
+    "content": "For partially prerendered app routes, onBuildComplete gives you the data needed to seed and resume PPR:\n\noutputs.prerenders[].fallback.filePath: path to the generated fallback shell (for example HTML)outputs.prerenders[].fallback.postponedState: serialized postponed state used to resume rendering",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\06-implementing-ppr-in-an-adapter.mdx"
+  },
+  {
+    "documentTitle": "Implementing PPR in an Adapter",
+    "documentDescription": "Implement Partial Prerendering support in an adapter using fallback output and cache hooks.",
+    "sectionTitle": "1. Seed shell + postponed state at build time",
+    "content": "import { readFile } from 'node:fs/promises'\r\n\r\nasync function seedPprEntries(outputs: AdapterOutputs) {\r\n  for (const prerender of outputs.prerenders) {\r\n    const fallback = prerender.fallback\r\n    if (!fallback?.filePath || !fallback.postponedState) continue\r\n\r\n    const shell = await readFile(fallback.filePath, 'utf8')\r\n    await platformCache.set(prerender.pathname, {\r\n      shell,\r\n      postponedState: fallback.postponedState,\r\n      initialHeaders: fallback.initialHeaders,\r\n      initialStatus: fallback.initialStatus,\r\n      initialRevalidate: fallback.initialRevalidate,\r\n      initialExpiration: fallback.initialExpiration,\r\n    })\r\n  }\r\n}",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\06-implementing-ppr-in-an-adapter.mdx"
+  },
+  {
+    "documentTitle": "Implementing PPR in an Adapter",
+    "documentDescription": "Implement Partial Prerendering support in an adapter using fallback output and cache hooks.",
+    "sectionTitle": "2. Runtime flow: serve cached shell and resume in background",
+    "content": "At request time, you can stream a single response that is the concatenation of:\n\ncached HTML shell streamresumed render stream (generated after invoking handler with postponed state)\n\nClient\r\n  | GET /ppr-route\r\n  v\r\nAdapter Router\r\n  |\r\n  |-- read cached shell + postponedState ---> Platform Cache\r\n  |<------------- cache hit -----------------|\r\n  |\r\n  |-- create responseStream = concat(shellStream, resumedStream)\r\n  |\r\n  |-- start piping shellStream ------------> Client (first bytes)\r\n  |\r\n  |-- invoke handler(req, res, { requestMeta: { postponed } })\r\n  |   -------------------------------------> Entrypoint (handler)\r\n  |   <------------------------------------- resumed chunks/cache entry\r\n  |\r\n  |-- append resumed chunks to resumedStream\r\n  |\r\n  '-- client receives one HTTP response:\r\n      [shell bytes........][resumed bytes........]",
+    "metadata": {
+      "language": "text"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\06-implementing-ppr-in-an-adapter.mdx"
+  },
+  {
+    "documentTitle": "Implementing PPR in an Adapter",
+    "documentDescription": "Implement Partial Prerendering support in an adapter using fallback output and cache hooks.",
+    "sectionTitle": "3. Update cache with requestMeta.onCacheEntryV2",
+    "content": "requestMeta.onCacheEntryV2 is called when a response cache entry is looked up or generated. Use it to persist updated shell/postponed data.\n\n[!NOTE]requestMeta.onCacheEntry still works, but is deprecated.Prefer requestMeta.onCacheEntryV2.If your adapter uses an internal onCacheCallback abstraction, wire it to requestMeta.onCacheEntryV2.\n\nawait handler(req, res, {\r\n  waitUntil,\r\n  requestMeta: {\r\n    postponed: cachedPprEntry?.postponedState,\r\n    onCacheEntryV2: async (cacheEntry, meta) => {\r\n      if (cacheEntry.value?.kind === 'APP_PAGE') {\r\n        const html =\r\n          cacheEntry.value.html &&\r\n          typeof cacheEntry.value.html.toUnchunkedString === 'function'\r\n            ? cacheEntry.value.html.toUnchunkedString()\r\n            : null\r\n\r\n        await platformCache.set(meta.url || req.url || '/', {\r\n          shell: html,\r\n          postponedState: cacheEntry.value.postponed,\r\n          headers: cacheEntry.value.headers,\r\n          status: cacheEntry.value.status,",
+    "metadata": {
+      "language": "text"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\06-implementing-ppr-in-an-adapter.mdx"
+  },
+  {
+    "documentTitle": "Implementing PPR in an Adapter",
+    "documentDescription": "Implement Partial Prerendering support in an adapter using fallback output and cache hooks.",
+    "sectionTitle": "3. Update cache with requestMeta.onCacheEntryV2",
+    "content": "(meta.url || req.url || '/', {\r\n          shell: html,\r\n          postponedState: cacheEntry.value.postponed,\r\n          headers: cacheEntry.value.headers,\r\n          status: cacheEntry.value.status,\r\n          cacheControl: cacheEntry.cacheControl,\r\n        })\r\n      }\r\n\r\n      // Return true only if your adapter already wrote the response itself.\r\n      return false\r\n    },\r\n  },\r\n})\n\nEntrypoint (handler)\r\n  | onCacheEntryV2(cacheEntry, { url })\r\n  v\r\nrequestMeta.onCacheEntryV2 callback\r\n  |\r\n  |-- if APP_PAGE ---> persist html + postponedState + headers ---> Platform Cache\r\n  |\r\n  '-- return false: continue normal Next.js response flow\r\n      return true:  adapter already handled response (short-circuit)",
+    "metadata": {
+      "language": "text"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\06-implementing-ppr-in-an-adapter.mdx"
+  }
+]

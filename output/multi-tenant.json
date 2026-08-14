@@ -1,0 +1,10 @@
+[
+  {
+    "documentTitle": "How to build multi-tenant apps in Next.js",
+    "documentDescription": "Learn how to build multi-tenant apps with the App Router.",
+    "sectionTitle": "Introduction",
+    "content": "If you are looking to build a single Next.js application that serves multiple tenants, we have built an example showing our recommended architecture.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\multi-tenant.mdx"
+  }
+]

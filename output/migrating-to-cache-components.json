@@ -1,0 +1,1640 @@
+[
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Introduction",
+    "content": "When Cache Components is enabled, route segment configs like dynamic, revalidate, and fetchCache are replaced by use cache and cacheLife.\n\nThe migration is driven by instant navigation validation. With Cache Components enabled, Next.js validates in development whether navigating into each route renders instantly, and surfaces the code that would block it as an error or insight.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Use the adoption skill (recommended)",
+    "content": "The next-cache-components-adoption skill drives this migration with a coding agent, one feature at a time, checking in at every feature boundary. It supports two modes:\n\nIncremental. Opens a single mechanical PR that opts every route out of validation, then ships each feature as a follow-up PR. This automates the Adopting incrementally flow below.Direct. Adopts every route in place on one branch.\n\nInstall the skill:\n\nnpx skills add vercel/next.js --skill next-cache-components-adoption\n\nThen give the agent this prompt:\n\nAdopt Cache Components in this project using the next-cache-components-adoption skill.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Or migrate by hand",
+    "content": "Migrating an existing app by hand follows a few steps, in order:\n\nEnable Cache Components in next.config.ts.Decide your approach: convert every route now, or adopt incrementally by opting routes out of validation first and converting one at a time.Follow the validation errors and insights it surfaces, replacing each route segment config with its Cache Components equivalent and caching uncached data with use cache or wrapping runtime data in <Suspense>. The per-key sections below cover each config and API.\n\nYour existing fetch and unstable_cache caching keeps working as a separate layer, so let the insights and errors guide what to change.\n\nSome surfaces have their own steps:\n\nFor routes with dynamic params, follow the generateStaticParams guidance.For metadata, follow the generateMetadata and generateViewport guidance.\n\nThe sections below cover each config and API and what to do with it under Cache Components.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Enable Cache Components",
+    "content": "Cache Components requires Next.js 16. If you're on Next.js 15 or earlier, upgrade first by following the version 16 upgrade guide. Coming from an older version, work through the upgrade guides to reach 16 before continuing.\n\nThen enable the cacheComponents flag in next.config.ts:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nexport default nextConfig\n\nGood to know: If you were using experimental.dynamicIO or experimental.useCache, cacheComponents replaces them. See the version 16 upgrade guide.\n\nAfter enabling the flag, route segments that still export dynamic, revalidate, or fetchCache will error. Start by replacing those configs. The sections below explain what to do for each one.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Opting out of validation",
+    "content": "A validation insight or error tells you a route won't render instantly. Resolve it by following the recommendation: cache the data with use cache or wrap it in <Suspense>. If you're not ready to address it yet, set the instant config to false on the segment that raised it (a layout, page, or parallel slot), then come back to it later.\n\nexport const instant = false\n\nGood to know: instant = false marks a segment as allowed to block. It does not force the route to be dynamic, so a genuinely prerenderable route still ships a static shell. It also does not clear synchronous IO build errors: calls like new Date(), Math.random(), and crypto.randomUUID() still fail the prerender. See Adopting incrementally.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "You don't have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ou don't have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "u don't have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "don't have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "don't have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "on't have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "n't have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "'t have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "t have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "have to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ave to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ve to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "to migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "o migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "migrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "igrate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "grate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "rate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ate every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "te every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "every route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "very route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ery route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ry route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "y route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "route at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "oute at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ute at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "te at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "at once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "t once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "once. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "nce. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ce. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e. instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": ". instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "instant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "nstant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "stant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "tant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ant = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "nt = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "t = false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "= false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "= false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "false lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "alse lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "lse lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "se lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "lets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ets you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ts you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "s you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "you get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ou get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "u get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "get the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "et the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "t the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "the whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "he whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "whole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "hole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ole app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "le app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "app building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "pp building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "p building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "building and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "uilding and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ilding and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "lding and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ding and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ing and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ng and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "g and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "and running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "nd running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "d running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "running first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "unning first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "nning first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ning first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ing first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ng first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "g first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "first, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "irst, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "rst, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "st, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "t, then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": ", then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "then convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "hen convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "en convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "n convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "convert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "onvert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "nvert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "vert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ert routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "rt routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "t routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "routes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "outes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "utes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "tes one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "es one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "s one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "one at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ne at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "at a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "t a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "a time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "time:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "ime:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "me:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "e:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": ":",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "Enable the flag and remove the route segment configs (dynamic, revalidate, fetchCache). Routes that still render instantly need no further work.Opt out the routes that aren't ready. Where an insight or error appears, set instant = false on the segment that raised it. To do this in one pass across the whole app, run the cache-components-instant-false codemod, which adds the opt-out to every page, layout, and default that doesn't already declare instant:npx @next/codemod@canary cache-components-instant-false ./appGood to know: Pass ./src/app in a src/ project. A wrong path reports 0 ok instead of failing, so check the file count.The app keeps building and serving, now with validation deferred for the opted-out routes.Fix synchronous IO. It can't be deferred. Calls like new Date(), Date.now(), Math.random(), and crypto.randomUUID() during prerender throw a build error that instant = false does not clear, so a route that uses them won't build until you address it, opt-out or not. Move the",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Adopting incrementally",
+    "content": "), Math.random(), and crypto.randomUUID() during prerender throw a build error that instant = false does not clear, so a route that uses them won't build until you address it, opt-out or not. Move the call out of the prerendered shell so it runs at request time: wrap the part that needs it in <Suspense> and call connection() before the call, or move it into a Client Component.Convert one route at a time. Remove instant = false from a route, then resolve its insights by caching data with use cache or wrapping runtime data in <Suspense>. Repeat until no routes opt out.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Following validation",
+    "content": "Cache Components validates your routes in development and surfaces errors and insights in the dev overlay. Some look like this, naming the affected component and pointing at a fix:\n\nEach card is clickable and opens a page with patterns, code samples, and trade-offs. Work through the insights and errors until they're gone. For the full validation workflow, the DevTools, and CI testing, see the instant navigation guide.\n\nInsights don't show up in the HTTP response. An offending route still returns 200 with rendered HTML in dev. The insight only appears in the dev overlay, the dev-server log, or the MCP get_errors tool. To see them, read the overlay (or query the MCP).",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "dynamic = \"force-dynamic\"",
+    "content": "Not needed. All pages are dynamic by default.\n\n// Before - No longer needed\r\nexport const dynamic = 'force-dynamic'\r\n\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}\n\n// Before - No longer needed\r\nexport const dynamic = 'force-dynamic'\r\n\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}\n\n// After - Just remove it\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}\n\n// After - Just remove it\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "dynamic = \"force-static\"",
+    "content": "Start by removing it. When unhandled uncached or runtime data access is detected during development and build time, Next.js raises an error. Otherwise, the prerendering step automatically extracts the static HTML shell.\n\nFor uncached data access, add use cache as close to the data access as possible with a long cacheLife like 'max' to maintain cached behavior. If needed, add it at the top of the page or layout.\n\nFor runtime data access (cookies(), headers(), etc.), errors will direct you to wrap it with <Suspense>. Since you started by using force-static, you must remove the runtime data access to prevent any request time work.\n\n// Before\r\nexport const dynamic = 'force-static'\r\n\r\nexport default async function Page() {\r\n  const data = await fetch('https://api.example.com/data')\r\n  return <div>...</div>\r\n}\n\n// Before\r\nexport const dynamic = 'force-static'\r\n\r\nexport default async function Page() {\r\n  const data = await fetch('https://api.example.com/data')\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "dynamic = \"force-static\"",
+    "content": "n <div>...</div>\r\n}\n\n// Before\r\nexport const dynamic = 'force-static'\r\n\r\nexport default async function Page() {\r\n  const data = await fetch('https://api.example.com/data')\r\n  return <div>...</div>\r\n}\n\nimport { cacheLife } from 'next/cache'\r\n\r\n// After - Use 'use cache' instead\r\nexport default async function Page() {\r\n  'use cache'\r\n  cacheLife('max')\r\n  const data = await fetch('https://api.example.com/data')\r\n  return <div>...</div>\r\n}\n\nimport { cacheLife } from 'next/cache'\r\n\r\n// After - Use 'use cache' instead\r\nexport default async function Page() {\r\n  'use cache'\r\n  cacheLife('max')\r\n  const data = await fetch('https://api.example.com/data')\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "revalidate",
+    "content": "Replace with cacheLife. Use the cacheLife function to define cache duration instead of the route segment config.\n\n// Before\r\nexport const revalidate = 3600 // 1 hour\r\n\r\nexport default async function Page() {\r\n  return <div>...</div>\r\n}\n\n// Before\r\nexport const revalidate = 3600 // 1 hour\r\n\r\nexport default async function Page() {\r\n  return <div>...</div>\r\n}\n\n// After - Use cacheLife\r\nimport { cacheLife } from 'next/cache'\r\n\r\nexport default async function Page() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  return <div>...</div>\r\n}\n\n// After - Use cacheLife\r\nimport { cacheLife } from 'next/cache'\r\n\r\nexport default async function Page() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "revalidate",
+    "content": "return <div>...</div>\r\n}\n\n// After - Use cacheLife\r\nimport { cacheLife } from 'next/cache'\r\n\r\nexport default async function Page() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  return <div>...</div>\r\n}\n\nGood to know: If your revalidate value doesn't match a built-in cacheLife profile ('seconds', 'minutes', 'hours', 'days', 'weeks', 'max'), pick the closest one or define a custom profile to match your conventions. You can also redefine a built-in profile, including default, when its timings don't match your application's caching needs.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "fetchCache",
+    "content": "Not needed. With use cache, all data fetching within a cached scope is automatically cached, making fetchCache unnecessary.\n\n// Before\r\nexport const fetchCache = 'force-cache'\n\n// Before\r\nexport const fetchCache = 'force-cache'\n\n// After - Use 'use cache' to control caching behavior\r\nexport default async function Page() {\r\n  'use cache'\r\n  // All fetches here are cached\r\n  return <div>...</div>\r\n}\n\n// After - Use 'use cache' to control caching behavior\r\nexport default async function Page() {\r\n  'use cache'\r\n  // All fetches here are cached\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "fetch cache options",
+    "content": "Move cache and next options to use cache.\n\nWithout Cache Components, you cache a request with cache: 'force-cache' and tune it with next: { revalidate, tags }.\n\nWith Cache Components, wrap the fetch in a use cache function. Fetches inside that scope are cached automatically, and revalidate and tags become cacheLife and cacheTag.\n\n// Before\r\nexport default async function Page() {\r\n  const res = await fetch('https://api.example.com/data', {\r\n    cache: 'force-cache',\r\n    next: { revalidate: 3600, tags: ['data'] },\r\n  })\r\n  const data = await res.json()\r\n  return <div>...</div>\r\n}\n\n// Before\r\nexport default async function Page() {\r\n  const res = await fetch('https://api.example.com/data', {\r\n    cache: 'force-cache',\r\n    next: { revalidate: 3600, tags: ['data'] },\r\n  })\r\n  const data = await res.json()\r\n  return <div>...</div>\r\n}\n\n// After\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\n\r\nasync function getData() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  cacheTag('data')",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "fetch cache options",
+    "content": "data = await res.json()\r\n  return <div>...</div>\r\n}\n\n// After\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\n\r\nasync function getData() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  cacheTag('data')\r\n  const res = await fetch('https://api.example.com/data')\r\n  return res.json()\r\n}\r\n\r\nexport default async function Page() {\r\n  const data = await getData()\r\n  return <div>...</div>\r\n}\n\n// After\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\n\r\nasync function getData() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  cacheTag('data')\r\n  const res = await fetch('https://api.example.com/data')\r\n  return res.json()\r\n}\r\n\r\nexport default async function Page() {\r\n  const data = await getData()\r\n  return <div>...</div>\r\n}\n\nNote the persistence difference. The fetch Data Cache persists cached responses across deployments and across serverless instances.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "fetch cache options",
+    "content": "ge() {\r\n  const data = await getData()\r\n  return <div>...</div>\r\n}\n\nNote the persistence difference. The fetch Data Cache persists cached responses across deployments and across serverless instances.\n\nuse cache defaults to in-memory storage, so its entries are discarded when the serverless instance is destroyed and are scoped to a single deployment. Use use cache: remote or a cache handler for storage that survives instance teardown. Even with durable storage, expect cached values to recompute after a new deployment.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "unstable_cache",
+    "content": "Replace with use cache.\n\nunstable_cache is replaced by the use cache directive.\n\nTurn the wrapped function into a function with the 'use cache' directive. The cache key is derived automatically from the arguments, so the key-parts array is no longer needed, and the options object maps to cacheLife and cacheTag.\n\n// Before\r\nimport { unstable_cache } from 'next/cache'\r\nimport { db } from '@/lib/db'\r\n\r\nexport const getUser = unstable_cache(\r\n  async (id: string) => {\r\n    return db.query.users.findFirst({ where: eq(users.id, id) })\r\n  },\r\n  ['user'], // cache key prefix\r\n  { tags: ['users'], revalidate: 3600 }\r\n)\n\n// Before\r\nimport { unstable_cache } from 'next/cache'\r\nimport { db } from '@/lib/db'\r\n\r\nexport const getUser = unstable_cache(\r\n  async (id) => {\r\n    return db.query.users.findFirst({ where: eq(users.id, id) })\r\n  },\r\n  ['user'], // cache key prefix\r\n  { tags: ['users'], revalidate: 3600 }\r\n)\n\n// After\r\nimport { cacheLife, cacheTag } from 'next/cache'",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "unstable_cache",
+    "content": "rn db.query.users.findFirst({ where: eq(users.id, id) })\r\n  },\r\n  ['user'], // cache key prefix\r\n  { tags: ['users'], revalidate: 3600 }\r\n)\n\n// After\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport { db } from '@/lib/db'\r\n\r\nexport async function getUser(id: string) {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  cacheTag('users')\r\n  return db.query.users.findFirst({ where: eq(users.id, id) })\r\n}\n\n// After\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport { db } from '@/lib/db'\r\n\r\nexport async function getUser(id) {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  cacheTag('users')\r\n  return db.query.users.findFirst({ where: eq(users.id, id) })\r\n}\n\nLike the fetch Data Cache, unstable_cache persists cached values across deployments and serverless instances, while use cache does not. See fetch cache options above for the storage details.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "On-demand revalidation (revalidateTag, revalidatePath, updateTag)",
+    "content": "On-demand invalidation still works by tagging cached data and expiring it after an event. Tag data with cacheTag inside a use cache function instead of the fetch next.tags option, then choose the invalidation API by the behavior you want:\n\nupdateTag: for mutations whose result the user must see immediately (read-your-own-writes). Called from a Server Action, it expires the tag so the next request waits for fresh data instead of serving stale content.revalidateTag: for stale-while-revalidate. A cache profile is required as the second argument, for example use 'max' to serve cached data while it refreshes in the background. Works in Server Actions and Route Handlers.revalidatePath: unchanged from the previous caching model.\n\nupdateTag isn't exclusive to Cache Components (it also works with the previous caching model), but migrating is a good time to adopt it. After a mutation in a Server Action, reach for it when the user should see their own change right away.\n\n'use server'",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "On-demand revalidation (revalidateTag, revalidatePath, updateTag)",
+    "content": "works with the previous caching model), but migrating is a good time to adopt it. After a mutation in a Server Action, reach for it when the user should see their own change right away.\n\n'use server'\r\nimport { updateTag } from 'next/cache'\r\n\r\nexport async function createPost(formData: FormData) {\r\n  // Create the post, then show it immediately on the next request\r\n  updateTag('posts')\r\n}\n\n'use server'\r\nimport { updateTag } from 'next/cache'\r\n\r\nexport async function createPost(formData) {\r\n  // Create the post, then show it immediately on the next request\r\n  updateTag('posts')\r\n}\n\nGood to know: updateTag can only be called from a Server Action; calling it elsewhere throws. In Route Handlers or webhooks, use revalidateTag instead with a cache profile.\n\nPass 'max' as the second argument to revalidateTag to expire the tag with stale-while-revalidate semantics:\n\n// Before\r\nimport { revalidateTag } from 'next/cache'\r\n\r\nexport async function POST() {\r\n  revalidateTag('posts')",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "On-demand revalidation (revalidateTag, revalidatePath, updateTag)",
+    "content": "d argument to revalidateTag to expire the tag with stale-while-revalidate semantics:\n\n// Before\r\nimport { revalidateTag } from 'next/cache'\r\n\r\nexport async function POST() {\r\n  revalidateTag('posts')\r\n  return Response.json({ ok: true })\r\n}\n\n// Before\r\nimport { revalidateTag } from 'next/cache'\r\n\r\nexport async function POST() {\r\n  revalidateTag('posts')\r\n  return Response.json({ ok: true })\r\n}\n\n// After - Pass a cache profile\r\nimport { revalidateTag } from 'next/cache'\r\n\r\nexport async function POST() {\r\n  revalidateTag('posts', 'max')\r\n  return Response.json({ ok: true })\r\n}\n\n// After - Pass a cache profile\r\nimport { revalidateTag } from 'next/cache'\r\n\r\nexport async function POST() {\r\n  revalidateTag('posts', 'max')\r\n  return Response.json({ ok: true })\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "unstable_noStore",
+    "content": "Not needed. unstable_noStore (noStore()) opts a component out of caching. With Cache Components, nothing is cached unless you add use cache, so you can remove it. If a component must run at request time, call connection() before the work and wrap it in <Suspense>.\n\n// Before\r\nimport { unstable_noStore as noStore } from 'next/cache'\r\n\r\nexport default async function Page() {\r\n  noStore()\r\n  const data = await db.query('...')\r\n  return <div>...</div>\r\n}\n\n// Before\r\nimport { unstable_noStore as noStore } from 'next/cache'\r\n\r\nexport default async function Page() {\r\n  noStore()\r\n  const data = await db.query('...')\r\n  return <div>...</div>\r\n}\n\n// After - uncached by default, just remove noStore()\r\nexport default async function Page() {\r\n  const data = await db.query('...')\r\n  return <div>...</div>\r\n}\n\n// After - uncached by default, just remove noStore()\r\nexport default async function Page() {\r\n  const data = await db.query('...')\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "generateStaticParams and dynamicParams",
+    "content": "Cache Components changes how dynamic routes handle params.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "generateStaticParams must return at least one param",
+    "content": "Returning an empty array now errors. Without Cache Components, returning [] defers every path to the first runtime visit. With Cache Components, generateStaticParams must return at least one param so Next.js can prerender the route and validate it produces a non-empty static shell. An empty array raises empty-generate-static-params.\n\n// Before - defer all paths to runtime\r\nexport async function generateStaticParams() {\r\n  return []\r\n}\n\n// Before - defer all paths to runtime\r\nexport async function generateStaticParams() {\r\n  return []\r\n}\n\n// After - return at least one param to prerender\r\nexport async function generateStaticParams() {\r\n  const posts = await fetch('https://.../posts').then((res) => res.json())\r\n  return posts.slice(0, 1).map((post) => ({ slug: post.slug }))\r\n}\n\n// After - return at least one param to prerender\r\nexport async function generateStaticParams() {\r\n  const posts = await fetch('https://.../posts').then((res) => res.json())",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "generateStaticParams must return at least one param",
+    "content": "{ slug: post.slug }))\r\n}\n\n// After - return at least one param to prerender\r\nexport async function generateStaticParams() {\r\n  const posts = await fetch('https://.../posts').then((res) => res.json())\r\n  return posts.slice(0, 1).map((post) => ({ slug: post.slug }))\r\n}\n\nPaths you don't return are still served. Next.js prerenders a static shell for the unknown params and streams the rest at request time. See ISR with Cache Components for the full prerender-a-subset workflow.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "dynamicParams is not supported",
+    "content": "Delete the export. With Cache Components enabled, exporting dynamicParams fails the build with this error message:\n\nRoute segment config \"dynamicParams\" is not compatible with nextConfig.cacheComponents.\n\nParams not returned by generateStaticParams are rendered on request. If you used dynamicParams: false to reject them, call notFound() in the page when the param doesn't resolve to real data.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Await params inside <Suspense>",
+    "content": "To produce the static shell, pass the params promise into a <Suspense> boundary instead of awaiting it at the top of the component, so unknown params can still prerender.\n\n// Before - awaiting params at the top blocks the shell\r\nexport default async function Page({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n  return <Post slug={slug} />\r\n}\n\n// Before - awaiting params at the top blocks the shell\r\nexport default async function Page({ params }) {\r\n  const { slug } = await params\r\n  return <Post slug={slug} />\r\n}\n\nimport { Suspense } from 'react'\r\n\r\n// After - await inside Suspense so the shell can prerender\r\nexport default function Page({ params }: PageProps<'/blog/[slug]'>) {\r\n  return (\r\n    <Suspense fallback={<div>Loading...</div>}>\r\n      <Post params={params} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Post({ params }: Pick<PageProps<'/blog/[slug]'>, 'params'>) {\r\n  const { slug } = await params\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Await params inside <Suspense>",
+    "content": "ading...</div>}>\r\n      <Post params={params} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Post({ params }: Pick<PageProps<'/blog/[slug]'>, 'params'>) {\r\n  const { slug } = await params\r\n  // ...\r\n}\n\nimport { Suspense } from 'react'\r\n\r\n// After - await inside Suspense so the shell can prerender\r\nexport default function Page({ params }) {\r\n  return (\r\n    <Suspense fallback={<div>Loading...</div>}>\r\n      <Post params={params} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Post({ params }) {\r\n  const { slug } = await params\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Await params inside <Suspense>",
+    "content": "return (\r\n    <Suspense fallback={<div>Loading...</div>}>\r\n      <Post params={params} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Post({ params }) {\r\n  const { slug } = await params\r\n  // ...\r\n}\n\nThe same applies to client hooks that read the route. When the route's pathname is fully known, they resolve during prerendering and need no boundary. When it depends on dynamic params not yet known, they suspend, wherever the component sits. A nav or breadcrumb in a shared layout, for instance, suspends while Next.js generates the static shell for any route below it that has dynamic params. Wrap the component that reads the hook in <Suspense> (push the read down to the smallest leaf so the rest stays prerendered), or the build fails:\n\nusePathnameuseParamsuseSelectedLayoutSegmentuseSelectedLayoutSegments",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Await params inside <Suspense>",
+    "content": "t that reads the hook in <Suspense> (push the read down to the smallest leaf so the rest stays prerendered), or the build fails:\n\nusePathnameuseParamsuseSelectedLayoutSegmentuseSelectedLayoutSegments\n\nThe useSearchParams hook always needs a <Suspense> boundary, since search params are only known at request time. See Next.js encountered URL data in a Client Component outside of Suspense for fixes.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "cookies, headers, and searchParams",
+    "content": "Wrap runtime data access in <Suspense>. Without Cache Components, reading cookies(), headers(), or searchParams opts the whole route into dynamic rendering. With Cache Components, accessing them outside a <Suspense> boundary surfaces the blocking-prerender-runtime insight. Move the access into a component wrapped in <Suspense> so the rest of the page prerenders as a static shell and the dynamic part streams in at request time.\n\nimport { cookies } from 'next/headers'\r\n\r\n// Before - reading cookies at the top makes the whole route dynamic\r\nexport default async function Page() {\r\n  const theme = (await cookies()).get('theme')?.value\r\n  return <Dashboard theme={theme} />\r\n}\n\nimport { cookies } from 'next/headers'\r\n\r\n// Before - reading cookies at the top makes the whole route dynamic\r\nexport default async function Page() {\r\n  const theme = (await cookies()).get('theme')?.value\r\n  return <Dashboard theme={theme} />\r\n}\n\nimport { cookies } from 'next/headers'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "cookies, headers, and searchParams",
+    "content": "the whole route dynamic\r\nexport default async function Page() {\r\n  const theme = (await cookies()).get('theme')?.value\r\n  return <Dashboard theme={theme} />\r\n}\n\nimport { cookies } from 'next/headers'\r\nimport { Suspense } from 'react'\r\n\r\n// After - the page prerenders; only Dashboard streams at request time\r\nexport default function Page() {\r\n  return (\r\n    <Suspense fallback={<p>Loading...</p>}>\r\n      <Dashboard />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Dashboard() {\r\n  const theme = (await cookies()).get('theme')?.value\r\n  // ...\r\n}\n\nimport { cookies } from 'next/headers'\r\nimport { Suspense } from 'react'\r\n\r\n// After - the page prerenders; only Dashboard streams at request time\r\nexport default function Page() {\r\n  return (\r\n    <Suspense fallback={<p>Loading...</p>}>\r\n      <Dashboard />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Dashboard() {\r\n  const theme = (await cookies()).get('theme')?.value\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "cookies, headers, and searchParams",
+    "content": "return (\r\n    <Suspense fallback={<p>Loading...</p>}>\r\n      <Dashboard />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Dashboard() {\r\n  const theme = (await cookies()).get('theme')?.value\r\n  // ...\r\n}\n\nYour page receives params and searchParams as props, and both are promises. Apply the same pattern: pass the promise straight through to the <Suspense>-wrapped component as a prop and await it there, rather than at the top of the page. You can also unwrap the promise inline with .then() and pass a plain value down; see Streaming for a similar pattern.\n\nimport { Suspense } from 'react'\r\n\r\nexport default function Page({ searchParams }: PageProps<'/'>) {\r\n  return (\r\n    <Suspense fallback={<p>Loading...</p>}>\r\n      <Results searchParams={searchParams} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Results({ searchParams }: Pick<PageProps<'/'>, 'searchParams'>) {\r\n  const { query } = await searchParams\r\n  // ...\r\n}\n\nimport { Suspense } from 'react'",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "cookies, headers, and searchParams",
+    "content": ">\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Results({ searchParams }: Pick<PageProps<'/'>, 'searchParams'>) {\r\n  const { query } = await searchParams\r\n  // ...\r\n}\n\nimport { Suspense } from 'react'\r\n\r\nexport default function Page({ searchParams }) {\r\n  return (\r\n    <Suspense fallback={<p>Loading...</p>}>\r\n      <Results searchParams={searchParams} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Results({ searchParams }) {\r\n  const { query } = await searchParams\r\n  // ...\r\n}\n\nGood to know: When a cookie or header value drives an attribute on the <html> element in the root layout (lang, dir, data-theme, etc.), reading it on the server makes the whole subtree request-bound, so there's no child to wrap in <Suspense>. An inline <script> in <head> that sets the attribute before paint keeps the shell static; see Preventing flash before hydration for the pattern.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Route Handlers (GET)",
+    "content": "Replace dynamic = 'force-static' with use cache.\n\nWithout Cache Components, a GET Route Handler is dynamic unless you opt into caching with export const dynamic = 'force-static'. With Cache Components, GET handlers follow the same model as pages: they prerender when they don't access uncached or runtime data, and you cache uncached data with use cache. Remove the dynamic config and move the data access into a separate function marked with use cache. The directive can't be applied to the GET export itself, so the handler calls a cached helper.\n\n// Before\r\nexport const dynamic = 'force-static'\r\n\r\nexport async function GET() {\r\n  const products = await db.query('SELECT * FROM products')\r\n  return Response.json(products)\r\n}\n\n// Before\r\nexport const dynamic = 'force-static'\r\n\r\nexport async function GET() {\r\n  const products = await db.query('SELECT * FROM products')\r\n  return Response.json(products)\r\n}\n\n// After\r\nimport { cacheLife } from 'next/cache'\r\n\r\nexport async function GET() {",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Route Handlers (GET)",
+    "content": "c function GET() {\r\n  const products = await db.query('SELECT * FROM products')\r\n  return Response.json(products)\r\n}\n\n// After\r\nimport { cacheLife } from 'next/cache'\r\n\r\nexport async function GET() {\r\n  const products = await getProducts()\r\n  return Response.json(products)\r\n}\r\n\r\nasync function getProducts() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  return db.query('SELECT * FROM products')\r\n}\n\n// After\r\nimport { cacheLife } from 'next/cache'\r\n\r\nexport async function GET() {\r\n  const products = await getProducts()\r\n  return Response.json(products)\r\n}\r\n\r\nasync function getProducts() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  return db.query('SELECT * FROM products')\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "Route Handlers (GET)",
+    "content": ") {\r\n  const products = await getProducts()\r\n  return Response.json(products)\r\n}\r\n\r\nasync function getProducts() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  return db.query('SELECT * FROM products')\r\n}\n\nGood to know: Reading uncached or runtime data in a GET handler bails out of prerendering by throwing. A try/catch you already have around other operations will catch that bail-out. If the catch block logs the error, it adds noise to the build output. Set experimental.hideLogsAfterAbort: true to hide logs emitted after a bail-out.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "generateMetadata and generateViewport",
+    "content": "Cache external data with use cache, or mark intentionally dynamic pages. Under Cache Components, generateMetadata and generateViewport follow the same rules as components. If they read runtime data (cookies(), headers(), params, searchParams) or fetch uncached data while the rest of the page is otherwise prerenderable, Next.js raises an error so the choice is explicit. If the metadata depends on external but not runtime data, add use cache.\n\n// Before\r\nexport async function generateMetadata() {\r\n  const { title, description } = await db.query('site-metadata')\r\n  return { title, description }\r\n}\n\n// After - cache external data\r\nexport async function generateMetadata() {\r\n  'use cache'\r\n  const { title, description } = await db.query('site-metadata')\r\n  return { title, description }\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "generateMetadata and generateViewport",
+    "content": "n }\r\n}\n\n// After - cache external data\r\nexport async function generateMetadata() {\r\n  'use cache'\r\n  const { title, description } = await db.query('site-metadata')\r\n  return { title, description }\r\n}\n\nIf the metadata genuinely needs runtime data, you can't wrap generateMetadata in <Suspense>. Instead, add a dynamic marker component to the page so the static content still prerenders while the metadata streams in.\n\nimport { Suspense } from 'react'\r\nimport { connection } from 'next/server'\r\n\r\nexport async function generateMetadata() {\r\n  // reads runtime data\r\n  return { title: 'Personalized Title' }\r\n}\r\n\r\nasync function DynamicMarker() {\r\n  return (\r\n    <Suspense>\r\n      <Connection />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Connection() {\r\n  await connection()\r\n  return null\r\n}\r\n\r\nexport default function Page() {\r\n  return (\r\n    <>\r\n      <article>Static content</article>\r\n      <DynamicMarker />\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "generateMetadata and generateViewport",
+    "content": "ction Connection() {\r\n  await connection()\r\n  return null\r\n}\r\n\r\nexport default function Page() {\r\n  return (\r\n    <>\r\n      <article>Static content</article>\r\n      <DynamicMarker />\r\n    </>\r\n  )\r\n}\n\nSee generateMetadata with Cache Components and generateViewport with Cache Components for the full set of fix options and trade-offs.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "runtime = 'edge'",
+    "content": "Not supported. Cache Components requires the Node.js runtime. Switch to the Node.js runtime (the default) by removing the deprecated runtime = 'edge' export. If you need edge behavior for specific routes, use Proxy instead.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "experimental_ppr",
+    "content": "Removed. Enable cacheComponents instead. Next.js 16 removes the experimental Partial Prerendering flag (experimental.ppr) and the experimental_ppr route segment config. Partial Prerendering is now part of Cache Components, so remove experimental.ppr from next.config and experimental_ppr from your segments. A codemod removes the segment config for you.\n\n// Before - no longer needed\r\nexport const experimental_ppr = true\r\n\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}\n\n// Before - no longer needed\r\nexport const experimental_ppr = true\r\n\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}\n\n// After - remove it; cacheComponents enables Partial Prerendering\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}\n\n// After - remove it; cacheComponents enables Partial Prerendering\r\nexport default function Page() {\r\n  return <div>...</div>\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  },
+  {
+    "documentTitle": "Migrating to Cache Components",
+    "documentDescription": "Learn how to migrate from route segment configs to Cache Components in Next.js.",
+    "sectionTitle": "UI state preservation",
+    "content": "Component state now persists across navigations. With Cache Components, Next.js preserves routes using React's <Activity> component in \"hidden\" mode instead of unmounting them. Effects clean up and re-run normally, but useState values, form inputs, and scroll position are no longer reset when navigating away and back.\n\nIf your code relied on unmounting to clear state, you may need to add explicit reset logic:\n\nDropdowns and popovers: stay open when navigating back. Close them in a useLayoutEffect cleanup function.Dialogs with initialization logic: Effects that depend on dialog state (like focusing an input) won't re-fire if the state was preserved. Derive dialog state from the URL instead.Forms after submission: input values and useActionState results (success/error messages) persist when returning. Reset in the submit handler or user action when possible, otherwise use a cleanup effect.\n\nSee Preserving UI state across navigations for detailed examples of each pattern.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\migrating-to-cache-components.mdx"
+  }
+]

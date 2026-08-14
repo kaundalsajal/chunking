@@ -1,0 +1,576 @@
+[
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Introduction",
+    "content": "/* The content of this doc is shared between the app and pages router. You can use the `<PagesOnly>Content</PagesOnly>` component to add content that is specific to the Pages Router. Any shared content should not be wrapped in a component. */",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Use an AI agent (recommended)",
+    "content": "An AI coding agent can run the mechanical parts of the upgrade, inspect the diff, fix follow-up breakages, and verify the app. The prompt below asks the agent to read version-matched docs, use the codemods where appropriate, explain important changes, and verify the result. Some runtime verification tools are only available after the app is upgraded.\n\nGive the agent this prompt:\n\nUpgrade this app to Next.js 16.\r\n\r\nBefore editing code, make sure AGENTS.md points at version-matched Next.js docs. If it is missing or outdated, follow [Set up AI agent docs](/docs/app/guides/upgrading/version-16#set-up-ai-agent-docs), then read AGENTS.md.\r\n\r\nThen follow the [Next.js 16 upgrade guide](/docs/app/guides/upgrading/version-16) as the source of truth for the migration. Use the [codemod](/docs/app/guides/upgrading/version-16#using-the-codemod) when you're ready to run the mechanical upgrade.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Use an AI agent (recommended)",
+    "content": "pp/guides/upgrading/version-16) as the source of truth for the migration. Use the [codemod](/docs/app/guides/upgrading/version-16#using-the-codemod) when you're ready to run the mechanical upgrade.\r\n\r\nBriefly explain the upgrade plan in user-facing language before making broad changes. Follow the documented defaults and keep moving unless the guide requires a project-specific decision, the change is destructive, credentials or environment setup are missing, or the correct migration is ambiguous. Keep the migration scoped to the upgrade, inspect the diff, run the relevant checks, and fix remaining breaking changes.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Use an AI agent (recommended)",
+    "content": "als or environment setup are missing, or the correct migration is ambiguous. Keep the migration scoped to the upgrade, inspect the diff, run the relevant checks, and fix remaining breaking changes.\r\n\r\nAfter the app is upgraded, use the runtime verification flow from the [AI Coding Agents guide](/docs/app/guides/ai-agents) to confirm it still works. Prefer the `next-dev-loop` skill when it is available (Next.js 16.3 or later with Turbopack); otherwise fall back to the best available `next dev`, browser, and build checks. Open the key interactive UI states and check the Next dev indicator plus browser and server logs. Summarize what changed, what was verified, and what could not be verified.\r\n\r\nBefore finishing, repeat the post-upgrade check in [Set up AI agent docs](/docs/app/guides/upgrading/version-16#set-up-ai-agent-docs) so the project is ready for future agent work.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Or upgrade manually",
+    "content": "Upgrading manually follows a few steps, in order:\n\nSet up AI agent docs if you use an assistant now or want future agent work grounded in version-matched docs.Run the upgrade codemod.If you prefer not to run the codemod, install packages manually.Continue through the breaking changes below, run the relevant checks, and fix any remaining issues.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Set up AI agent docs",
+    "content": "The prompt above asks the agent to do this before it edits code. You can also prepare the project yourself before starting the upgrade. See the AI Coding Agents guide for the full setup.\n\nnpx @next/codemod@canary agents-md\n\nAfter upgrading, verify AGENTS.md still points at the docs for the installed Next.js version. On Next.js 16.2 and later, that should be the bundled docs in node_modules/next/dist/docs/. If the pre-upgrade setup downloaded docs into .next-docs/, update AGENTS.md to point at the bundled docs, then remove .next-docs/ once nothing references it.\n\nThe managed block should look like this:\n\n<!-- BEGIN:nextjs-agent-rules -->\r\n\r\n# This is NOT the Next.js you know",
+    "metadata": {
+      "language": "md"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Set up AI agent docs",
+    "content": "to point at the bundled docs, then remove .next-docs/ once nothing references it.\n\nThe managed block should look like this:\n\n<!-- BEGIN:nextjs-agent-rules -->\r\n\r\n# This is NOT the Next.js you know\r\n\r\nThis version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.\r\n\r\nThis block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.\r\n\r\n<!-- END:nextjs-agent-rules -->",
+    "metadata": {
+      "language": "md"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Using the codemod",
+    "content": "To update to Next.js version 16, you can use the upgrade codemod:\n\npnpm dlx @next/codemod@canary upgrade latest\n\nnpx @next/codemod@canary upgrade latest\n\nyarn dlx @next/codemod@canary upgrade latest\n\nbunx @next/codemod@canary upgrade latest\n\nThe codemod is able to:\n\nUpdate next.config.js to use the new turbopack configurationMigrate from next lint to the ESLint CLIMigrate from deprecated middleware convention to proxyRemove unstable_ prefix from stabilized APIsRemove experimental_ppr Route Segment Config from pages and layouts\n\nThe upgrade codemod does not run every migration codemod. If your app still uses synchronous params, searchParams, cookies(), headers(), or draftMode() access from the Next.js 15 compatibility period, also run the async Request APIs codemod:\n\nnpx @next/codemod@canary next-async-request-api .",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Install packages manually",
+    "content": "If you prefer to do it manually, install the latest Next.js and React versions:\n\npnpm add next@latest react@latest react-dom@latest\n\nnpm install next@latest react@latest react-dom@latest\n\nyarn add next@latest react@latest react-dom@latest\n\nbun add next@latest react@latest react-dom@latest\n\nIf you are using TypeScript, ensure you also upgrade @types/react and @types/react-dom to their latest versions.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Node.js runtime and browser support",
+    "content": "| Requirement   | Change / Details                                                   |\r\n| ------------- | ------------------------------------------------------------------ |\r\n| Node.js 20.9+ | Minimum version now 20.9.0 (LTS); Node.js 18 no longer supported |\r\n| TypeScript 5+ | Minimum version now 5.1.0                                        |\r\n| Browsers      | Chrome 111+, Edge 111+, Firefox 111+, Safari 16.4+                 |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Turbopack by default",
+    "content": "Starting with Next.js 16, Turbopack is stable and used by default with next dev and next build\n\nPreviously you had to enable Turbopack using --turbopack, or --turbo.\n\n{\r\n  \"scripts\": {\r\n    \"dev\": \"next dev --turbopack\",\r\n    \"build\": \"next build --turbopack\",\r\n    \"start\": \"next start\"\r\n  }\r\n}\n\nThis is no longer necessary. You can update your package.json scripts:\n\n{\r\n  \"scripts\": {\r\n    \"dev\": \"next dev\",\r\n    \"build\": \"next build\",\r\n    \"start\": \"next start\"\r\n  }\r\n}\n\nIf your project has a custom webpack configuration and you run next build (which now uses Turbopack by default), the build will fail to prevent misconfiguration issues.\n\nYou have a few different ways to address this:\n\nUse Turbopack anyway: Run with next build --turbopack to build using Turbopack and ignore your webpack config.Switch to Turbopack fully: Migrate your webpack config to Turbopack-compatible options.Keep using Webpack: Use the --webpack flag to opt out of Turbopack and build with Webpack.",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Turbopack by default",
+    "content": "e your webpack config.Switch to Turbopack fully: Migrate your webpack config to Turbopack-compatible options.Keep using Webpack: Use the --webpack flag to opt out of Turbopack and build with Webpack.\n\nGood to know: If you see failing builds because a webpack configuration was found, but you don't define one yourself, it is likely that a plugin is adding a webpack option",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Opting out of Turbopack",
+    "content": "If you need to continue using Webpack, you can opt out with the --webpack flag. For example, to use Turbopack in development but Webpack for production builds:\n\n{\r\n  \"scripts\": {\r\n    \"dev\": \"next dev\",\r\n    \"build\": \"next build --webpack\",\r\n    \"start\": \"next start\"\r\n  }\r\n}\n\nWe recommend using Turbopack for development and production. Submit a comment to this thread, if you are unable to switch to Turbopack.",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Turbopack configuration location",
+    "content": "The experimental.turbopack configuration is out of experimental.\n\nimport type { NextConfig } from 'next'\r\n\r\n// Next.js 15 - experimental.turbopack\r\nconst nextConfig: NextConfig = {\r\n  experimental: {\r\n    turbopack: {\r\n      // options\r\n    },\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\nYou can use it as a top-level turbopack option:\n\nimport type { NextConfig } from 'next'\r\n\r\n// Next.js 16 - turbopack at the top level of nextConfig\r\nconst nextConfig: NextConfig = {\r\n  turbopack: {\r\n    // options\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\nMake sure to review the Turbopack configuration options. Next.js 16 introduces various improvements and new options, for example:\n\nAdvanced Webpack loader conditionsdebugIds",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Resolve alias fallback",
+    "content": "In some projects, client-side code may import files containing Node.js native modules. This will cause Module not found: Can't resolve 'fs' type of errors.\n\nWhen this happens, you should refactor your code so that your client-side bundles do not reference these Node.js native modules.\n\nHowever, in some cases, this might not be possible. In Webpack the resolve.fallback option was typically used to silence the error. Turbopack offers a similar option, using turbopack.resolveAlias. In this case, tell Turbopack to load an empty module when fs is requested for the browser.\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  turbopack: {\r\n    resolveAlias: {\r\n      fs: {\r\n        browser: './empty.ts', // We recommend to fix code imports before using this method\r\n      },\r\n    },\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\nIt is preferable to refactor your modules so that client code doesn't ever import from modules using Node.js native modules.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Sass node_modules imports",
+    "content": "Turbopack fully supports importing Sass files from node_modules. Note that while Webpack allowed the legacy tilde (~) prefix, Turbopack does not support this syntax.\n\nIn Webpack:\n\n@import '~bootstrap/dist/css/bootstrap.min.css';\n\nIn Turbopack:\n\n@import 'bootstrap/dist/css/bootstrap.min.css';\n\nIf changing the imports is not possible, you can use turbopack.resolveAlias. For example:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  turbopack: {\r\n    resolveAlias: {\r\n      '~*': '*',\r\n    },\r\n  },\r\n}\r\n\r\nexport default nextConfig",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Turbopack File System Caching",
+    "content": "Turbopack stores compiler artifacts on disk between runs, for significantly faster compile times across restarts. Filesystem caching is enabled by default for both next dev and next build. See turbopackFileSystemCache to configure or disable it.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Async Request APIs (Breaking change)",
+    "content": "Version 15 introduced Async Request APIs as a breaking change, with temporary synchronous compatibility.\n\nStarting with Next.js 16, synchronous access is fully removed. These APIs can only be accessed asynchronously.\n\ncookiesheadersdraftModeparams in layout.js, page.js, route.js, default.js, opengraph-image, twitter-image, icon, and apple-icon.searchParams in page.js\n\nUse the codemod to migrate to async Request-time APIs.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Migrating types for async Request-time APIs",
+    "content": "To help migrate to async params and searchParams, you can run npx next typegen to automatically generate these globally available types helpers:\n\nPagePropsLayoutPropsRouteContext\n\nGood to know: typegen was introduced in Next.js 15.5\n\nThis simplifies type-safe migration to the new async API pattern, and enables you to update your components with full type safety, for example:\n\nexport default async function Page(props: PageProps<'/blog/[slug]'>) {\r\n  const { slug } = await props.params\r\n  const query = await props.searchParams\r\n  return <h1>Blog Post: {slug}</h1>\r\n}\n\nThis approach gives you fully type-safe access to props.params, including the slug, and to searchParams, directly within your page.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Async parameters for icon, and open-graph Image (Breaking change)",
+    "content": "The props passed to the image generating functions in opengraph-image, twitter-image, icon, and apple-icon, are now Promises.\n\nIn previous versions, both the Image (image generation function), and the generateImageMetadata received a params object. The id returned by generateImageMetadata was passed as a string to the image generation function.\n\n// Next.js 15 - synchronous params access\r\nexport function generateImageMetadata({ params }) {\r\n  const { slug } = params\r\n  return [{ id: '1' }, { id: '2' }]\r\n}\r\n\r\n// Next.js 15 - synchronous params and id access\r\nexport default function Image({ params, id }) {\r\n  const slug = params.slug\r\n  const imageId = id // string\r\n  // ...\r\n}\n\nStarting with Next.js 16, to align with the Async Request APIs change, the image generating function now receives params and id as promises. The generateImageMetadata function continues to receive synchronous params.\n\nexport async function generateImageMetadata({ params }) {\r\n  const { slug } = params",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Async parameters for icon, and open-graph Image (Breaking change)",
+    "content": "w receives params and id as promises. The generateImageMetadata function continues to receive synchronous params.\n\nexport async function generateImageMetadata({ params }) {\r\n  const { slug } = params\r\n  return [{ id: '1' }, { id: '2' }]\r\n}\r\n\r\n// Next.js 16 - asynchronous params and id access\r\nexport default async function Image({ params, id }) {\r\n  const { slug } = await params // params now async\r\n  const imageId = await id // id is now Promise<string> when using generateImageMetadata\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Async id parameter for sitemap (Breaking change)",
+    "content": "Previously, the id values returned from generateSitemaps were passed directly to the sitemap generating function.\n\nexport async function generateSitemaps() {\r\n  return [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }]\r\n}\r\n\r\n// Next.js 15 - synchronous id access\r\nexport default async function sitemap({ id }) {\r\n  const start = id * 50000 // id is a number\r\n  // ...\r\n}\n\nStarting with Next.js 16, the sitemap generating function now receives id as a promise.\n\nexport async function generateSitemaps() {\r\n  return [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }]\r\n}\r\n\r\n// Next.js 16 - asynchronous id access\r\nexport default async function sitemap({ id }) {\r\n  const resolvedId = await id // id is now Promise<string>\r\n  const start = Number(resolvedId) * 50000\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "React 19.2",
+    "content": "The App Router in Next.js 16 uses the latest React Canary release, which includes the newly released React 19.2 features and other features being incrementally stabilized. Highlights include:\n\nView Transitions: Animate elements that update inside a Transition or navigationuseEffectEvent: Extract non-reactive logic from Effects into reusable Effect Event functionsActivity: Render \"background activity\" by hiding UI with display: none while maintaining state and cleaning up Effects\n\nLearn more in the React 19.2 announcement.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "React Compiler Support",
+    "content": "Built-in support for the React Compiler is now stable in Next.js 16 following the React Compiler's 1.0 release. The React Compiler automatically memoizes components, reducing unnecessary re-renders with zero manual code changes.\n\nThe reactCompiler configuration option has been promoted from experimental to stable. It is not enabled by default as we continue gathering build performance data across different application types.\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  reactCompiler: true,\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  reactCompiler: true,\r\n}\r\n\r\nmodule.exports = nextConfig\n\nInstall the latest version of the React Compiler plugin:\n\npnpm add -D babel-plugin-react-compiler\n\nnpm install -D babel-plugin-react-compiler\n\nyarn add -D babel-plugin-react-compiler\n\nbun add -D babel-plugin-react-compiler",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "React Compiler Support",
+    "content": "ion of the React Compiler plugin:\n\npnpm add -D babel-plugin-react-compiler\n\nnpm install -D babel-plugin-react-compiler\n\nyarn add -D babel-plugin-react-compiler\n\nbun add -D babel-plugin-react-compiler\n\nGood to know: Expect compile times in development and during builds to be higher when enabling this option as the React Compiler relies on Babel.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "revalidateTag",
+    "content": "revalidateTag now requires a second argument specifying a cacheLife profile. The single-argument form is deprecated and will produce a TypeScript error.\n\n// Before\r\nrevalidateTag('posts')\r\n\r\n// After\r\nrevalidateTag('posts', 'max')\n\nIf you need immediate expiration rather than stale-while-revalidate, use updateTag in Server Actions instead.\n\n'use server'\r\n\r\nimport { revalidateTag } from 'next/cache'\r\n\r\nexport async function updateArticle(articleId: string) {\r\n  // Mark article data as stale - article readers see stale data while it revalidates\r\n  revalidateTag(`article-${articleId}`, 'max')\r\n}\n\n'use server'\r\n\r\nimport { revalidateTag } from 'next/cache'\r\n\r\nexport async function updateArticle(articleId) {\r\n  // Mark article data as stale - article readers see stale data while it revalidates\r\n  revalidateTag(`article-${articleId}`, 'max')\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "revalidateTag",
+    "content": "xt/cache'\r\n\r\nexport async function updateArticle(articleId) {\r\n  // Mark article data as stale - article readers see stale data while it revalidates\r\n  revalidateTag(`article-${articleId}`, 'max')\r\n}\n\nUse revalidateTag for content where a slight delay in updates is acceptable, such as blog posts, product catalogs, or documentation. Users receive stale content while fresh data loads in the background.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "updateTag",
+    "content": "updateTag is a new Server Actions-only API that provides read-your-writes semantics, where a user makes a change and the UI immediately shows the change, rather than stale data.\n\nIt does this by expiring and immediately refreshing data within the same request.\n\n'use server'\r\n\r\nimport { updateTag } from 'next/cache'\r\n\r\nexport async function updateUserProfile(userId: string, profile: Profile) {\r\n  await db.users.update(userId, profile)\r\n\r\n  // Expire cache and refresh immediately - user sees their changes right away\r\n  updateTag(`user-${userId}`)\r\n}\n\n'use server'\r\n\r\nimport { updateTag } from 'next/cache'\r\n\r\nexport async function updateUserProfile(userId, profile) {\r\n  await db.users.update(userId, profile)\r\n\r\n  // Expire cache and refresh immediately - user sees their changes right away\r\n  updateTag(`user-${userId}`)\r\n}\n\nThis ensures interactive features reflect changes immediately. Perfect for forms, user settings, and any workflow where users expect to see their updates instantly.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "updateTag",
+    "content": "updateTag(`user-${userId}`)\r\n}\n\nThis ensures interactive features reflect changes immediately. Perfect for forms, user settings, and any workflow where users expect to see their updates instantly.\n\nLearn more about when to use updateTag or revalidateTag here.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "refresh",
+    "content": "refresh allows you to refresh the client router from within a Server Action.\n\n'use server'\r\n\r\nimport { refresh } from 'next/cache'\r\n\r\nexport async function markNotificationAsRead(notificationId: string) {\r\n  // Update the notification in the database\r\n  await db.notifications.markAsRead(notificationId)\r\n\r\n  // Refresh the notification count displayed in the header\r\n  refresh()\r\n}\n\n'use server'\r\n\r\nimport { refresh } from 'next/cache'\r\n\r\nexport async function markNotificationAsRead(notificationId) {\r\n  // Update the notification in the database\r\n  await db.notifications.markAsRead(notificationId)\r\n\r\n  // Refresh the notification count displayed in the header\r\n  refresh()\r\n}\n\nUse it when you need to refresh the client router after performing an action.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "cacheLife and cacheTag",
+    "content": "cacheLife and cacheTag are now stable. The unstable_ prefix is no longer needed.\n\nWherever you had aliased imports like:\n\nimport {\r\n  unstable_cacheLife as cacheLife,\r\n  unstable_cacheTag as cacheTag,\r\n} from 'next/cache'\n\nYou can update your imports to:\n\nimport { cacheLife, cacheTag } from 'next/cache'",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Enhanced Routing and Navigation",
+    "content": "Next.js 16 includes a complete overhaul of the routing and navigation system, making page transitions leaner and faster. This optimizes how Next.js prefetches and caches navigation data:\n\nLayout deduplication: When prefetching multiple URLs with a shared layout, the layout is downloaded once.Incremental prefetching: Next.js only prefetches parts not already in cache, rather than entire pages.\n\nThese changes require no code modifications and are designed to improve performance across all apps.\n\nHowever, you may see more individual prefetch requests with much lower total transfer sizes. We believe this is the right trade-off for nearly all applications.\n\nIf the increased request count causes issues, please let us know by creating an issue or discussion item.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Partial Prerendering (PPR)",
+    "content": "Next.js 16 removes the experimental Partial Prerendering (PPR) flag and configuration options, including the route level segment experimental_ppr.\n\nStarting with Next.js 16, you can opt into PPR using the cacheComponents configuration.\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nmodule.exports = nextConfig\n\nPPR in Next.js 16 works differently than in Next.js 15 canaries. If you are using PPR today, stay in the current Next.js 15 canary you are using. See Migrating to Cache Components for migration patterns.\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  // If you are using PPR today\r\n  // stay in the current Next.js 15 canary\r\n  experimental: {\r\n    ppr: true,\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "middleware to proxy",
+    "content": "The middleware filename is deprecated, and has been renamed to proxy to clarify network boundary and routing focus.\n\nThe edge runtime is NOT supported in proxy. The proxy runtime is nodejs, and it cannot be configured. If you want to continue using the edge runtime, keep using middleware. We will follow up on a minor release with further edge runtime instructions.\n\n# Rename your middleware file\r\nmv middleware.ts proxy.ts\r\n# or\r\nmv middleware.js proxy.js\n\nThe named export middleware is also deprecated. Rename your function to proxy.\n\nexport function proxy(request: Request) {}\n\nexport function proxy(request) {}\n\nWe recommend changing the function name to proxy, even if you are using a default export.\n\nConfiguration flags that contained the middleware name are also renamed. For example, skipMiddlewareUrlNormalize is now skipProxyUrlNormalize\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  skipProxyUrlNormalize: true,\r\n}\r\n\r\nexport default nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "middleware to proxy",
+    "content": "le, skipMiddlewareUrlNormalize is now skipProxyUrlNormalize\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  skipProxyUrlNormalize: true,\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  skipProxyUrlNormalize: true,\r\n}\r\n\r\nmodule.exports = nextConfig\n\nThe version 16 codemod is able to update these flags too.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Local Images with Query Strings (Breaking change)",
+    "content": "Local image sources with query strings now require images.localPatterns.search configuration to prevent enumeration attacks.\n\nimport Image from 'next/image'\r\n\r\nexport default function Page() {\r\n  return <Image src=\"/assets/photo?v=1\" alt=\"Photo\" width=\"100\" height=\"100\" />\r\n}\n\nIf you need to use query strings with local images, add the pattern to your configuration:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  images: {\r\n    localPatterns: [\r\n      {\r\n        pathname: '/assets/**',\r\n        search: '?v=1',\r\n      },\r\n    ],\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  images: {\r\n    localPatterns: [\r\n      {\r\n        pathname: '/assets/**',\r\n        search: '?v=1',\r\n      },\r\n    ],\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "minimumCacheTTL Default (Breaking change)",
+    "content": "The default value for images.minimumCacheTTL has changed from 60 seconds to 4 hours (14400 seconds). This reduces revalidation cost for images without cache-control headers.\n\nFor some Next.js users, image revalidation was happening frequently, often because the upstream source images missed a cache-control header. This caused revalidation to happen every 60 seconds, which increased CPU usage and cost.\n\nSince most images do not change often, this short interval is not ideal. Setting the default to 4 hours offers a more durable cache by default, while still allowing images to update a few times per day if needed.\n\nIf you need the previous behavior, change minimumCacheTTL to a lower value, for example back to 60 seconds:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  images: {\r\n    minimumCacheTTL: 60,\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  images: {\r\n    minimumCacheTTL: 60,\r\n  },\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "minimumCacheTTL Default (Breaking change)",
+    "content": "nfig = {\r\n  images: {\r\n    minimumCacheTTL: 60,\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  images: {\r\n    minimumCacheTTL: 60,\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "imageSizes Default (Breaking change)",
+    "content": "The value 16 has been removed from the default images.imageSizes array.\n\nWe have looked at request analytics and found out that very few projects ever serve 16 pixels width images. Removing this setting reduces the size of the srcset attribute shipped to the browser by next/image.\n\nIf you need to support 16px images:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  images: {\r\n    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  images: {\r\n    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig\n\nRather than lack of developer usage, we believe 16 pixels width images have become less common, because devicePixelRatio: 2 actually fetches a 32px image to prevent blurriness in retina displays.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "qualities Default (Breaking change)",
+    "content": "The default value for images.qualities has changed from allowing all qualities to only [75].\n\nIf you need to support multiple quality levels:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  images: {\r\n    qualities: [50, 75, 100],\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  images: {\r\n    qualities: [50, 75, 100],\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig\n\nIf you specify a quality prop not included in the image.qualities array, the quality will be coerced to the closest value in images.qualities. For example, given the configuration above, a quality prop of 80, is coerced to 75.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Local IP Restriction (Breaking change)",
+    "content": "A new security restriction blocks local IP optimization by default. Set images.dangerouslyAllowLocalIP to true only for private networks.\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  images: {\r\n    dangerouslyAllowLocalIP: true, // Only for private networks\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  images: {\r\n    dangerouslyAllowLocalIP: true, // Only for private networks\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig\n\nThis might be necessary when hosting Next.js in a VPC with split-horizon DNS and you receive status 400 Bad Request. Only enable once you understand the SSRF risk.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Maximum Redirects (Breaking change)",
+    "content": "The default for images.maximumRedirects has changed from unlimited to 3 redirects maximum.\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  images: {\r\n    maximumRedirects: 0, // Disable redirects\r\n    // or\r\n    maximumRedirects: 5, // Increase for edge cases\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  images: {\r\n    maximumRedirects: 0, // Disable redirects\r\n    // or\r\n    maximumRedirects: 5, // Increase for edge cases\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "next/legacy/image Component (deprecated)",
+    "content": "The next/legacy/image component is deprecated. Use next/image instead:\n\n// Before\r\nimport Image from 'next/legacy/image'\r\n\r\n// After\r\nimport Image from 'next/image'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "images.domains Configuration (deprecated)",
+    "content": "The images.domains config is deprecated.\n\n// image.domains is deprecated\r\nmodule.exports = {\r\n  images: {\r\n    domains: ['example.com'],\r\n  },\r\n}\n\nUse images.remotePatterns instead for improved security:\n\n// Use image.remotePatterns instead\r\nmodule.exports = {\r\n  images: {\r\n    remotePatterns: [\r\n      {\r\n        protocol: 'https',\r\n        hostname: 'example.com',\r\n      },\r\n    ],\r\n  },\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Concurrent dev and build",
+    "content": "next dev and next build now use separate output directories, enabling concurrent execution. The next dev command outputs to .next/dev.\n\nAdditionally, a lockfile mechanism prevents multiple next dev or next build instances on the same project.\n\nThe Turbopack tracing command should be:\n\npnpm next internal trace .next-profiles/trace-turbopack.bin\n\nnpx next internal trace .next-profiles/trace-turbopack.bin\n\nyarn next internal trace .next-profiles/trace-turbopack.bin\n\nbunx next internal trace .next-profiles/trace-turbopack.bin",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Parallel Routes default.js requirement",
+    "content": "All parallel route slots now require explicit default.js files. Builds will fail without them.\n\nTo maintain previous behavior, create a default.js file that calls notFound() or returns null.\n\nimport { notFound } from 'next/navigation'\r\n\r\nexport default function Default() {\r\n  notFound()\r\n}\n\nOr return null:\n\nexport default function Default() {\r\n  return null\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "ESLint Flat Config",
+    "content": "@next/eslint-plugin-next now defaults to ESLint Flat Config format, aligning with ESLint v10 which will drop legacy config support.\n\nMake sure to review our API reference for the @next/eslint-plugin-next plugin.\n\nIf you're using the legacy .eslintrc format, consider migrating to the flat config format. See the ESLint migration guide for details.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Scroll Behavior Override",
+    "content": "In previous versions of Next.js, if you had set scroll-behavior: smooth globally on your <html> element via CSS, Next.js would override this during SPA route transitions, as follows:\n\nTemporarily set scroll-behavior to autoPerform the navigation (causing instant scroll to top)Restore your original scroll-behavior value\n\nThis ensured that page navigation always felt snappy and instant, even when you had smooth scrolling enabled for in-page navigation. However, this manipulation could be expensive, especially at the start of every navigation.\n\nIn Next.js 16, this behavior has changed. By default, Next.js will no longer override your scroll-behavior setting during navigation.\n\nIf you want Next.js to perform this override (the previous default behavior), add the data-scroll-behavior=\"smooth\" attribute to your <html> element:\n\nexport default function RootLayout({ children }) {\r\n  return (\r\n    <html lang=\"en\" data-scroll-behavior=\"smooth\">\r\n      <body>{children}</body>\r\n    </html>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Performance Improvements",
+    "content": "Significant performance optimizations for next dev and next start commands, along with improved terminal output with clearer formatting, better error messages, and improved performance metrics.\n\nNext.js 16 removes the size and First Load JS metrics from the next build output. We found these to be inaccurate in server-driven architectures using React Server Components. Both our Turbopack and Webpack implementations had issues, and disagreed on how to account for Client Components payload.\n\nThe most effective way to measure actual route performance is through tools such as Chrome Lighthouse or Vercel Analytics, which focus on Core Web Vitals and downloaded resource sizes.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "next dev config load",
+    "content": "In previous versions the Next config file was loaded twice during development:\n\nWhen running the next dev commandWhen the next dev command started the Next.js server\n\nThis was inefficient because the next dev command doesn't need the config file to start the Next.js server.\n\nA consequence of this change is that, when running next dev checking if process.argv includes 'dev', in your Next.js config file, will return false.\n\nGood to know: The typegen, and build commands, are still visible in process.argv.\n\nThis is specially important for plugins that trigger side-effects on next dev. If that's the case, it might be enough to check if NODE_ENV is set to development.\n\nimport { startServer } from 'docs-lib/dev-server'\r\n\r\nconst isDev = process.env.NODE_ENV === 'development'\r\n\r\nif (isDev) {\r\n  startServer()\r\n}\r\n\r\nconst nextConfig = {\r\n  /* Your config options */\r\n}\r\n\r\nmodule.exports = nextConfig\n\nAlternatively, use the phase in which the configuration is loaded.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Build Adapters API (alpha)",
+    "content": "Following the Build Adapters RFC, the first alpha version of the Build Adapters API is now available.\n\nBuild Adapters allow you to create custom adapters that hook into the build process, enabling deployment platforms and custom build integrations to modify Next.js configuration or process build output.\n\nconst nextConfig = {\r\n  experimental: {\r\n    adapterPath: require.resolve('./my-adapter.js'),\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig\n\nadapterPath was promoted to a stable, top-level option in 16.2.0. See adapterPath for the current API reference.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Modern Sass API",
+    "content": "sass-loader has been bumped to v16, which supports modern Sass syntax and new features.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Removals",
+    "content": "These features were previously deprecated and are now removed:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "AMP Support",
+    "content": "AMP adoption has declined significantly, and maintaining this feature adds complexity to the framework. All AMP APIs and configurations have been removed:\n\namp configuration from your Next config filenext/amp hook imports and usage (useAmp)\n\n// Removed\r\nimport { useAmp } from 'next/amp'\r\n\r\n// Removed\r\nexport const config = { amp: true }\n\nexport const config = { amp: true } from pages\n\nconst nextConfig = {\r\n  // Removed\r\n  amp: {\r\n    canonicalBase: 'https://example.com',\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\nEvaluate if AMP is still necessary for your use case. Most performance benefits can now be achieved through Next.js's built-in optimizations and modern web standards.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "next lint Command",
+    "content": "The next lint command has been removed. Use Biome or ESLint directly. next build no longer runs linting.\n\nA codemod is available to automate migration:\n\npnpm dlx @next/codemod@canary next-lint-to-eslint-cli .\n\nnpx @next/codemod@canary next-lint-to-eslint-cli .\n\nyarn dlx @next/codemod@canary next-lint-to-eslint-cli .\n\nbunx @next/codemod@canary next-lint-to-eslint-cli .\n\nThe eslint option in the Next.js config file is also removed.\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  // No longer supported\r\n  // eslint: {},\r\n}\r\n\r\nexport default nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Runtime Configuration",
+    "content": "serverRuntimeConfig and publicRuntimeConfig have been removed. Use environment variables instead.\n\nBefore (Next.js 15):\n\nmodule.exports = {\r\n  serverRuntimeConfig: {\r\n    dbUrl: process.env.DATABASE_URL,\r\n  },\r\n  publicRuntimeConfig: {\r\n    apiUrl: '/api',\r\n  },\r\n}\n\nimport getConfig from 'next/config'\r\n\r\nexport default function Page() {\r\n  const { publicRuntimeConfig } = getConfig()\r\n  return <p>API URL: {publicRuntimeConfig.apiUrl}</p>\r\n}\n\nAfter (Next.js 16):\n\nFor server-only values, access environment variables directly in Server Components:\n\nasync function fetchData() {\r\n  const dbUrl = process.env.DATABASE_URL\r\n  // Use for server-side operations only\r\n  return await db.query(dbUrl, 'SELECT * FROM users')\r\n}\r\n\r\nexport default async function Page() {\r\n  const data = await fetchData()\r\n  return <div>{/* render data */}</div>\r\n}\n\nGood to know: Use the taint API to prevent accidentally passing sensitive server values to Client Components.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "Runtime Configuration",
+    "content": "n Page() {\r\n  const data = await fetchData()\r\n  return <div>{/* render data */}</div>\r\n}\n\nGood to know: Use the taint API to prevent accidentally passing sensitive server values to Client Components.\n\nFor client-accessible values, use the NEXT_PUBLIC_ prefix:\n\nNEXT_PUBLIC_API_URL=\"/api\"\n\n'use client'\r\n\r\nexport default function ClientComponent() {\r\n  const apiUrl = process.env.NEXT_PUBLIC_API_URL\r\n  return <p>API URL: {apiUrl}</p>\r\n}\n\nTo ensure environment variables are read at runtime (not bundled at build time), use the connection() function before reading from process.env:\n\nimport { connection } from 'next/server'\r\n\r\nexport default async function Page() {\r\n  await connection()\r\n  const config = process.env.RUNTIME_CONFIG\r\n  return <p>{config}</p>\r\n}\n\nLearn more about environment variables.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "devIndicators Options",
+    "content": "The following options have been removed from devIndicators:\n\nappIsrStatusbuildActivitybuildActivityPosition\n\nThe indicator itself remains available.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "experimental.dynamicIO and experimental.useCache",
+    "content": "The experimental.dynamicIO and experimental.useCache flags have been removed.\n\n// Before: experimental.useCache\r\nmodule.exports = {\r\n  experimental: {\r\n    useCache: true,\r\n  },\r\n}\n\n// Before: experimental.dynamicIO\r\nmodule.exports = {\r\n  experimental: {\r\n    dynamicIO: true,\r\n  },\r\n}\n\nIf you were actively using these flags, migrate to top-level cacheComponents:\n\nimport type { NextConfig } from 'next'\r\n\r\n// After\r\nconst nextConfig: NextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nexport default nextConfig\n\n// After\r\nmodule.exports = {\r\n  cacheComponents: true,\r\n}\n\nIf you were not actively adopting Cache Components, remove the flags instead. Enabling cacheComponents is not a rename-only change: it can surface build errors for uncached data outside of <Suspense> and requires adopting the Cache Components model.\n\nFor the full migration path, see Migrating to Cache Components.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  },
+  {
+    "documentTitle": "How to upgrade to version 16",
+    "documentDescription": "Upgrade your Next.js Application from Version 15 to 16.",
+    "sectionTitle": "unstable_rootParams",
+    "content": "The unstable_rootParams function has been removed. Use next/root-params instead.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\upgrading\\version-16.mdx"
+  }
+]

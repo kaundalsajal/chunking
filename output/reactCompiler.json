@@ -1,0 +1,30 @@
+[
+  {
+    "documentTitle": "reactCompiler",
+    "documentDescription": "Enable the React Compiler to automatically optimize component rendering.",
+    "sectionTitle": "Introduction",
+    "content": "Next.js includes support for the React Compiler, a tool designed to improve performance by automatically optimizing component rendering. This reduces the need for manual memoization using useMemo and useCallback.\n\nNext.js includes a custom performance optimization written in SWC that makes the React Compiler more efficient. Instead of running the compiler on every file, Next.js analyzes your project and only applies the React Compiler to relevant files. This avoids unnecessary work and leads to faster builds compared to using the Babel plugin on its own.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\reactCompiler.mdx"
+  },
+  {
+    "documentTitle": "reactCompiler",
+    "documentDescription": "Enable the React Compiler to automatically optimize component rendering.",
+    "sectionTitle": "How It Works",
+    "content": "The React Compiler runs through a Babel plugin. To keep builds fast, Next.js uses a custom SWC optimization that only applies the React Compiler to relevant files—like those with JSX or React Hooks.\n\nThis avoids compiling everything and keeps the performance cost minimal. You may still see slightly slower builds compared to the default Rust-based compiler, but the impact is small and localized.\n\nTo use it, install the babel-plugin-react-compiler:\n\npnpm add -D babel-plugin-react-compiler\n\nnpm install -D babel-plugin-react-compiler\n\nyarn add -D babel-plugin-react-compiler\n\nbun add -D babel-plugin-react-compiler\n\nThen, add reactCompiler option in next.config.js:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  reactCompiler: true,\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  reactCompiler: true,\r\n}\r\n\r\nmodule.exports = nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\reactCompiler.mdx"
+  },
+  {
+    "documentTitle": "reactCompiler",
+    "documentDescription": "Enable the React Compiler to automatically optimize component rendering.",
+    "sectionTitle": "Annotations",
+    "content": "You can configure the compiler to run in \"opt-in\" mode as follows:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  reactCompiler: {\r\n    compilationMode: 'annotation',\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  reactCompiler: {\r\n    compilationMode: 'annotation',\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig\n\nThen, you can annotate specific components or hooks with the \"use memo\" directive from React to opt-in:\n\nexport default function Page() {\r\n  'use memo'\r\n  // ...\r\n}\n\nexport default function Page() {\r\n  'use memo'\r\n  // ...\r\n}\n\nNote: You can also use the \"use no memo\" directive from React for the opposite effect, to opt-out a component or hook.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\reactCompiler.mdx"
+  }
+]

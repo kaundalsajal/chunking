@@ -1,0 +1,30 @@
+[
+  {
+    "documentTitle": "How to configure Babel in Next.js",
+    "documentDescription": "Extend the babel preset added by Next.js with your own configs.",
+    "sectionTitle": "Introduction",
+    "content": "ExamplesCustomizing babel configuration\n\nNext.js includes the next/babel preset to your app, which includes everything needed to compile React applications and server-side code. But if you want to extend the default Babel configs, it's also possible.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\02-guides\\babel.mdx"
+  },
+  {
+    "documentTitle": "How to configure Babel in Next.js",
+    "documentDescription": "Extend the babel preset added by Next.js with your own configs.",
+    "sectionTitle": "Adding Presets and Plugins",
+    "content": "To start, you only need to define a .babelrc file (or babel.config.js) in the root directory of your project. If such a file is found, it will be considered as the source of truth, and therefore it needs to define what Next.js needs as well, which is the next/babel preset.\n\nHere's an example .babelrc file:\n\n{\r\n  \"presets\": [\"next/babel\"],\r\n  \"plugins\": []\r\n}\n\nYou can take a look at this file to learn about the presets included by next/babel.\n\nTo add presets/plugins without configuring them, you can do it this way:\n\n{\r\n  \"presets\": [\"next/babel\"],\r\n  \"plugins\": [\"@babel/plugin-proposal-do-expressions\"]\r\n}",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\babel.mdx"
+  },
+  {
+    "documentTitle": "How to configure Babel in Next.js",
+    "documentDescription": "Extend the babel preset added by Next.js with your own configs.",
+    "sectionTitle": "Customizing Presets and Plugins",
+    "content": "To add presets/plugins with custom configuration, do it on the next/babel preset like so:\n\n{\r\n  \"presets\": [\r\n    [\r\n      \"next/babel\",\r\n      {\r\n        \"preset-env\": {},\r\n        \"transform-runtime\": {},\r\n        \"styled-jsx\": {},\r\n        \"class-properties\": {}\r\n      }\r\n    ]\r\n  ],\r\n  \"plugins\": []\r\n}\n\nTo learn more about the available options for each config, visit babel's documentation site.\n\nGood to know:Next.js uses the current Node.js version for server-side compilations.The modules option on \"preset-env\" should be kept to false, otherwise webpack code splitting is turned off.",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\babel.mdx"
+  }
+]

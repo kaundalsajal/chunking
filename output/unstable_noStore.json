@@ -1,0 +1,30 @@
+[
+  {
+    "documentTitle": "unstable_noStore",
+    "documentDescription": "API Reference for the unstable_noStore function.",
+    "sectionTitle": "Introduction",
+    "content": "In version 15, we recommend using connection instead of unstable_noStore.\n\nunstable_noStore can be used to declaratively opt out of prerendering and indicate a particular component should not be cached.\n\nimport { unstable_noStore as noStore } from 'next/cache';\r\n\r\nexport default async function ServerComponent() {\r\n  noStore();\r\n  const result = await db.query(...);\r\n  ...\r\n}\n\nGood to know:unstable_noStore is equivalent to cache: 'no-store' on a fetchunstable_noStore is preferred over export const dynamic = 'force-dynamic' as it is more granular and can be used on a per-component basis\n\nUsing unstable_noStore inside unstable_cache will not opt out of static generation. Instead, it will defer to the cache configuration to determine whether to cache the result or not.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\unstable_noStore.mdx"
+  },
+  {
+    "documentTitle": "unstable_noStore",
+    "documentDescription": "API Reference for the unstable_noStore function.",
+    "sectionTitle": "Usage",
+    "content": "If you prefer not to pass additional options to fetch, like cache: 'no-store', next: { revalidate: 0 } or in cases where fetch is not available, you can use noStore() as a replacement for all of these use cases.\n\nimport { unstable_noStore as noStore } from 'next/cache';\r\n\r\nexport default async function ServerComponent() {\r\n  noStore();\r\n  const result = await db.query(...);\r\n  ...\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\unstable_noStore.mdx"
+  },
+  {
+    "documentTitle": "unstable_noStore",
+    "documentDescription": "API Reference for the unstable_noStore function.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                         |\r\n| --------- | ----------------------------------------------- |\r\n| v15.0.0 | unstable_noStore deprecated for connection. |\r\n| v14.0.0 | unstable_noStore introduced.                  |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\unstable_noStore.mdx"
+  }
+]

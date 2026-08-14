@@ -1,0 +1,132 @@
+[
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Introduction",
+    "content": "Public pages show the same content to every user. Common examples include landing pages, marketing pages, and product pages.\n\nSince data is shared, these kind of pages can be prerendered ahead of time and reused. This leads to faster page loads and lower server costs.\n\nThis guide will show you how to build public pages that share data across users.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Example",
+    "content": "As an example, we'll build a product list page.\n\nWe'll start with a static header, add a product list with async external data, and learn how to render it without blocking the response. Finally, we'll add a user-specific promotion banner without switching the entire page to dynamic rendering.\n\nYou can find the resources used in this example here:\n\nVideoDemoCode",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Step 1: Add a simple header",
+    "content": "Let's start with a simple header.\n\n// Static component\r\nfunction Header() {\r\n  return <h1>Shop</h1>\r\n}\r\n\r\nexport default async function Page() {\r\n  return (\r\n    <>\r\n      <Header />\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Static components",
+    "content": "The <Header /> component doesn't depend on any inputs that change between requests, such as: external data, request headers, route params, the current time, or random values.\n\nGood to know: If you need to display locale-aware dates or times without a visible flash, see Preventing flash before hydration.\n\nSince its output never changes and can be determined ahead of time, this kind of component is called a static component. With no reason to wait for a request, Next.js can safely prerender the page at build time.\n\nWe can confirm this by running next build.\n\nRoute (app)      Revalidate  Expire\r\n┌ ○ /products           15m      1y\r\n└ ○ /_not-found\r\n\r\n○  (Static)  prerendered as static content\n\nNotice that the product route is marked as static, even though we didn't add any explicit configuration.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Step 2: Add the product list",
+    "content": "Now, let's fetch and render our product list.\n\nimport db from '@/db'\r\nimport { List } from '@/app/products/ui'\r\n\r\nfunction Header() {}\r\n\r\n// Dynamic component\r\nasync function ProductList() {\r\n  const products = await db.product.findMany()\r\n  return <List items={products} />\r\n}\r\n\r\nexport default async function Page() {\r\n  return (\r\n    <>\r\n      <Header />\r\n      <ProductList />\r\n    </>\r\n  )\r\n}\n\nUnlike the header, the product list depends on external data.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Dynamic components",
+    "content": "Since this data can change over time, the rendered output is no longer guaranteed to be stable. This makes the product list a dynamic component.\n\nWithout guidance, the framework assumes you want to fetch fresh data on every user request. This design choice reflects standard web behavior where a new server request renders the page.\n\nHowever, if this component is rendered at request time, fetching its data will delay the entire route from responding. If we refresh the page, we can see this happen.\n\nEven though the header is rendered instantly, it can't be sent to the browser until the product list has finished fetching.\n\nTo protect us from this performance cliff, the first time we await this uncached data Next.js shows a warning: accessing uncached data outside of <Suspense> prevents the route from being prerendered.\n\nAt this point, we have to decide how to unblock the response. Either:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Dynamic components",
+    "content": "uncached data Next.js shows a warning: accessing uncached data outside of <Suspense> prevents the route from being prerendered.\n\nAt this point, we have to decide how to unblock the response. Either:\n\nCache the component, so it becomes stable and can be prerendered with the rest of the page.Stream the component, so it becomes non-blocking and the rest of the page doesn't have to wait for it.\n\nIn our case, the product catalog is shared across all users, so caching is the right choice.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Cache components",
+    "content": "We can mark a function as cacheable using the 'use cache' directive.\n\nimport db from '@/db'\r\nimport { List } from '@/app/products/ui'\r\n\r\nfunction Header() {}\r\n\r\n// Cache component\r\nasync function ProductList() {\r\n  'use cache'\r\n  const products = await db.product.findMany()\r\n  return <List items={products} />\r\n}\r\n\r\nexport default async function Page() {\r\n  return (\r\n    <>\r\n      <Header />\r\n      <ProductList />\r\n    </>\r\n  )\r\n}\n\nThis turns it into a cache component. The first time it runs, whatever we return will be cached and reused.\n\nIf a cache component's inputs are available before the request arrives, it can be prerendered just like a static component.\n\nIf we refresh again, we can see the page loads instantly because the cache component doesn't block the response. And, if we run next build again, we can confirm the page is still static:\n\nRoute (app)      Revalidate  Expire\r\n┌ ○ /products           15m      1y\r\n└ ○ /_not-found\r\n\r\n○  (Static)  prerendered as static content",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Cache components",
+    "content": "run next build again, we can confirm the page is still static:\n\nRoute (app)      Revalidate  Expire\r\n┌ ○ /products           15m      1y\r\n└ ○ /_not-found\r\n\r\n○  (Static)  prerendered as static content\n\nBut, pages rarely stay static forever.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Step 3: Add a dynamic promotion banner",
+    "content": "Sooner or later, even simple pages need some dynamic content. To demonstrate this, let's add a promotional banner:\n\nimport db from '@/db'\r\nimport { List, Promotion } from '@/app/products/ui'\r\nimport { getPromotion } from '@/app/products/data'\r\n\r\nfunction Header() {}\r\n\r\nasync function ProductList() {}\r\n\r\n// Dynamic component\r\nasync function PromotionContent() {\r\n  const promotion = await getPromotion()\r\n  return <Promotion data={promotion} />\r\n}\r\n\r\nexport default async function Page() {\r\n  return (\r\n    <>\r\n      <PromotionContent />\r\n      <Header />\r\n      <ProductList />\r\n    </>\r\n  )\r\n}\n\nOnce again, this starts off as dynamic. And as before, introducing blocking behavior triggers a Next.js warning.\n\nLast time, the data was shared, so it could be cached. This time, the promotion depends on request specific inputs like the user's location and A/B tests, so we can't cache our way out of the blocking behavior.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Partial prerendering",
+    "content": "Adding dynamic content doesn't mean we have to go back to a fully blocking render. We can unblock the response with streaming.\n\nNext.js supports streaming by default. We can use a Suspense boundary to tell the framework where to slice the streamed response into chunks, and what fallback UI to show while content loads.\n\nimport { Suspense } from 'react'\r\nimport db from '@/db'\r\nimport { List, Promotion, PromotionSkeleton } from '@/app/products/ui'\r\nimport { getPromotion } from '@/app/products/data'\r\n\r\nfunction Header() {}\r\n\r\nasync function ProductList() {}\r\n\r\n// Dynamic component (streamed)\r\nasync function PromotionContent() {\r\n  const promotion = await getPromotion()\r\n  return <Promotion data={promotion} />\r\n}\r\n\r\nexport default async function Page() {\r\n  return (\r\n    <>\r\n      <Suspense fallback={<PromotionSkeleton />}>\r\n        <PromotionContent />\r\n      </Suspense>\r\n      <Header />\r\n      <ProductList />\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Partial prerendering",
+    "content": "ync function Page() {\r\n  return (\r\n    <>\r\n      <Suspense fallback={<PromotionSkeleton />}>\r\n        <PromotionContent />\r\n      </Suspense>\r\n      <Header />\r\n      <ProductList />\r\n    </>\r\n  )\r\n}\n\nThe fallback is prerendered alongside the rest of our static and cached content. The inner component streams in later, once its async work completes.\n\nWith this change, Next.js can separate prerenderable work from request-time work and the route becomes partially prerendered.\n\nAgain, we can confirm this by running next build:\n\nRoute (app)      Revalidate  Expire\r\n┌ ◐ /products    15m      1y\r\n└ ◐ /_not-found\r\n\r\n◐  (Partial Prerender)  Prerendered as static HTML with dynamic server-streamed content\n\nAt build time, most of the page, including the header, product list and promotion fallback, is rendered, cached and pushed to a content delivery network.\n\nAt request time, the prerendered part is served instantly from a CDN node close to the user.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Partial prerendering",
+    "content": "eader, product list and promotion fallback, is rendered, cached and pushed to a content delivery network.\n\nAt request time, the prerendered part is served instantly from a CDN node close to the user.\n\nIn parallel, the user specific promotion is rendered on the server, streamed to the client, and swapped into the fallback slot.\n\nIf we refresh the page one last time, we can see most of the page loads instantly, while the dynamic parts stream in as they become available.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  },
+  {
+    "documentTitle": "Building public pages",
+    "documentDescription": "Learn how to build public, \"static\" pages that share data across users, such as landing pages, list pages (products, blogs, etc.), marketing and news sites.",
+    "sectionTitle": "Next steps",
+    "content": "We've learned how to build mostly static pages that include pockets of dynamic content.\n\nWe started with a static page, added async work, and resolved the blocking behavior by caching what could be prerendered, and streaming what couldn't.\n\nIn future guides, we'll learn how to:\n\nRevalidate prerendered pages or cached data.Create variants of the same page with route params.Create private pages with personalized user data.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\public-static-pages.mdx"
+  }
+]

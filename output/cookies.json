@@ -1,0 +1,152 @@
+[
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Introduction",
+    "content": "cookies is an async function that allows you to read the HTTP incoming request cookies in Server Components, and read/write outgoing request cookies in Server Functions or Route Handlers.\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const theme = cookieStore.get('theme')\r\n  return '...'\r\n}\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const theme = cookieStore.get('theme')\r\n  return '...'\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Methods",
+    "content": "The following methods are available:\n\n| Method                      | Return Type      | Description                                                                     |\r\n| --------------------------- | ---------------- | ------------------------------------------------------------------------------- |\r\n| get('name')               | Object           | Accepts a cookie name and returns an object with the name and value.            |\r\n| getAll()                  | Array of objects | Returns a list of all the cookies with a matching name.                         |\r\n| has('name')               | Boolean          | Accepts a cookie name and returns a boolean based on if the cookie exists.      |\r\n| set(name, value, options) | -                | Accepts a cookie name, value, and options and sets the outgoing request cookie. |\r\n| delete(name)              | -                | Accepts a cookie name and deletes the cookie.                                   |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Methods",
+    "content": "ie name, value, and options and sets the outgoing request cookie. |\r\n| delete(name)              | -                | Accepts a cookie name and deletes the cookie.                                   |\r\n| toString()                | String           | Returns a string representation of the cookies.                                 |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Options",
+    "content": "When setting a cookie, the following properties from the options object are supported:\n\n| Option        | Type                                   | Description                                                                        |\r\n| ------------- | -------------------------------------- | ---------------------------------------------------------------------------------- |\r\n| name        | String                                 | Specifies the name of the cookie.                                                  |\r\n| value       | String                                 | Specifies the value to be stored in the cookie.                                    |\r\n| expires     | Date                                   | Defines the exact date when the cookie will expire.                                |\r\n| maxAge      | Number                                 | Sets the cookie’s lifespan in seconds.                                             |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Options",
+    "content": "the cookie will expire.                                |\r\n| maxAge      | Number                                 | Sets the cookie’s lifespan in seconds.                                             |\r\n| domain      | String                                 | Specifies the domain where the cookie is available.                                |\r\n| path        | String, default: '/'                 | Limits the cookie's scope to a specific path within the domain.                    |\r\n| secure      | Boolean                                | Ensures the cookie is sent only over HTTPS connections for added security.         |\r\n| httpOnly    | Boolean                                | Restricts the cookie to HTTP requests, preventing client-side access.              |\r\n| sameSite    | Boolean, 'lax', 'strict', 'none' | Controls the cookie's cross-site request behavior.                                 |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Options",
+    "content": "o HTTP requests, preventing client-side access.              |\r\n| sameSite    | Boolean, 'lax', 'strict', 'none' | Controls the cookie's cross-site request behavior.                                 |\r\n| priority    | String (\"low\", \"medium\", \"high\") | Specifies the cookie's priority                                                    |\r\n| partitioned | Boolean                                | Indicates whether the cookie is partitioned. |\n\nThe only option with a default value is path.\n\nTo learn more about these options, see the MDN docs.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Good to know",
+    "content": "cookies is an asynchronous function that returns a promise. You must use async/await or React's use function to access cookies.In version 14 and earlier, cookies was a synchronous function. To help with backwards compatibility, you can still access it synchronously in Next.js 15, but this behavior will be deprecated in the future.cookies is a Request-time API whose returned values cannot be known ahead of time. Using it in a layout or page will opt a route into dynamic rendering.With Cache Components, calling cookies() outside of a <Suspense> boundary prevents the route from being prerendered. See Next.js encountered runtime data during prerendering for fix options.The .delete method can only be called:In a Server Function or Route Handler.If it belongs to the same domain from which .set is called. For wildcard domains, the specific subdomain must be an exact match. Additionally, the code must be executed on the same protocol (HTTP or HTTPS) as the cookie you want to delete.HTTP does",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Good to know",
+    "content": "is called. For wildcard domains, the specific subdomain must be an exact match. Additionally, the code must be executed on the same protocol (HTTP or HTTPS) as the cookie you want to delete.HTTP does not allow setting cookies after streaming starts, so you must use .set in a Server Function or Route Handler.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Understanding Cookie Behavior in Server Components",
+    "content": "When working with cookies in Server Components, it's important to understand that cookies are fundamentally a client-side storage mechanism:\n\nReading cookies works in Server Components because you're accessing the cookie data that the client's browser sends to the server in the HTTP request headers.Setting cookies is not supported during Server Component rendering. To modify cookies, invoke a Server Function from the client or use a Route Handler.\n\nThe server can only send instructions (via Set-Cookie headers) to tell the browser to store cookies - the actual storage happens on the client side. This is why cookie operations that modify state (.set, .delete) must be performed in a Server Function or Route Handler where the response headers can be properly set.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Understanding Cookie Behavior in Server Functions",
+    "content": "After you set or delete a cookie in a Server Function, Next.js can return both the updated UI and new data in a single server roundtrip when the function is used as a Server Action (e.g., passed to a form's action prop). See Caching and Revalidating.\n\nThe UI is not unmounted, but effects that depend on data coming from the server will re-run.\n\nTo refresh cached data too, call revalidatePath or revalidateTag inside the function.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Getting a cookie",
+    "content": "You can use the (await cookies()).get('name') method to get a single cookie:\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const theme = cookieStore.get('theme')\r\n  return '...'\r\n}\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const theme = cookieStore.get('theme')\r\n  return '...'\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Getting all cookies",
+    "content": "You can use the (await cookies()).getAll() method to get all cookies with a matching name. If name is unspecified, it returns all the available cookies.\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  return cookieStore.getAll().map((cookie) => (\r\n    <div key={cookie.name}>\r\n      <p>Name: {cookie.name}</p>\r\n      <p>Value: {cookie.value}</p>\r\n    </div>\r\n  ))\r\n}\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  return cookieStore.getAll().map((cookie) => (\r\n    <div key={cookie.name}>\r\n      <p>Name: {cookie.name}</p>\r\n      <p>Value: {cookie.value}</p>\r\n    </div>\r\n  ))\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Setting a cookie",
+    "content": "You can use the (await cookies()).set(name, value, options) method in a Server Function or Route Handler to set a cookie. The options object is optional.\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function create(data) {\r\n  const cookieStore = await cookies()\r\n\r\n  cookieStore.set('name', 'lee')\r\n  // or\r\n  cookieStore.set('name', 'lee', { secure: true })\r\n  // or\r\n  cookieStore.set({\r\n    name: 'name',\r\n    value: 'lee',\r\n    httpOnly: true,\r\n    path: '/',\r\n  })\r\n}\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function create(data) {\r\n  const cookieStore = await cookies()\r\n\r\n  cookieStore.set('name', 'lee')\r\n  // or\r\n  cookieStore.set('name', 'lee', { secure: true })\r\n  // or\r\n  cookieStore.set({\r\n    name: 'name',\r\n    value: 'lee',\r\n    httpOnly: true,\r\n    path: '/',\r\n  })\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Checking if a cookie exists",
+    "content": "You can use the (await cookies()).has(name) method to check if a cookie exists:\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const hasCookie = cookieStore.has('theme')\r\n  return '...'\r\n}\n\nimport { cookies } from 'next/headers'\r\n\r\nexport default async function Page() {\r\n  const cookieStore = await cookies()\r\n  const hasCookie = cookieStore.has('theme')\r\n  return '...'\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Deleting cookies",
+    "content": "There are three ways you can delete a cookie.\n\nUsing the delete() method:\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function deleteCookie(data) {\r\n  const cookieStore = await cookies()\r\n  cookieStore.delete('name')\r\n}\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function deleteCookie(data) {\r\n  const cookieStore = await cookies()\r\n  cookieStore.delete('name')\r\n}\n\nSetting a new cookie with the same name and an empty value:\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function deleteCookie(data) {\r\n  const cookieStore = await cookies()\r\n  cookieStore.set('name', '')\r\n}\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function deleteCookie(data) {\r\n  const cookieStore = await cookies()\r\n  cookieStore.set('name', '')\r\n}\n\nSetting the maxAge to 0 will immediately expire a cookie. maxAge accepts a value in seconds.\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Deleting cookies",
+    "content": "ait cookies()\r\n  cookieStore.set('name', '')\r\n}\n\nSetting the maxAge to 0 will immediately expire a cookie. maxAge accepts a value in seconds.\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function deleteCookie(data) {\r\n  const cookieStore = await cookies()\r\n  cookieStore.set('name', 'value', { maxAge: 0 })\r\n}\n\n'use server'\r\n\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function deleteCookie(data) {\r\n  const cookieStore = await cookies()\r\n  cookieStore.set('name', 'value', { maxAge: 0 })\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  },
+  {
+    "documentTitle": "cookies",
+    "documentDescription": "API Reference for the cookies function.",
+    "sectionTitle": "Version History",
+    "content": "| Version      | Changes                                                                                                |\r\n| ------------ | ------------------------------------------------------------------------------------------------------ |\r\n| v15.0.0-RC | cookies is now an async function. A codemod is available. |\r\n| v13.0.0    | cookies introduced.                                                                                  |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\cookies.mdx"
+  }
+]

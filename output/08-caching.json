@@ -1,0 +1,330 @@
+[
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Introduction",
+    "content": "This page covers caching with Cache Components, enabled by setting cacheComponents: true in your next.config.ts file. If you're not using Cache Components, see the Caching and Revalidating (Previous Model) guide.\n\nCaching is a technique for storing the result of data fetching and other computations so that future requests for the same data can be served faster, without doing the work again.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Enabling Cache Components",
+    "content": "You can enable Cache Components by adding the cacheComponents option to your Next config file:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nmodule.exports = nextConfig\n\nGood to know: When Cache Components is enabled, GET Route Handlers follow the same prerendering model as pages. See Route Handlers with Cache Components for details.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Usage",
+    "content": "The use cache directive caches the return value of async functions and components. You can apply it at two levels:\n\nData-level: Cache a function that fetches or computes data (e.g., getProducts(), getUser(id))UI-level: Cache an entire component or page (e.g., async function BlogPosts())\n\nA cache directive gives a result a lifetime, information Next.js uses to apply rendering optimizations. See Prerendering for how cached results become part of the static shell and may be included in a prefetch.\n\nGood to know: We recommend pairing every cache directive with a cacheLife. Without one, the implicit default profile applies.\n\nArguments and any closed-over values from parent scopes automatically become part of the cache key, which means different inputs will produce separate cache entries. See serialization requirements and constraints for details on what can be cached and how arguments work.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Data-level caching",
+    "content": "To cache an asynchronous function that fetches data, add the use cache directive at the top of the function body:\n\nimport { cacheLife } from 'next/cache'\r\n\r\nexport async function getUsers() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  return db.query('SELECT * FROM users')\r\n}\n\nData-level caching is useful when the same data is used across multiple components, or when you want to cache the data independently from the UI.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "UI-level caching",
+    "content": "To cache an entire component, page, or layout, add the use cache directive at the top of the component or page body:\n\nimport { cacheLife } from 'next/cache'\r\n\r\nexport default async function Page() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n\r\n  const users = await db.query('SELECT * FROM users')\r\n\r\n  return (\r\n    <ul>\r\n      {users.map((user) => (\r\n        <li key={user.id}>{user.name}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\nIf you add \"use cache\" at the top of a file, all exported functions in the file will be cached.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Streaming uncached data",
+    "content": "For components that fetch data from an asynchronous source such as an API, a database, or any other async operation, and require fresh data on every request, do not use \"use cache\".\n\nInstead, wrap the component in <Suspense> and provide a fallback UI. The fallback ships with the prerendered shell while the async work runs at request time.\n\nimport { Suspense } from 'react'\r\n\r\nasync function LatestPosts() {\r\n  const data = await fetch('https://api.example.com/posts')\r\n  const posts = await data.json()\r\n  return (\r\n    <ul>\r\n      {posts.map((post) => (\r\n        <li key={post.id}>{post.title}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\r\n\r\nexport default function Page() {\r\n  return (\r\n    <>\r\n      <h1>My Blog</h1>\r\n      <Suspense fallback={<p>Loading posts...</p>}>\r\n        <LatestPosts />\r\n      </Suspense>\r\n    </>\r\n  )\r\n}\n\nFor example, <p>Loading posts...</p> is included in the static shell, and the posts stream in at request time.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Streaming uncached data",
+    "content": "{<p>Loading posts...</p>}>\r\n        <LatestPosts />\r\n      </Suspense>\r\n    </>\r\n  )\r\n}\n\nFor example, <p>Loading posts...</p> is included in the static shell, and the posts stream in at request time.\n\nWithout a <Suspense> boundary around the uncached read, the dev overlay surfaces the blocking-route insight with this fix:\n\nGood to know: Each fix card links to a detailed walkthrough with patterns, code samples, and trade-offs. Click a card to dive in.\n\n/* xref to the sync io section - that section should also emphaize that these are not random or timestamp sync invokations, in the referenced section */\n\n<Suspense> provides a fallback UI while async work completes, but it does not itself opt a component into dynamic rendering. If a component only performs synchronous work, it will complete during prerendering regardless of whether it is wrapped in <Suspense>.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Working with runtime APIs",
+    "content": "Runtime APIs require information that is only available when a user makes a request. These include:\n\ncookies - User's cookie dataheaders - Request headerssearchParams - URL query parametersparams - Dynamic route parameters. Use generateStaticParams to prerender specific values at build time, or ISR with Cache Components to serve an App Shell while unknown params resolve in the background.\n\nComponents that access runtime APIs should be wrapped in <Suspense>:\n\nimport { cookies } from 'next/headers'\r\nimport { Suspense } from 'react'\r\n\r\nasync function UserGreeting() {\r\n  const cookieStore = await cookies()\r\n  const theme = cookieStore.get('theme')?.value || 'light'\r\n  return <p>Your theme: {theme}</p>\r\n}\r\n\r\nexport default function Page() {\r\n  return (\r\n    <>\r\n      <h1>Dashboard</h1>\r\n      <Suspense fallback={<p>Loading...</p>}>\r\n        <UserGreeting />\r\n      </Suspense>\r\n    </>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Working with runtime APIs",
+    "content": "}</p>\r\n}\r\n\r\nexport default function Page() {\r\n  return (\r\n    <>\r\n      <h1>Dashboard</h1>\r\n      <Suspense fallback={<p>Loading...</p>}>\r\n        <UserGreeting />\r\n      </Suspense>\r\n    </>\r\n  )\r\n}\n\nA runtime API access without <Suspense> surfaces the same blocking-route insight in the dev overlay, with the same fix:\n\nRuntime-dependent data can still be given a cache lifetime with \"use cache: private\", another variant that ships with Cache Components. It gives a lifetime to a function that reads cookies, headers, or searchParams directly, so it can be included in a prefetch.\n\nThe following section shows an alternative to use cache: private: extracting a runtime value and passing it to a shared cached function.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Passing runtime values to cached functions",
+    "content": "You can extract values from runtime APIs and pass them as arguments to cached functions:\n\nimport { cookies } from 'next/headers'\r\nimport { Suspense } from 'react'\r\n\r\nexport default function Page() {\r\n  return (\r\n    <Suspense fallback={<div>Loading...</div>}>\r\n      <ProfileContent />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\n// Component (not cached) reads runtime data\r\nasync function ProfileContent() {\r\n  const session = (await cookies()).get('session')?.value\r\n  return <CachedContent sessionId={session} />\r\n}\r\n\r\n// Cached component receives extracted value as a prop\r\nasync function CachedContent({ sessionId }: { sessionId: string }) {\r\n  'use cache'\r\n  // sessionId becomes part of the cache key\r\n  const data = await fetchUserData(sessionId)\r\n  return <div>{data}</div>\r\n}\n\nAt request time, <CachedContent /> executes if no matching cache entry is found, and stores the result for future requests with the same sessionId.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Passing runtime values to cached functions",
+    "content": "UserData(sessionId)\r\n  return <div>{data}</div>\r\n}\n\nAt request time, <CachedContent /> executes if no matching cache entry is found, and stores the result for future requests with the same sessionId.\n\nGood to know: Because <CachedContent /> is gated behind request data, it isn't added to the prerendered static shell. At runtime it's cached in-memory by default, which doesn't persist across serverless requests, so it may re-evaluate on each request. Reach for 'use cache: remote' for durable, shared caching.\n\nWith this pattern, prefetching can prerender <CachedContent /> with the user's actual session during a client transition and have the result ready before the click. This works even when server-side entries rarely survive between requests, because the lifetime you assign is what lets the result join the prefetch, where the client treats it as fresh for its cacheLife stale window.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Static, cached, and streaming",
+    "content": "Here's a complete example showing static content, cached dynamic content, and streaming dynamic content working together on a single page:\n\nimport { Suspense } from 'react'\r\nimport { cookies } from 'next/headers'\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\nimport Link from 'next/link'\r\n\r\nexport default function BlogPage() {\r\n  return (\r\n    <>\r\n      {/* Static content - prerendered automatically */}\r\n      <header>\r\n        <h1>Our Blog</h1>\r\n        <nav>\r\n          <Link href=\"/\">Home</Link> | <Link href=\"/about\">About</Link>\r\n        </nav>\r\n      </header>\r\n\r\n      {/* Cached dynamic content - included in the static shell */}\r\n      <BlogPosts />\r\n\r\n      {/* Runtime dynamic content - streams at request time */}\r\n      <Suspense fallback={<p>Loading your preferences...</p>}>\r\n        <UserPreferences />\r\n      </Suspense>\r\n    </>\r\n  )\r\n}\r\n\r\ntype Post = { id: string; title: string; author: string; date: string }",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Static, cached, and streaming",
+    "content": "<Suspense fallback={<p>Loading your preferences...</p>}>\r\n        <UserPreferences />\r\n      </Suspense>\r\n    </>\r\n  )\r\n}\r\n\r\ntype Post = { id: string; title: string; author: string; date: string }\r\n\r\n// Everyone sees the same blog posts (revalidated every hour)\r\nasync function BlogPosts() {\r\n  'use cache'\r\n  cacheLife('hours')\r\n  cacheTag('posts')\r\n\r\n  const res = await fetch('https://api.vercel.app/blog')\r\n  const posts: Post[] = await res.json()\r\n\r\n  return (\r\n    <section>\r\n      <h2>Latest Posts</h2>\r\n      <ul>\r\n        {posts.map((post) => (\r\n          <li key={post.id}>\r\n            <h3>{post.title}</h3>\r\n            <p>\r\n              By {post.author} on {post.date}\r\n            </p>\r\n          </li>\r\n        ))}\r\n      </ul>\r\n    </section>\r\n  )\r\n}\r\n\r\n// UI that depends on a value stored in cookies\r\nasync function UserPreferences() {\r\n  const theme = (await cookies()).get('theme')?.value || 'light'\r\n  const favoriteCategory = (await cookies()).get('category')?.value",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Static, cached, and streaming",
+    "content": "a value stored in cookies\r\nasync function UserPreferences() {\r\n  const theme = (await cookies()).get('theme')?.value || 'light'\r\n  const favoriteCategory = (await cookies()).get('category')?.value\r\n\r\n  return (\r\n    <aside>\r\n      <p>Your theme: {theme}</p>\r\n      {favoriteCategory && <p>Favorite category: {favoriteCategory}</p>}\r\n    </aside>\r\n  )\r\n}\n\nDuring prerendering, the header (static) and blog posts (cached with use cache) become part of the static shell, along with the fallback UI for user preferences. The UI preferences stored in cookies stream in at request time.\n\nReading cookies() here doesn't opt-in the whole route into dynamic rendering, the way the previous rendering model did. The Suspense boundary provides fallback UI where the runtime access streams, while static and cached content still ship in the initial HTML.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Static, cached, and streaming",
+    "content": "namic rendering, the way the previous rendering model did. The Suspense boundary provides fallback UI where the runtime access streams, while static and cached content still ship in the initial HTML.\n\nJust as <Suspense> contains async access, an error boundary contains failures: wrap them around a subtree that might error during rendering. Use catchError for component-level boundaries, or the error.js file convention for route-level boundaries.\n\nAs you build, consider that inside generateMetadata and generateViewport, uncached fetches or runtime data access surface the same insights and errors as in your page, guiding you to the rendering you intend. For incremental static regeneration with both known and unknown param values, see ISR with Cache Components.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Random values and timestamps",
+    "content": "Operations like Math.random(), Date.now(), or crypto.randomUUID() produce different values each time they execute. Cache Components requires you to explicitly handle these.\n\nGood to know: performance.now() is meant for telemetry, so Next.js doesn't treat it as a value to guard. Use it for timing and pass the result to your logger or metrics rather than rendering it.\n\nTo generate unique values per request, defer to request time by calling connection() before these operations, and wrap the component in <Suspense>:\n\nimport { connection } from 'next/server'\r\nimport { Suspense } from 'react'\r\n\r\nasync function UniqueContent() {\r\n  await connection()\r\n  const uuid = crypto.randomUUID()\r\n  return <p>Request ID: {uuid}</p>\r\n}\r\n\r\nexport default function Page() {\r\n  return (\r\n    <Suspense fallback={<p>Loading...</p>}>\r\n      <UniqueContent />\r\n    </Suspense>\r\n  )\r\n}\n\nAlternatively, you can cache the result so all users see the same value until revalidation:",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Random values and timestamps",
+    "content": "return (\r\n    <Suspense fallback={<p>Loading...</p>}>\r\n      <UniqueContent />\r\n    </Suspense>\r\n  )\r\n}\n\nAlternatively, you can cache the result so all users see the same value until revalidation:\n\nexport default async function Page() {\r\n  'use cache'\r\n  const buildId = crypto.randomUUID()\r\n  return <p>Build ID: {buildId}</p>\r\n}\n\nYou don't need to memorize which operations behave this way. The dev overlay surfaces a blocking-prerender-random, blocking-prerender-current-time, or blocking-prerender-crypto insight (depending on the call) with these fixes:",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Predictable values",
+    "content": "Unlike random values and timestamps, which can vary between renders, module imports, synchronous I/O, and pure computations produce the same result every time they run. Components using only these operations are prerendered automatically, and their output becomes part of the static HTML at build time.\n\nimport fs from 'node:fs'\r\n\r\nexport default async function Page() {\r\n  const constants = await import('./constants.json')\r\n  const content = fs.readFileSync('./config.json', 'utf-8')\r\n  const items = JSON.parse(content).items ?? []\r\n\r\n  return (\r\n    <div>\r\n      <h1>{constants.appName}</h1>\r\n      <ul>\r\n        {items.map((item) => (\r\n          <li key={item.id}>{item.value}</li>\r\n        ))}\r\n      </ul>\r\n    </div>\r\n  )\r\n}\n\nGood to know: This includes queries to embedded databases with synchronous APIs, such as better-sqlite3 or Node.js's built-in node:sqlite. If you need per-request data from a synchronous source, call connection() before the query.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Predictable values",
+    "content": "ries to embedded databases with synchronous APIs, such as better-sqlite3 or Node.js's built-in node:sqlite. If you need per-request data from a synchronous source, call connection() before the query.\n\nSome asynchronous APIs read local resources that don't depend on the incoming request, such as fonts or configuration files. When those resources are expected to be the same for every request, read them once at module scope instead of during rendering\n\nIf the data should instead be computed during rendering and reused across requests, wrap the read in use cache. If the data depends on the incoming request or is expected to change over time, read it during request-time rendering.\n\nimport { readFile } from 'node:fs/promises'\r\n\r\nconst content = await readFile('./config.json', 'utf-8')\r\nconst items = JSON.parse(content).items ?? []\r\n\r\nexport default function Page() {\r\n  return (\r\n    <ul>\r\n      {items.map((item) => (\r\n        <li key={item.id}>{item.value}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Predictable values",
+    "content": "ms = JSON.parse(content).items ?? []\r\n\r\nexport default function Page() {\r\n  return (\r\n    <ul>\r\n      {items.map((item) => (\r\n        <li key={item.id}>{item.value}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\nIn this example, the configuration file is expected to be the same for every request, so it is read once at module scope. Calling await readFile() inside the component would be treated as uncached data that must be either accessed within use cache or behind a <Suspense> boundary. Since this file does not depend on the request and is not expected to change, module scope is the simplest option.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Prerendering",
+    "content": "At build time, Next.js renders your route's component tree. How each component is handled depends on the APIs it uses:\n\nuse cache: the result is cached and included in the static shell, as long as its lifetime isn't too short<Suspense>: fallback UI is included in the static shell while the content streams at request timePredictable values: module imports, fs.readFileSync, and pure computations complete during prerender and are included in the static shell automaticallyRandom values and timestamps: use connection() + <Suspense> to get a unique value per request, or use cache to share one across users\n\nThis generates a static shell consisting of HTML for initial page loads and a serialized RSC Payload for client-side navigation, ensuring the browser receives fully rendered content instantly whether users navigate directly to the URL or transition from another page. This rendering approach is called Partial Prerendering (PPR), the default behavior with Cache Components.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Prerendering",
+    "content": "content instantly whether users navigate directly to the URL or transition from another page. This rendering approach is called Partial Prerendering (PPR), the default behavior with Cache Components.\n\nEvery produced static shell can be served directly from a CDN, without going through to the upstream server. This makes direct navigations instant.\n\nWhat ends up in a route's static shell depends on what's known at build time. When a route's dynamic params are known, the shell contains that concrete content, and any remaining uncached or runtime data still streams behind its <Suspense> fallback. When the params aren't known, the reusable, URL-independent version is the App Shell: the same static shell with the param-specific parts left behind their fallbacks. Incremental Static Regeneration fills in the concrete versions after the first visit.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Prerendering",
+    "content": "endent version is the App Shell: the same static shell with the param-specific parts left behind their fallbacks. Incremental Static Regeneration fills in the concrete versions after the first visit.\n\nNext.js requires you to explicitly handle components that can't complete during prerendering. It surfaces a validation insight in the dev overlay and dev server console that names the route and points at fixes (cache the access, move it into a <Suspense> boundary, or opt the route out). This validation keeps every route producing a static shell, so direct navigations stay instant.\n\n🎥 Watch: Why Partial Prerendering and how it works → YouTube (10 minutes).",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Maximizing the static shell",
+    "content": "The deeper your async work sits in the tree, the more of the page can be prerendered. This is the structural pattern Cache Components rewards: a general practice worth applying everywhere, and the foundation for the instant navigation and prefetching that follow. It applies to all runtime APIs and async operations like data fetches.\n\nConsider a layout that destructures params at the top level:\n\nexport default async function Layout({\r\n  children,\r\n  params,\r\n}: LayoutProps<'/shop/[slug]'>) {\r\n  const { slug } = await params\r\n\r\n  return (\r\n    <div>\r\n      <Sidebar />\r\n      <h1>{slug}</h1>\r\n      {children}\r\n    </div>\r\n  )\r\n}\n\nIf this param is dynamic (not provided by generateStaticParams), it is runtime data and the layout cannot be prerendered.\n\nHowever, it is often possible to read the parameter value further down the tree. Instead of awaiting at the layout level, pass the params promise down and await there:\n\nimport { Suspense } from 'react'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Maximizing the static shell",
+    "content": "ver, it is often possible to read the parameter value further down the tree. Instead of awaiting at the layout level, pass the params promise down and await there:\n\nimport { Suspense } from 'react'\r\n\r\n// Not async: this layout never awaits params\r\nexport default function Layout({\r\n  children,\r\n  params,\r\n}: LayoutProps<'/shop/[slug]'>) {\r\n  return (\r\n    <div>\r\n      <Sidebar />\r\n      <Suspense fallback={<h1>Loading...</h1>}>\r\n        {/* await happens inside the boundary, so the shell still renders */}\r\n        {params.then(({ slug }) => (\r\n          <SlugHeading slug={slug} />\r\n        ))}\r\n      </Suspense>\r\n      {children}\r\n    </div>\r\n  )\r\n}\r\n\r\nfunction SlugHeading({ slug }: { slug: string }) {\r\n  return <h1>{slug}</h1>\r\n}\n\nNow <Sidebar />, {children}, and the Suspense fallback are all part of the static shell. Only SlugHeading streams in at request time. You can also pass the entire params promise and await it in the child component.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Maximizing the static shell",
+    "content": ", {children}, and the Suspense fallback are all part of the static shell. Only SlugHeading streams in at request time. You can also pass the entire params promise and await it in the child component.\n\nThe same principle applies to cookies(), headers(), searchParams, and data fetches. See Reusing data with React.cache for a related pattern.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Instant navigation",
+    "content": "Cache Components shipped in 16.0.0 with verification that direct visits to a route produce a static shell. Client navigations are different: a <Suspense> boundary that covers a direct visit may not be part of the render during a transition. Getting that structure right is easier when the framework steps in. Cache Components now validates these navigations too, giving you insights and errors that guide you to make navigations to your route instant. For example, wrap data in <Suspense>, cache it with use cache, or move where the access happens.\n\nRead the Instant navigation guide for examples and inspection tools.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Prefetching",
+    "content": "With Partial Prefetching enabled, the router prefetches each route's App Shell by default. The App Shell includes static content and session data derived from cookies() and headers(). To also prefetch cached content that depends on a link's URL data, such as searchParams or dynamic params, set prefetch={true} on that link.\n\nWith <Link prefetch={true}> pointing at a Partial Prefetching route, Next.js renders that route's component tree again at prefetch time, this time with the destination URL resolved. The same rules apply, but more of the tree resolves now that its searchParams and params are in scope:\n\nuse cache called with values extracted from runtime APIs (passed as arguments) joins the per-link prefetchuse cache: private executes on the server, reads runtime data directly, and caches the result in the browser as part of the per-link prefetch<Suspense> fallbacks stay in the prefetched UI while uncached content streams at request time",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Prefetching",
+    "content": "server, reads runtime data directly, and caches the result in the browser as part of the per-link prefetch<Suspense> fallbacks stay in the prefetched UI while uncached content streams at request time\n\nThis per-link prefetch includes cached content that resolves after the destination URL is known. It costs a server invocation per prefetchable link.\n\nFor example, take a search page that reads searchParams from the URL:\n\nimport { Suspense } from 'react'\r\n\r\nexport default function SearchPage(props: PageProps<'/search'>) {\r\n  return (\r\n    <Suspense fallback={<p>Loading results...</p>}>\r\n      <Results searchParams={props.searchParams} />\r\n    </Suspense>\r\n  )\r\n}\r\n\r\nasync function Results({\r\n  searchParams,\r\n}: Pick<PageProps<'/search'>, 'searchParams'>) {\r\n  const { q } = await searchParams\r\n  const results = await search(q)\r\n  return (\r\n    <ul>\r\n      {results.map((result) => (\r\n        <li key={result.id}>{result.title}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Prefetching",
+    "content": "{ q } = await searchParams\r\n  const results = await search(q)\r\n  return (\r\n    <ul>\r\n      {results.map((result) => (\r\n        <li key={result.id}>{result.title}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\r\n\r\nasync function search(query: string | string[] | undefined) {\r\n  'use cache'\r\n  return db.search(query)\r\n}\n\nOn a direct visit, <Results> streams in behind the fallback.\n\nWhen a <Link> to /search?q=shoes is prefetched, the framework resolves searchParams from the link's URL, so the cached search result is included in the runtime prerender before the click. The browser then reuses it until its stale time passes or the searchParams change.\n\nSee Adopting Partial Prefetching to understand how <Link> prefetching behaves and how to adopt it.\n\nSee the Optimizing prefetching guide for full patterns and the prefetch reference for all modes.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Where cached content is stored",
+    "content": "A cached function's output is serialized into an RSC payload, at build time or at runtime. This payload is what everything else works from. Next.js renders it into HTML, keeps it in a server or remote store, or sends it to the browser, and cacheLife sets how long each copy stays fresh:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Where cached content is stored",
+    "content": "me. This payload is what everything else works from. Next.js renders it into HTML, keeps it in a server or remote store, or sends it to the browser, and cacheLife sets how long each copy stays fresh:\n\nPrerendered HTML. The payload is rendered to HTML and stored on disk when self-hosting, or in your platform's durable storage behind a CDN. That HTML is the static shell at build time and the concrete page after an ISR upgrade, with revalidate and expire controlling when it's rebuilt.Shared store. By default the result stays in a per-instance, in-memory store that is ephemeral on serverless. use cache: remote moves it to a durable cache handler shared across instances, a network roundtrip that pays off only at a high hit rate.Browser. The payload is included in the RSC sent for a client navigation or prefetch, where the browser keeps it fresh for its stale window. use cache: private results live only here.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Where cached content is stored",
+    "content": "a high hit rate.Browser. The payload is included in the RSC sent for a client navigation or prefetch, where the browser keeps it fresh for its stale window. use cache: private results live only here.\n\nGood to know: An App Shell that reads cookies() or headers() is session-specific, cached per session on the client rather than in the shared server cache.\n\nAll of these stores are scoped to a single deployment. A new deploy starts fresh, new prerenders are built, and use cache entries don't carry over, even durable remote ones, because the cache key includes the build id. See Runtime caching considerations for per-environment behavior and Self-hosting for configuring the server cache.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Incremental Static Regeneration",
+    "content": "In a route with dynamic param segments, generateStaticParams prerenders the URLs you list at build time. Any other URL is served the App Shell instantly, then upgraded in the background with its now-known params and cached for the next visitor.\n\nSee ISR with Cache Components for the full walkthrough.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  },
+  {
+    "documentTitle": "Caching",
+    "documentDescription": "Learn how to cache data and UI in Next.js",
+    "sectionTitle": "Bots and crawlers",
+    "content": "Browsers receive the static shell instantly. Bots and crawlers are detected by their user agent and handled differently: because they need a complete document, Next.js skips the shell and renders the entire page dynamically at request time, then sends the finished HTML once the render completes.\n\nBecause the shell is re-rendered instead of reused, work that completed during prerendering now runs at request time for a bot. If part of your shell depends on inputs that only exist while prerendering, such as build-time data or values that are not reachable in the request-time environment, a page that loads for a person can fail to render for a crawler. Make sure the data your shell relies on is also available at request time. See Bots and crawlers in the Streaming guide for more details.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\01-getting-started\\08-caching.mdx"
+  }
+]

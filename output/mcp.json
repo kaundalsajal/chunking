@@ -1,0 +1,628 @@
+[
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Introduction",
+    "content": "The Model Context Protocol (MCP) is an open standard that allows AI agents and coding assistants to interact with your applications through a standardized interface.\n\nNext.js 16+ includes MCP support that enables coding agents to access your application's internals in real-time. To use this functionality, install the next-devtools-mcp package.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Getting started",
+    "content": "Requirements: Next.js 16 or above\n\nAdd next-devtools-mcp to the .mcp.json file at the root of your project:\n\n{\r\n  \"mcpServers\": {\r\n    \"next-devtools\": {\r\n      \"command\": \"npx\",\r\n      \"args\": [\"-y\", \"next-devtools-mcp@latest\"]\r\n    }\r\n  }\r\n}\n\nThat's it! When you start your development server, next-devtools-mcp will automatically discover and connect to your running Next.js instance.\n\nFor more configuration options, see the next-devtools-mcp repository.",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Capabilities",
+    "content": "next-devtools-mcp provides coding agents with a growing set of capabilities:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Application Runtime Access",
+    "content": "Error Detection: Retrieve current build errors, runtime errors, and type errors from your dev serverLive State Queries: Access real-time application state and runtime informationPage Metadata: Query page routes, components, and rendering detailsServer Actions: Inspect Server Actions and component hierarchiesDevelopment Logs: Access development server logs and console output",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Development Tools",
+    "content": "Documentation Gateway: Points your agent at the version-accurate docs bundled with your installed Next.js (in node_modules/next/dist/docs/), so explanations and generated code match the version you are runningBrowser Testing: Playwright MCP integration for verifying pages in the browser\n\nNote: The Next.js team is actively expanding these capabilities. New tools and features are added regularly to improve the agent development experience.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Development workflow",
+    "content": "Start your Next.js development server:\n\npnpm dev\n\nnpm run dev\n\nyarn dev\n\nbun dev\n\nYour Coding Agent will automatically connect to the running Next.js instance via next-devtools-mcpOpen your application in the browser to view pagesQuery your agent for insights and diagnostics (see examples below)",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "Through next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "hrough next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "rough next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ough next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ugh next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "gh next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "h next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "next-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ext-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "xt-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "t-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "-devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "devtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "evtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "vtools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "tools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ools-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ols-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ls-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "s-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "-mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "mcp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "cp, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "p, agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": ", agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "agents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "gents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ents can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "nts can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ts can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "s can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "can use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "an use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "n use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "use the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "se the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "e the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "the following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "he following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "e following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "following tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ollowing tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "llowing tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "lowing tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "owing tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "wing tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ing tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ng tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "g tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "tools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ools:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ols:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "ls:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "s:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": ":",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "get_errors: Retrieve current build errors, runtime errors, and type errors from your dev serverget_logs: Get the path to the development log file containing browser console logs and server outputget_page_metadata: Get metadata about specific pages including routes, components, and rendering informationget_project_metadata: Retrieve project structure, configuration, and dev server URLget_routes: Get all routes that will become entry points by scanning the filesystem. Returns routes grouped by router type (appRouter, pagesRouter). Dynamic segments appear as [param] or [...slug] patternsget_server_action_by_id: Look up Server Actions by their ID to find the source file and function nameget_compilation_issues: Retrieve compilation warnings and errors for the whole project from the bundler. Turbopack only.compile_route: Trigger on-demand compilation of a specific route without making an HTTP request to it. Accepts either a routeSpecifier (e.g. /blog/[slug], as returned by get_routes) or a",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Available tools",
+    "content": "urbopack only.compile_route: Trigger on-demand compilation of a specific route without making an HTTP request to it. Accepts either a routeSpecifier (e.g. /blog/[slug], as returned by get_routes) or a path (e.g. /blog/hello-world) which is resolved to the matching route using the dev router's live route table. Returns any compilation issues for the route. Turbopack only.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Using with agents",
+    "content": "MCP-compatible Coding Agents can automatically discover and connect to your Next.js development server, providing them with rich context about your project.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Benefits for agent-assisted development",
+    "content": "Agents can:\n\nMake context-aware suggestions: Recommend the right place to add new features based on your existing structureQuery live application state: Check current configuration, routes, and middleware during developmentUnderstand your app router pages layout: Know exactly which page and layout are renderedProvide accurate implementations: Generate code that follows your project's patterns and conventions",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Error detection and diagnosis",
+    "content": "Ask your agent about errors in real-time:\n\nUser: \"What errors are currently in my application?\"\n\nThe agent will:\n\nQuery your running Next.js application via next-devtools-mcpRetrieve current build errors, runtime errors, and type errorsAnalyze the errors and provide actionable fixes\n\nAgent response (click to expand)> fix errors on the page\r\n\r\n⏺ I'll help you fix the errors on the page. Let me first check what errors exist by looking at the\r\n  current state of the project.\r\n\r\n⏺ next-devtools - nextjs_runtime (MCP)(action: \"discover_servers\")\r\n⏺ next-devtools - nextjs_runtime (MCP)(action: \"call_tool\", toolName: \"get_errors\")\r\n\r\n⏺ I found a hydration error on the /about page. The error shows that the server is rendering\r\n  \"server\" but the client is rendering \"client\", causing a mismatch. Let me create a todo list and fix\r\n   this issue.\r\n\r\n⏺ Perfect! Now let me check for errors on the page.           01:14 PM  claude-sonnet-4-5-20250929",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Error detection and diagnosis",
+    "content": "nt is rendering \"client\", causing a mismatch. Let me create a todo list and fix\r\n   this issue.\r\n\r\n⏺ Perfect! Now let me check for errors on the page.           01:14 PM  claude-sonnet-4-5-20250929\r\n\r\n⏺ next-devtools - nextjs_runtime (MCP)(action: \"call_tool\", toolName: \"get_errors\")\r\n  ⎿ {\r\n      \"success\": true,\r\n      \"port\": 3000,\r\n      \"toolName\": \"get_errors\",\r\n      \"result\": {\r\n        \"content\": [\r\n          {\r\n            \"type\": \"text\",\r\n            \"text\": \"# Found errors in 1 browser session(s)\\n\\n## Session: /about\\n\\n**1 error(s)\r\n     found**\\n\\n### Runtime Errors\\n\\n#### Error 1 (Type: recoverable)\\n\\n**Error**: Hydration failed",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "Upgrading and best practices",
+    "content": "Get help with Next.js concepts and migrations:\n\nUser: \"Help me upgrade my Next.js app to version 16\"\n\nThe agent will run the official upgrade codemod (npx @next/codemod@latest upgrade latest) and provide step-by-step instructions for handling breaking changes.\n\nAsk conceptual questions:\n\nUser: \"When should I use 'use client' in App Router?\"\n\nThe agent will read the version-accurate Next.js docs bundled with your project and provide documentation-backed explanations with examples from your codebase.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "How it works",
+    "content": "Next.js 16+ includes a built-in MCP endpoint at /_next/mcp that runs within your development server. The next-devtools-mcp package automatically discovers and communicates with these endpoints, allowing it to:\n\nConnect to multiple Next.js instances running on different portsForward tool calls to the appropriate Next.js dev serverProvide a unified interface for coding agents\n\nThis architecture decouples the agent interface from the internal implementation, enabling next-devtools-mcp to work seamlessly across different Next.js projects.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  },
+  {
+    "documentTitle": "Enabling Next.js MCP Server for Coding Agents",
+    "documentDescription": "Learn how to use Next.js MCP support to allow coding agents access to your application state",
+    "sectionTitle": "MCP server not connecting",
+    "content": "Ensure you're using Next.js v16 or aboveVerify next-devtools-mcp is configured in your .mcp.jsonStart your development server: npm run devRestart your development server if it was already runningCheck that your coding agent has loaded the MCP server configuration",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\mcp.mdx"
+  }
+]

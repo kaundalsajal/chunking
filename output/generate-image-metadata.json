@@ -1,0 +1,114 @@
+[
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Introduction",
+    "content": "You can use generateImageMetadata to generate different versions of one image or return multiple images for one route segment. This is useful for when you want to avoid hard-coding metadata values, such as for icons.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Parameters",
+    "content": "generateImageMetadata function accepts the following parameters:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "params (optional)",
+    "content": "An object containing the dynamic route parameters object from the root segment down to the segment generateImageMetadata is called from.\n\nexport function generateImageMetadata({\r\n  params,\r\n}: {\r\n  params: { slug: string }\r\n}) {\r\n  // ...\r\n}\n\nexport function generateImageMetadata({ params }) {\r\n  // ...\r\n}\n\n| Route                           | URL         | params                  |\r\n| ------------------------------- | ----------- | ------------------------- |\r\n| app/shop/icon.js              | /shop     | undefined               |\r\n| app/shop/[slug]/icon.js       | /shop/1   | { slug: '1' }           |\r\n| app/shop/[tag]/[item]/icon.js | /shop/1/2 | { tag: '1', item: '2' } |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Returns",
+    "content": "The generateImageMetadata function should return an array of objects containing the image's metadata such as alt and size. In addition, each item must include an id value which will be passed as a promise to the props of the image generating function.\n\n| Image Metadata Object | Type                                |\r\n| --------------------- | ----------------------------------- |\r\n| id                  | string (required)                 |\r\n| alt                 | string                            |\r\n| size                | { width: number; height: number } |\r\n| contentType         | string                            |\n\nimport { ImageResponse } from 'next/og'\r\n\r\nexport function generateImageMetadata() {\r\n  return [\r\n    {\r\n      contentType: 'image/png',\r\n      size: { width: 48, height: 48 },\r\n      id: 'small',\r\n    },\r\n    {\r\n      contentType: 'image/png',\r\n      size: { width: 72, height: 72 },\r\n      id: 'medium',\r\n    },\r\n  ]\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Returns",
+    "content": "'image/png',\r\n      size: { width: 48, height: 48 },\r\n      id: 'small',\r\n    },\r\n    {\r\n      contentType: 'image/png',\r\n      size: { width: 72, height: 72 },\r\n      id: 'medium',\r\n    },\r\n  ]\r\n}\r\n\r\nexport default async function Icon({ id }: { id: Promise<string | number> }) {\r\n  const iconId = await id\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          width: '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n          fontSize: 88,\r\n          background: '#000',\r\n          color: '#fafafa',\r\n        }}\r\n      >\r\n        Icon {iconId}\r\n      </div>\r\n    )\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\n\r\nexport function generateImageMetadata() {\r\n  return [\r\n    {\r\n      contentType: 'image/png',\r\n      size: { width: 48, height: 48 },\r\n      id: 'small',\r\n    },\r\n    {\r\n      contentType: 'image/png',\r\n      size: { width: 72, height: 72 },\r\n      id: 'medium',\r\n    },",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Returns",
+    "content": "tentType: 'image/png',\r\n      size: { width: 48, height: 48 },\r\n      id: 'small',\r\n    },\r\n    {\r\n      contentType: 'image/png',\r\n      size: { width: 72, height: 72 },\r\n      id: 'medium',\r\n    },\r\n  ]\r\n}\r\n\r\nexport default async function Icon({ id }) {\r\n  const iconId = await id\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={{\r\n          width: '100%',\r\n          height: '100%',\r\n          display: 'flex',\r\n          alignItems: 'center',\r\n          justifyContent: 'center',\r\n          fontSize: 88,\r\n          background: '#000',\r\n          color: '#fafafa',\r\n        }}\r\n      >\r\n        Icon {iconId}\r\n      </div>\r\n    )\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Image generation function props",
+    "content": "When using generateImageMetadata, the default export image generation function receives the following props:",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "id",
+    "content": "A promise that resolves to the id value from one of the items returned by generateImageMetadata. The id will be a string or number depending on what was returned from generateImageMetadata.\n\nexport default async function Icon({ id }: { id: Promise<string | number> }) {\r\n  const iconId = await id\r\n  // Use iconId to generate the image\r\n}\n\nexport default async function Icon({ id }) {\r\n  const iconId = await id\r\n  // Use iconId to generate the image\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "params (optional)",
+    "content": "A promise that resolves to an object containing the dynamic route parameters from the root segment down to the segment the image is colocated in.\n\nexport default async function Icon({\r\n  params,\r\n}: {\r\n  params: Promise<{ slug: string }>\r\n}) {\r\n  const { slug } = await params\r\n  // Use slug to generate the image\r\n}\n\nexport default async function Icon({ params }) {\r\n  const { slug } = await params\r\n  // Use slug to generate the image\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Using external data",
+    "content": "This example uses the params object and external data to generate multiple Open Graph images for a route segment.\n\nimport { ImageResponse } from 'next/og'\r\nimport { getCaptionForImage, getOGImages } from '@/app/utils/images'\r\n\r\nexport async function generateImageMetadata({\r\n  params,\r\n}: {\r\n  params: { id: string }\r\n}) {\r\n  const images = await getOGImages(params.id)\r\n\r\n  return images.map((image, idx) => ({\r\n    id: idx,\r\n    size: { width: 1200, height: 600 },\r\n    alt: image.text,\r\n    contentType: 'image/png',\r\n  }))\r\n}\r\n\r\nexport default async function Image({\r\n  params,\r\n  id,\r\n}: {\r\n  params: Promise<{ id: string }>\r\n  id: Promise<number>\r\n}) {\r\n  const productId = (await params).id\r\n  const imageId = await id\r\n  const text = await getCaptionForImage(productId, imageId)\r\n\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={\r\n          {\r\n            // ...\r\n          }\r\n        }\r\n      >\r\n        {text}\r\n      </div>\r\n    )\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Using external data",
+    "content": "e(productId, imageId)\r\n\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={\r\n          {\r\n            // ...\r\n          }\r\n        }\r\n      >\r\n        {text}\r\n      </div>\r\n    )\r\n  )\r\n}\n\nimport { ImageResponse } from 'next/og'\r\nimport { getCaptionForImage, getOGImages } from '@/app/utils/images'\r\n\r\nexport async function generateImageMetadata({ params }) {\r\n  const images = await getOGImages(params.id)\r\n\r\n  return images.map((image, idx) => ({\r\n    id: idx,\r\n    size: { width: 1200, height: 600 },\r\n    alt: image.text,\r\n    contentType: 'image/png',\r\n  }))\r\n}\r\n\r\nexport default async function Image({ params, id }) {\r\n  const productId = (await params).id\r\n  const imageId = await id\r\n  const text = await getCaptionForImage(productId, imageId)\r\n\r\n  return new ImageResponse(\r\n    (\r\n      <div\r\n        style={\r\n          {\r\n            // ...\r\n          }\r\n        }\r\n      >\r\n        {text}\r\n      </div>\r\n    )\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  },
+  {
+    "documentTitle": "generateImageMetadata",
+    "documentDescription": "Learn how to generate multiple images in a single Metadata API special file.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                                                                             |\r\n| --------- | --------------------------------------------------------------------------------------------------- |\r\n| v16.0.0 | id passed to the Image generation function is now a promise that resolves to string or number |\r\n| v16.0.0 | params passed to the Image generation function is now a promise that resolves to an object        |\r\n| v13.3.0 | generateImageMetadata introduced.                                                                 |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-image-metadata.mdx"
+  }
+]

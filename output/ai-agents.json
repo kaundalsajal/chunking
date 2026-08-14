@@ -1,0 +1,180 @@
+[
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Introduction",
+    "content": "Next.js ships version-matched documentation inside the next package, allowing AI coding agents to reference accurate, up-to-date APIs and patterns. An AGENTS.md file at the root of your project directs agents to these bundled docs instead of their training data.\n\nPoint agents at the bundled docs, give them runtime visibility into the dev server, let errors drive the fixes, and hand multi-step workflows to skills.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 1: Point agents at the bundled docs",
+    "content": "Make sure AGENTS.md exists at your project root and directs agents to the bundled docs. When you install next, the Next.js documentation is bundled at node_modules/next/dist/docs/, mirroring the structure of the Next.js documentation site:\n\nnode_modules/next/dist/docs/\r\n├── 01-app/\r\n│   ├── 01-getting-started/\r\n│   ├── 02-guides/\r\n│   └── 03-api-reference/\r\n├── 02-pages/\r\n├── 03-architecture/\r\n└── index.mdx\n\nAgents always have access to docs that match your installed version, with no network request or external lookup required. Upgrading Next.js also upgrades the bundled docs, including new guidance for existing features. Most AI coding agents, including Claude Code, Codex, Cursor, and GitHub Copilot, automatically read AGENTS.md when they start a session.",
+    "metadata": {
+      "language": "txt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "New projects",
+    "content": "create-next-app generates AGENTS.md and CLAUDE.md automatically. No additional setup is needed:\n\npnpm create next-app@canary\n\nnpx create-next-app@canary\n\nyarn create next-app@canary\n\nbun create next-app@canary\n\nIf you don't want the agent files, pass --no-agents-md:\n\nnpx create-next-app@canary --no-agents-md",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Existing projects",
+    "content": "On Next.js 16.3 or later, run next dev. When an AI coding agent is detected in the environment and no managed block is present, Next.js auto-generates AGENTS.md and CLAUDE.md at the project root. Existing AGENTS.md or CLAUDE.md files are upserted, so content outside the managed block is preserved:\n\n<!-- BEGIN:nextjs-agent-rules -->\r\n\r\n# This is NOT the Next.js you know\r\n\r\nThis version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.\r\n\r\nThis block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.\r\n\r\n<!-- END:nextjs-agent-rules -->\n\n@AGENTS.md",
+    "metadata": {
+      "language": "md"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Existing projects",
+    "content": "/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.\r\n\r\n<!-- END:nextjs-agent-rules -->\n\n@AGENTS.md\n\nAdd your own project-specific instructions outside the <!-- BEGIN:nextjs-agent-rules --> and <!-- END:nextjs-agent-rules --> markers, and they're preserved when Next.js updates the managed block.",
+    "metadata": {
+      "language": "md"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Opting out",
+    "content": "We believe leaving auto-generation on is a good default. Benchmark results on nextjs.org/evals show agents do better when they read the bundled docs. If you really want to opt out, set agentRules to false in your config:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  agentRules: false,\r\n}\r\n\r\nexport default nextConfig",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "For earlier versions",
+    "content": "On version 16.2, the docs are bundled but AGENTS.md is not auto-generated. Add the file yourself with an instruction to read the bundled docs at node_modules/next/dist/docs/ before writing code.\n\nOn version 16.1 and earlier, the docs are not bundled either. Use the legacy agents-md command, which downloads a version-matched copy to .next-docs/ in the project root and indexes it in AGENTS.md:\n\nnpx @next/codemod@canary agents-md",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Docs over the network",
+    "content": "The Next.js docs are also available as Markdown over the network, for agents that fetch pages instead of reading node_modules. Append .md to any page URL on nextjs.org/docs for a plain Markdown version, and clients that send an Accept: text/markdown header get Markdown too. This includes the per-error pages under /docs/messages, which are not bundled.\n\nThe index at /docs/llms.txt and the single-file /docs/llms-full.txt follow the llms.txt convention, so agents that already read llms.txt for other tools can discover the Next.js docs the same way.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 2: Give agents runtime visibility",
+    "content": "Run next dev and let the agent work against the running server. Runtime errors, client-side warnings, and rendered output live in the browser, where agents can't look. Next.js surfaces two complementary views that an agent can read from the terminal.\n\nFirst, next dev forwards browser console errors and warnings to the terminal (the logging.browserToTerminal config), so the output agents already read carries the client-side failures they're asked to fix.\n\nnext dev also writes its PID, port, and URL to .next/dev/lock. A second next dev in the same project prints the running server's URL and the PID to kill, so an agent connects to the existing server instead of starting a duplicate.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 2: Give agents runtime visibility",
+    "content": "ort, and URL to .next/dev/lock. A second next dev in the same project prints the running server's URL and the PID to kill, so an agent connects to the existing server instead of starting a duplicate.\n\nThe framework's view comes from the Next.js MCP server at /_next/mcp, which exposes the running dev server's routes, server logs, and compilation issues. Its get_compilation_issues and compile_route tools report whether the code compiles straight from the dev server, so an agent doesn't have to run a full next build to find out.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 2: Give agents runtime visibility",
+    "content": "nd compilation issues. Its get_compilation_issues and compile_route tools report whether the code compiles straight from the dev server, so an agent doesn't have to run a full next build to find out.\n\nThe browser's view comes from agent-browser, a CLI that exposes the DOM, console, network, and Web Vitals as structured text. With React DevTools enabled (pass --enable react-devtools to agent-browser open, which the next-dev-loop skill does for you), it also reports the component tree and which Suspense boundaries are still pending. An agent runs a command like react tree, reads the output, and decides what to inspect next, instead of looking at a DevTools panel it can't see.\n\nThe next-dev-loop skill builds on both views, combining the framework's and the browser's perspective into a single edit-and-verify loop.\n\nGood to know: For the story behind this tooling, see the Next.js 16.2 and Next.js 16.3 AI blog posts.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 3: Let errors drive the fixes",
+    "content": "With Cache Components enabled, a blocking error presents labeled fixes, each making a different trade-off. The dev overlay adds a Copy prompt button that packages the chosen fix into a paste-ready prompt. The prompt walks the agent through reading the matching error page, applying the canonical pattern, and verifying the result at runtime.\n\nThe same menu prints in the next dev terminal and in next build output, so an agent reading CI logs sees it too:\n\nRoute \"/products/[slug]\": Next.js encountered uncached data during prerendering.\r\n\r\n`fetch(...)` or `connection()` accessed outside of `<Suspense>` prevents the route\r\nfrom being prerendered, blocking the page load and leading to a slower user experience.\r\n\r\nWays to fix this:\r\n  - [stream] Provide a placeholder with `<Suspense fallback={...}>` around the data access\r\n  - [cache] Cache the data access with `\"use cache\"` (does not apply to `connection()`)\r\n  - [block] Set `export const instant = false` to allow a blocking route",
+    "metadata": {
+      "language": "txt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 3: Let errors drive the fixes",
+    "content": "ack={...}>` around the data access\r\n  - [cache] Cache the data access with `\"use cache\"` (does not apply to `connection()`)\r\n  - [block] Set `export const instant = false` to allow a blocking route\r\n\r\nLearn more: https://nextjs.org/docs/messages/blocking-prerender-dynamic\r\n    at ProductPage (app/products/[slug]/page.tsx:52:32)\r\n    ...\n\nIn next dev the stack frame resolves to your source, in both the dev overlay and the terminal. A production build minifies server code, so when the build error alone isn't enough, next build --debug-prerender turns on server source maps and continues past the first failure.",
+    "metadata": {
+      "language": "txt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 3: Let errors drive the fixes",
+    "content": "y and the terminal. A production build minifies server code, so when the build error alone isn't enough, next build --debug-prerender turns on server source maps and continues past the first failure.\n\nThe Learn more link resolves to a per-error page under /docs/messages written for agents to read. Each page follows the same shape, with the canonical patterns for every fix, the trade-offs against the other fixes, and the gotchas an agent is likely to miss on a first attempt. The Instant navigation guide walks through the full loop an agent runs on these errors, from reading the insight to writing an instant() test that fails before the fix and passes once it's in place.",
+    "metadata": {
+      "language": "txt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "Step 4: Hand multi-step workflows to Skills",
+    "content": "Framework knowledge comes from the bundled docs, not from Skills. Benchmark results show that always-available context outperforms on-demand retrieval. Skills cover the tasks that are workflows rather than lookups, such as adopting Cache Components or Partial Prefetching across an app. Next.js Skills package these as structured instructions an agent installs and follows, sequencing the work and pointing at the relevant docs and runtime tooling along the way.\n\nYou can browse the source for these Skills in the Next.js repository and find them on skills.sh.\n\nThe Skills serve three different workflow types:\n\nRuntime foundations such as next-dev-loop give any coding task a repeatable inspect, edit, and verify cycle.Interactive workflows make broader changes with user checkpoints, such as adopting Cache Components or Partial Prefetching across an app.Unattended loops work toward a verifiable goal and stop only for genuine decisions.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "next-dev-loop",
+    "content": "The next-dev-loop runtime foundation verifies changes against a running dev server using the MCP server and browser.\n\nnpx skills add vercel/next.js --skill next-dev-loop\n\nThen give the agent this prompt:\n\nAfter every edit, verify the page still works at runtime using the next-dev-loop Skill.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "next-cache-components-adoption",
+    "content": "The next-cache-components-adoption Skill migrates an app to Cache Components:\n\nTurns the flag on and finds the routes that can't prerender.Fixes them one feature at a time, checking in with you before moving on.Confirms a feature against next dev and next build before leaving it.\n\nYou choose whether the work lands as a series of PRs or stays on one branch.\n\nnpx skills add vercel/next.js --skill next-cache-components-adoption\n\nThen give the agent this prompt:\n\nAdopt Cache Components in this project using the next-cache-components-adoption Skill.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "next-cache-components-optimizer",
+    "content": "The next-cache-components-optimizer Skill takes a target route or set of routes and works toward the UI you want on screen at click time:\n\nWrites a failing instant() test for the UI you named.Refactors the route until it passes, often by moving a data read below a <Suspense> boundary.Commits the passing test with the refactoring, so it catches future regressions.\n\nIt needs a route that already builds with Cache Components.\n\nnpx skills add vercel/next.js --skill next-cache-components-optimizer\n\nThen give the agent a prompt like:\n\nMake the navigation from /settings to /dashboard instant using the next-cache-components-optimizer Skill. The header and the project list should be part of the instant UI.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  },
+  {
+    "documentTitle": "How to set up your Next.js project for AI coding agents",
+    "documentDescription": "Learn how to configure your Next.js project so AI coding agents use up-to-date documentation instead of outdated training data.",
+    "sectionTitle": "next-partial-prefetching-adoption",
+    "content": "The next-partial-prefetching-adoption Skill moves an app onto Partial Prefetching, where links share one App Shell:\n\nAudits the existing <Link prefetch={true}> calls with you.Turns the flag on and resolves the insights it surfaces.Marks the routes whose URL data might be worth prefetching later.\n\nIt needs Cache Components already adopted.\n\nnpx skills add vercel/next.js --skill next-partial-prefetching-adoption\n\nThen give the agent this prompt:\n\nAdopt Partial Prefetching in this project using the next-partial-prefetching-adoption Skill.",
+    "metadata": {
+      "language": "prompt"
+    },
+    "sourceFile": "docs\\01-app\\02-guides\\ai-agents.mdx"
+  }
+]

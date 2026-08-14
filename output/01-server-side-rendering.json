@@ -1,0 +1,22 @@
+[
+  {
+    "documentTitle": "Server-side Rendering (SSR)",
+    "documentDescription": "Use Server-side Rendering to render pages on each request.",
+    "sectionTitle": "Introduction",
+    "content": "Also referred to as \"SSR\" or \"Dynamic Rendering\".\n\nIf a page uses Server-side Rendering, the page HTML is generated on each request.\n\nTo use Server-side Rendering for a page, you need to export an async function called getServerSideProps. This function will be called by the server on every request.\n\nFor example, suppose that your page needs to prerender frequently updated data (fetched from an external API). You can write getServerSideProps which fetches this data and passes it to Page like below:\n\nexport default function Page({ data }) {\r\n  // Render data...\r\n}\r\n\r\n// This gets called on every request\r\nexport async function getServerSideProps() {\r\n  // Fetch data from external API\r\n  const res = await fetch(`https://.../data`)\r\n  const data = await res.json()\r\n\r\n  // Pass data to the page via props\r\n  return { props: { data } }\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\01-server-side-rendering.mdx"
+  },
+  {
+    "documentTitle": "Server-side Rendering (SSR)",
+    "documentDescription": "Use Server-side Rendering to render pages on each request.",
+    "sectionTitle": "Introduction",
+    "content": "deProps() {\r\n  // Fetch data from external API\r\n  const res = await fetch(`https://.../data`)\r\n  const data = await res.json()\r\n\r\n  // Pass data to the page via props\r\n  return { props: { data } }\r\n}\n\nAs you can see, getServerSideProps is similar to getStaticProps, but the difference is that getServerSideProps is run on every request instead of on build time.\n\nTo learn more about how getServerSideProps works, check out our Data Fetching documentation.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\01-server-side-rendering.mdx"
+  }
+]

@@ -1,0 +1,94 @@
+[
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Introduction",
+    "content": "ExamplesAgility CMS Example (Demo)Builder.io Example (Demo)ButterCMS Example (Demo)Contentful Example (Demo)Cosmic Example (Demo)DatoCMS Example (Demo)DotCMS Example (Demo)Drupal Example (Demo)Enterspeed Example (Demo)GraphCMS Example (Demo)Keystone Example (Demo)Kontent.ai Example (Demo)Makeswift Example (Demo)Plasmic Example (Demo)Prepr Example (Demo)Prismic Example (Demo)Sanity Example (Demo)Sitecore XM Cloud Example (Demo)Storyblok Example (Demo)Strapi Example (Demo)TakeShape Example (Demo)Tina Example (Demo)Umbraco Example (Demo)Umbraco Heartcore Example (Demo)Webiny Example (Demo)WordPress Example (Demo)Blog Starter Example (Demo)Static Tweet (Demo)\n\nIf a page uses Static Generation, the page HTML is generated at build time. That means in production, the page HTML is generated when you run next build. This HTML will then be reused on each request. It can be cached by a CDN.\n\nIn Next.js, you can statically generate pages with or without data. Let's take a look at each case.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Static Generation without data",
+    "content": "By default, Next.js prerenders pages using Static Generation without fetching data. Here's an example:\n\nfunction About() {\r\n  return <div>About</div>\r\n}\r\n\r\nexport default About\n\nNote that this page does not need to fetch any external data to be prerendered. In cases like this, Next.js generates a single HTML file per page during build time.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Static Generation with data",
+    "content": "Some pages require fetching external data for prerendering. There are two scenarios, and one or both might apply. In each case, you can use these functions that Next.js provides:\n\nYour page content depends on external data: Use getStaticProps.Your page paths depend on external data: Use getStaticPaths (usually in addition to getStaticProps).",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Scenario 1: Your page content depends on external data",
+    "content": "Example: Your blog page might need to fetch the list of blog posts from a CMS (content management system).\n\n// TODO: Need to fetch `posts` (by calling some API endpoint)\r\n//       before this page can be prerendered.\r\nexport default function Blog({ posts }) {\r\n  return (\r\n    <ul>\r\n      {posts.map((post) => (\r\n        <li>{post.title}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\nTo fetch this data on prerender, Next.js allows you to export an async function called getStaticProps from the same file. This function gets called at build time and lets you pass fetched data to the page's props on prerender.\n\nexport default function Blog({ posts }) {\r\n  // Render posts...\r\n}\r\n\r\n// This function gets called at build time\r\nexport async function getStaticProps() {\r\n  // Call an external API endpoint to get posts\r\n  const res = await fetch('https://.../posts')\r\n  const posts = await res.json()\r\n\r\n  // By returning { props: { posts } }, the Blog component",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Scenario 1: Your page content depends on external data",
+    "content": "ps() {\r\n  // Call an external API endpoint to get posts\r\n  const res = await fetch('https://.../posts')\r\n  const posts = await res.json()\r\n\r\n  // By returning { props: { posts } }, the Blog component\r\n  // will receive `posts` as a prop at build time\r\n  return {\r\n    props: {\r\n      posts,\r\n    },\r\n  }\r\n}\n\nTo learn more about how getStaticProps works, check out the Data Fetching documentation.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Scenario 2: Your page paths depend on external data",
+    "content": "Next.js allows you to create pages with dynamic routes. For example, you can create a file called pages/posts/[id].js to show a single blog post based on id. This will allow you to show a blog post with id: 1 when you access posts/1.\n\nTo learn more about dynamic routing, check the Dynamic Routing documentation.\n\nHowever, which id you want to prerender at build time might depend on external data.\n\nExample: suppose that you've only added one blog post (with id: 1) to the database. In this case, you'd only want to prerender posts/1 at build time.\n\nLater, you might add the second post with id: 2. Then you'd want to prerender posts/2 as well.\n\nSo your page paths that are prerendered depend on external data. To handle this, Next.js lets you export an async function called getStaticPaths from a dynamic page (pages/posts/[id].js in this case). This function gets called at build time and lets you specify which paths you want to prerender.\n\n// This function gets called at build time",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Scenario 2: Your page paths depend on external data",
+    "content": "ths from a dynamic page (pages/posts/[id].js in this case). This function gets called at build time and lets you specify which paths you want to prerender.\n\n// This function gets called at build time\r\nexport async function getStaticPaths() {\r\n  // Call an external API endpoint to get posts\r\n  const res = await fetch('https://.../posts')\r\n  const posts = await res.json()\r\n\r\n  // Get the paths we want to prerender based on posts\r\n  const paths = posts.map((post) => ({\r\n    params: { id: post.id },\r\n  }))\r\n\r\n  // We'll prerender only these paths at build time.\r\n  // { fallback: false } means other routes should 404.\r\n  return { paths, fallback: false }\r\n}\n\nAlso in pages/posts/[id].js, you need to export getStaticProps so that you can fetch the data about the post with this id and use it to prerender the page:\n\nexport default function Post({ post }) {\r\n  // Render post...\r\n}\r\n\r\nexport async function getStaticPaths() {\r\n  // ...\r\n}\r\n\r\n// This also gets called at build time",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "Scenario 2: Your page paths depend on external data",
+    "content": "and use it to prerender the page:\n\nexport default function Post({ post }) {\r\n  // Render post...\r\n}\r\n\r\nexport async function getStaticPaths() {\r\n  // ...\r\n}\r\n\r\n// This also gets called at build time\r\nexport async function getStaticProps({ params }) {\r\n  // params contains the post `id`.\r\n  // If the route is like /posts/1, then params.id is 1\r\n  const res = await fetch(`https://.../posts/${params.id}`)\r\n  const post = await res.json()\r\n\r\n  // Pass post data to the page via props\r\n  return { props: { post } }\r\n}\n\nTo learn more about how getStaticPaths works, check out the Data Fetching documentation.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "When should I use Static Generation?",
+    "content": "We recommend using Static Generation (with and without data) whenever possible because your page can be built once and served by CDN, which makes it much faster than having a server render the page on every request.\n\nYou can use Static Generation for many types of pages, including:\n\nMarketing pagesBlog posts and portfoliosE-commerce product listingsHelp and documentation\n\nYou should ask yourself: \"Can I prerender this page ahead of a user's request?\" If the answer is yes, then you should choose Static Generation.\n\nOn the other hand, Static Generation is not a good idea if you cannot prerender a page ahead of a user's request. Maybe your page shows frequently updated data, and the page content changes on every request.\n\nIn cases like this, you can do one of the following:",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  },
+  {
+    "documentTitle": "Static Site Generation (SSG)",
+    "documentDescription": "Use Static Site Generation (SSG) to prerender pages at build time.",
+    "sectionTitle": "When should I use Static Generation?",
+    "content": "cannot prerender a page ahead of a user's request. Maybe your page shows frequently updated data, and the page content changes on every request.\n\nIn cases like this, you can do one of the following:\n\nUse Static Generation with Client-side data fetching: You can skip prerendering some parts of a page and then use client-side JavaScript to populate them. To learn more about this approach, check out the Data Fetching documentation.Use Server-Side Rendering: Next.js prerenders a page on each request. It will be slower because the page cannot be cached by a CDN, but the prerendered page will always be up-to-date. We'll talk about this approach below.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\03-building-your-application\\02-rendering\\02-static-site-generation.mdx"
+  }
+]

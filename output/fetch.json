@@ -1,0 +1,304 @@
+[
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "Introduction",
+    "content": "Next.js extends the Web fetch() API to allow each request on the server to set its own persistent caching and revalidation semantics.\n\nIn the browser, the cache option indicates how a fetch request will interact with the browser's HTTP cache. With this extension, cache indicates how a server-side fetch request will interact with the framework's persistent cache.\n\nYou can call fetch with async and await directly within Server Components.\n\nexport default async function Page() {\r\n  let data = await fetch('https://api.vercel.app/blog')\r\n  let posts = await data.json()\r\n  return (\r\n    <ul>\r\n      {posts.map((post) => (\r\n        <li key={post.id}>{post.title}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}\n\nexport default async function Page() {\r\n  let data = await fetch('https://api.vercel.app/blog')\r\n  let posts = await data.json()\r\n  return (\r\n    <ul>\r\n      {posts.map((post) => (\r\n        <li key={post.id}>{post.title}</li>\r\n      ))}\r\n    </ul>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "fetch(url, options)",
+    "content": "Since Next.js extends the Web fetch() API, you can use any of the native options available.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "Configure how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "onfigure how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "nfigure how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "figure how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "igure how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "gure how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "ure how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "re how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "e how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "how the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "ow the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "w the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "the request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "he request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "e request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "request should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "equest should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "quest should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "uest should interact with Next.js caching.\n\nfetch(`https://...`, { cache: 'force-cache' | 'no-store' })\n\nauto no cache (default): Next.js fetches the resource from the remote server on every request in development, but will fetch once during next build because the route will be statically prerendered. If Request-time APIs are detected on the route, Next.js will fetch the resource on every request.no-store: Next.js fetches the resource from the remote server on every request, even if Request-time APIs are not detected on the route.force-cache: Next.js looks for a matching request in its server-side cache. A request matches on its URL, method, headers, and body, so requests that differ in any of these are cached separately.If there is a match and it is fresh, it will be returned from the cache.If there is no match or a stale match, Next.js fetches the resource from the remote server and updates the cache with the downloaded resource. Only responses with a 200 HTTP status code are stored.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.cache",
+    "content": "he.If there is no match or a stale match, Next.js fetches the resource from the remote server and updates the cache with the downloaded resource. Only responses with a 200 HTTP status code are stored.\n\nGood to know: Caching is opt-in. Set cache: 'force-cache' to cache any request, including POST and requests that send authorization or cookie headers. Draft Mode bypasses the cache entirely (no read or write).",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.next.revalidate",
+    "content": "fetch(`https://...`, { next: { revalidate: false | 0 | number } })\n\nSet the cache lifetime of a resource (in seconds).\n\nfalse - Cache the resource indefinitely. Semantically equivalent to revalidate: Infinity. The HTTP cache may evict older resources over time.0 - Prevent the resource from being cached.number - (in seconds) Specify the resource should have a cache lifetime of at most n seconds.\n\nGood to know:If an individual fetch() request sets a revalidate number lower than the default revalidate of a route, the whole route revalidation interval will be decreased.If two fetch requests with the same URL in the same route have different revalidate values, the lower value will be used.Conflicting options such as { revalidate: 3600, cache: 'no-store' } are not allowed, both will be ignored, and in development mode a warning will be printed to the terminal.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "options.next.tags",
+    "content": "fetch(`https://...`, { next: { tags: ['collection'] } })\n\nSet the cache tags of a resource. Data can then be revalidated on-demand using revalidateTag. The max length for a custom tag is 256 characters and the max tag items is 128.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "Memoization",
+    "content": "fetch requests using GET with the same URL and options are automatically memoized during a server render pass. If you call the same fetch in multiple Server Components, layouts, pages, generateStaticParams and generateViewport, Next.js executes it only once and shares the result. This is separate from persistent caching: memoization lasts only for a single render pass, while cached responses persist across requests.\n\nTo opt out, pass an AbortController signal to fetch:\n\nconst { signal } = new AbortController()\r\nfetch(url, { signal })\n\nGood to know: Memoization does not apply in Route Handlers, since they are not part of the React component tree.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "Fetch default auto no store and cache: 'no-store' not showing fresh data in development",
+    "content": "Next.js caches fetch responses in Server Components across Hot Module Replacement (HMR) in local development for faster responses and to reduce costs for billed API calls.\n\nBy default, the HMR cache applies to all fetch requests, including those with the default auto no cache and cache: 'no-store' option. This means uncached requests will not show fresh data between HMR refreshes. However, the cache will be cleared on navigation or full-page reloads.\n\nSee the serverComponentsHmrCache docs for more information.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "Hard refresh and caching in development",
+    "content": "In development mode, if the request includes the cache-control: no-cache header, options.cache, options.next.revalidate, and options.next.tags are ignored, and the fetch request is served from the source.\n\nBrowsers typically include cache-control: no-cache when the cache is disabled in developer tools or during a hard refresh.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  },
+  {
+    "documentTitle": "fetch",
+    "documentDescription": "API reference for the extended fetch function.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes             |\r\n| --------- | ------------------- |\r\n| v13.0.0 | fetch introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\fetch.mdx"
+  }
+]

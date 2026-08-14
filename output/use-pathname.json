@@ -1,0 +1,96 @@
+[
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Introduction",
+    "content": "usePathname is a Client Component hook that lets you read the current URL's pathname.\n\n'use client'\r\n\r\nimport { usePathname } from 'next/navigation'\r\n\r\nexport default function ExampleClientComponent() {\r\n  const pathname = usePathname()\r\n  return <p>Current pathname: {pathname}</p>\r\n}\n\n'use client'\r\n\r\nimport { usePathname } from 'next/navigation'\r\n\r\nexport default function ExampleClientComponent() {\r\n  const pathname = usePathname()\r\n  return <p>Current pathname: {pathname}</p>\r\n}\n\nusePathname intentionally requires using a Client Component. It's important to note Client Components are not a de-optimization. They are an integral part of the Server Components architecture.\n\nFor example, a Client Component with usePathname will be rendered into HTML on the initial page load. When navigating to a new route, this component does not need to be re-fetched. Instead, the component is downloaded once (in the client JavaScript bundle), and re-renders based on the current state.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Introduction",
+    "content": "When navigating to a new route, this component does not need to be re-fetched. Instead, the component is downloaded once (in the client JavaScript bundle), and re-renders based on the current state.\n\nGood to know:Reading the current URL from a Server Component is not supported. This design is intentional to support layout state being preserved across page navigations.If your page is being statically prerendered and your app has rewrites in next.config or a Proxy file, reading the pathname with usePathname() can result in hydration mismatch errors, because the initial value comes from the server and may not match the actual browser pathname after routing. See our example for a way to mitigate this issue.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Introduction",
+    "content": "can result in hydration mismatch errors, because the initial value comes from the server and may not match the actual browser pathname after routing. See our example for a way to mitigate this issue.\n\nCompatibility with Pages RouterIf you have components that use usePathname and they are imported into routes within the Pages Router, be aware that usePathname may return null if the router is not yet initialized. This can occur in cases such as fallback routes or during Automatic Static Optimization in the Pages Router.To enhance compatibility between routing systems, if your project contains both an app and a pages directory, Next.js will automatically adjust the return type of usePathname.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Parameters",
+    "content": "const pathname = usePathname()\n\nusePathname does not take any parameters.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Returns",
+    "content": "usePathname returns a string of the current URL's pathname. For example:\n\n| URL                 | Returned value        |\r\n| ------------------- | --------------------- |\r\n| /                 | '/'                 |\r\n| /dashboard        | '/dashboard'        |\r\n| /dashboard?v=2    | '/dashboard'        |\r\n| /blog/hello-world | '/blog/hello-world' |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Cache Components",
+    "content": "When cacheComponents is enabled, usePathname may require a Suspense boundary. This depends on whether the pathname can be resolved during prerendering.\n\nStatic routes and routes with generateStaticParams: every route segment, including dynamic params, is known at build time. The pathname can be resolved during prerendering, so usePathname resolves on the server and no Suspense boundary is required.Routes with dynamic params not covered by generateStaticParams: the param is a fallback param that is not known until request time. The pathname cannot be resolved during prerendering, so usePathname suspends. Wrap the component (or a parent) in a Suspense boundary so its fallback can be rendered during prerendering; otherwise, the build fails.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Cache Components",
+    "content": "nnot be resolved during prerendering, so usePathname suspends. Wrap the component (or a parent) in a Suspense boundary so its fallback can be rendered during prerendering; otherwise, the build fails.\n\nThis applies even when the component that calls usePathname is itself static. For example, a sidebar with active links rendered in a layout suspends on any page below it that has an unknown dynamic param. To keep the rest of the layout prerendered, wrap the component that calls usePathname (or a parent) in a Suspense boundary with a fallback.\n\nSee Next.js encountered URL data in a Client Component outside of Suspense for full fix options and trade-offs.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Do something in response to a route change",
+    "content": "'use client'\r\n\r\nimport { useEffect } from 'react'\r\nimport { usePathname, useSearchParams } from 'next/navigation'\r\n\r\nfunction ExampleClientComponent() {\r\n  const pathname = usePathname()\r\n  const searchParams = useSearchParams()\r\n  useEffect(() => {\r\n    // Do something here...\r\n  }, [pathname, searchParams])\r\n}\n\n'use client'\r\n\r\nimport { useEffect } from 'react'\r\nimport { usePathname, useSearchParams } from 'next/navigation'\r\n\r\nfunction ExampleClientComponent() {\r\n  const pathname = usePathname()\r\n  const searchParams = useSearchParams()\r\n  useEffect(() => {\r\n    // Do something here...\r\n  }, [pathname, searchParams])\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Avoid hydration mismatch with rewrites",
+    "content": "When a page is prerendered, the HTML is generated for the source pathname. If the page is then reached through a rewrite using next.config or Proxy, the browser URL may differ, and usePathname() will read the rewritten pathname on the client.\n\nTo avoid hydration mismatches, design the UI so that only a small, isolated part depends on the client pathname. Render a stable fallback on the server and update that part after mount. The deferred read shows a brief moment of the fallback before the real pathname appears; see Preventing flash before hydration for techniques that eliminate the visible flicker.\n\n'use client'\r\n\r\nimport { useEffect, useState } from 'react'\r\nimport { usePathname } from 'next/navigation'\r\n\r\nexport default function PathnameBadge() {\r\n  const pathname = usePathname()\r\n  const [clientPathname, setClientPathname] = useState('')\r\n\r\n  useEffect(() => {\r\n    setClientPathname(pathname)\r\n  }, [pathname])\r\n\r\n  return (\r\n    <p>",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  },
+  {
+    "documentTitle": "usePathname",
+    "documentDescription": "API Reference for the usePathname hook.",
+    "sectionTitle": "Avoid hydration mismatch with rewrites",
+    "content": "adge() {\r\n  const pathname = usePathname()\r\n  const [clientPathname, setClientPathname] = useState('')\r\n\r\n  useEffect(() => {\r\n    setClientPathname(pathname)\r\n  }, [pathname])\r\n\r\n  return (\r\n    <p>\r\n      Current pathname: <span>{clientPathname}</span>\r\n    </p>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { useEffect, useState } from 'react'\r\nimport { usePathname } from 'next/navigation'\r\n\r\nexport default function PathnameBadge() {\r\n  const pathname = usePathname()\r\n  const [clientPathname, setClientPathname] = useState('')\r\n\r\n  useEffect(() => {\r\n    setClientPathname(pathname)\r\n  }, [pathname])\r\n\r\n  return (\r\n    <p>\r\n      Current pathname: <span>{clientPathname}</span>\r\n    </p>\r\n  )\r\n}\n\n| Version   | Changes                   |\r\n| --------- | ------------------------- |\r\n| v13.0.0 | usePathname introduced. |",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\use-pathname.mdx"
+  }
+]

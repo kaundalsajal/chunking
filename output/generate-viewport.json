@@ -1,0 +1,146 @@
+[
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "Introduction",
+    "content": "You can customize the initial viewport of the page with the static viewport object or the dynamic generateViewport function.\n\nGood to know:The viewport object and generateViewport function exports are only supported in Server Components.You cannot export both the viewport object and generateViewport function from the same route segment.If you're coming from migrating metadata exports, you can use metadata-to-viewport-export codemod to update your changes.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "The viewport object",
+    "content": "To define the viewport options, export a viewport object from a layout.jsx or page.jsx file.\n\nimport type { Viewport } from 'next'\r\n\r\nexport const viewport: Viewport = {\r\n  themeColor: 'black',\r\n}\r\n\r\nexport default function Page() {}\n\nexport const viewport = {\r\n  themeColor: 'black',\r\n}\r\n\r\nexport default function Page() {}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "generateViewport function",
+    "content": "generateViewport should return a Viewport object containing one or more viewport fields.\n\nexport function generateViewport({ params }) {\r\n  return {\r\n    themeColor: '...',\r\n  }\r\n}\n\nIn TypeScript, the params argument can be typed via PageProps<'/route'> or LayoutProps<'/route'> depending on where generateViewport is defined.\n\nexport function generateViewport({ params }) {\r\n  return {\r\n    themeColor: '...',\r\n  }\r\n}\n\nGood to know:If the viewport doesn't depend on request information, it should be defined using the static viewport object rather than generateViewport.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "themeColor",
+    "content": "Learn more about theme-color.\n\nSimple theme color\n\nimport type { Viewport } from 'next'\r\n\r\nexport const viewport: Viewport = {\r\n  themeColor: 'black',\r\n}\n\nexport const viewport = {\r\n  themeColor: 'black',\r\n}\n\n<meta name=\"theme-color\" content=\"black\" />\n\nWith media attribute\n\nimport type { Viewport } from 'next'\r\n\r\nexport const viewport: Viewport = {\r\n  themeColor: [\r\n    { media: '(prefers-color-scheme: light)', color: 'cyan' },\r\n    { media: '(prefers-color-scheme: dark)', color: 'black' },\r\n  ],\r\n}\n\nexport const viewport = {\r\n  themeColor: [\r\n    { media: '(prefers-color-scheme: light)', color: 'cyan' },\r\n    { media: '(prefers-color-scheme: dark)', color: 'black' },\r\n  ],\r\n}\n\n<meta name=\"theme-color\" media=\"(prefers-color-scheme: light)\" content=\"cyan\" />\r\n<meta name=\"theme-color\" media=\"(prefers-color-scheme: dark)\" content=\"black\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "width, initialScale, maximumScale and userScalable",
+    "content": "Good to know: The viewport meta tag is automatically set, and manual configuration is usually unnecessary as the default is sufficient. However, the information is provided for completeness.\n\nimport type { Viewport } from 'next'\r\n\r\nexport const viewport: Viewport = {\r\n  width: 'device-width',\r\n  initialScale: 1,\r\n  maximumScale: 1,\r\n  userScalable: false,\r\n  // Also supported but less commonly used\r\n  // interactiveWidget: 'resizes-visual',\r\n}\n\nexport const viewport = {\r\n  width: 'device-width',\r\n  initialScale: 1,\r\n  maximumScale: 1,\r\n  userScalable: false,\r\n  // Also supported but less commonly used\r\n  // interactiveWidget: 'resizes-visual',\r\n}\n\n<meta\r\n  name=\"viewport\"\r\n  content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\"\r\n/>",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "colorScheme",
+    "content": "Learn more about color-scheme.\n\nimport type { Viewport } from 'next'\r\n\r\nexport const viewport: Viewport = {\r\n  colorScheme: 'dark',\r\n}\n\nexport const viewport = {\r\n  colorScheme: 'dark',\r\n}\n\n<meta name=\"color-scheme\" content=\"dark\" />",
+    "metadata": {
+      "language": "html"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "With Cache Components",
+    "content": "When Cache Components is enabled, generateViewport follows the same rules as other components. If viewport accesses runtime data (cookies(), headers(), params, searchParams) or performs uncached data fetching, it defers to request time.\n\nUnlike metadata, viewport cannot be streamed because it affects initial page load UI. If generateViewport defers to request time, the page would need to block until resolved.\n\nIf viewport depends on external data but not runtime data, use use cache:\n\nexport async function generateViewport() {\r\n  'use cache'\r\n  const { width, initialScale } = await db.query('viewport-size')\r\n  return { width, initialScale }\r\n}\n\nIf viewport genuinely requires runtime data, wrap the document <body> in a <Suspense> boundary to signal that the entire route should be dynamic. The shell ships immediately and the document streams in once the viewport resolves:\n\nimport { Suspense } from 'react'\r\nimport { cookies } from 'next/headers'",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "With Cache Components",
+    "content": "hat the entire route should be dynamic. The shell ships immediately and the document streams in once the viewport resolves:\n\nimport { Suspense } from 'react'\r\nimport { cookies } from 'next/headers'\r\n\r\nexport async function generateViewport() {\r\n  const cookieJar = await cookies()\r\n  return {\r\n    themeColor: cookieJar.get('theme-color')?.value,\r\n  }\r\n}\r\n\r\nexport default function RootLayout({ children }) {\r\n  return (\r\n    <Suspense>\r\n      <html>\r\n        <body>{children}</body>\r\n      </html>\r\n    </Suspense>\r\n  )\r\n}\n\nAlternatively, opt the segment out of instant-navigation validation with instant = false. The route renders on every request and the navigation blocks until the render completes:\n\nimport { cookies } from 'next/headers'\r\n\r\nexport const instant = false\r\n\r\nexport async function generateViewport() {\r\n  const cookieJar = await cookies()\r\n  return {\r\n    themeColor: cookieJar.get('theme-color')?.value,\r\n  }\r\n}\r\n\r\nexport default function DashboardLayout({ children }) {",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "With Cache Components",
+    "content": "function generateViewport() {\r\n  const cookieJar = await cookies()\r\n  return {\r\n    themeColor: cookieJar.get('theme-color')?.value,\r\n  }\r\n}\r\n\r\nexport default function DashboardLayout({ children }) {\r\n  return <section>{children}</section>\r\n}\n\nSetting instant = false opts only the segment that exports it out. Descendant segments are still validated by the global default. See Next.js encountered runtime data in generateViewport() for the full set of fix options, trade-offs, and the subtree-wide opt-out.\n\nGood to know: Use multiple root layouts to isolate fully dynamic viewport to specific routes, while still letting other routes in your application generate a static shell.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "Types",
+    "content": "You can add type safety to your viewport object by using the Viewport type. If you are using the built-in TypeScript plugin in your IDE, you do not need to manually add the type, but you can still explicitly add it if you want.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "viewport object",
+    "content": "import type { Viewport } from 'next'\r\n\r\nexport const viewport: Viewport = {\r\n  themeColor: 'black',\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "Regular function",
+    "content": "import type { Viewport } from 'next'\r\n\r\nexport function generateViewport(): Viewport {\r\n  return {\r\n    themeColor: 'black',\r\n  }\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "With segment props",
+    "content": "import type { Viewport } from 'next'\r\n\r\ntype Props = {\r\n  params: Promise<{ id: string }>\r\n  searchParams: Promise<{ [key: string]: string | string[] | undefined }>\r\n}\r\n\r\nexport function generateViewport({ params, searchParams }: Props): Viewport {\r\n  return {\r\n    themeColor: 'black',\r\n  }\r\n}\r\n\r\nexport default function Page({ params, searchParams }: Props) {}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "JavaScript Projects",
+    "content": "For JavaScript projects, you can use JSDoc to add type safety.\n\n/** @type {import(\"next\").Viewport} */\r\nexport const viewport = {\r\n  themeColor: 'black',\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  },
+  {
+    "documentTitle": "generateViewport",
+    "documentDescription": "API Reference for the generateViewport function.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                       |\r\n| --------- | --------------------------------------------- |\r\n| v14.0.0 | viewport and generateViewport introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\generate-viewport.mdx"
+  }
+]

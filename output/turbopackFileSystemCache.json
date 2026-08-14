@@ -1,0 +1,36 @@
+[
+  {
+    "documentTitle": "Turbopack FileSystem Caching",
+    "documentDescription": "Learn how to enable and configure FileSystem Caching for Turbopack builds",
+    "sectionTitle": "Usage",
+    "content": "Turbopack FileSystem Cache enables Turbopack to reduce work across next dev or next build commands. When enabled, Turbopack will save and restore data under the .next directory between runs, which can greatly speed up subsequent builds and dev sessions.\n\nTwo options control the cache, one for next dev and one for next build. Both are enabled by default:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  experimental: {\r\n    turbopackFileSystemCacheForDev: true,\r\n    turbopackFileSystemCacheForBuild: true,\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  experimental: {\r\n    turbopackFileSystemCacheForDev: true,\r\n    turbopackFileSystemCacheForBuild: true,\r\n  },\r\n}\r\n\r\nmodule.exports = nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\turbopackFileSystemCache.mdx"
+  },
+  {
+    "documentTitle": "Turbopack FileSystem Caching",
+    "documentDescription": "Learn how to enable and configure FileSystem Caching for Turbopack builds",
+    "sectionTitle": "Options",
+    "content": "turbopackFileSystemCacheForDev (default: true): caches Turbopack's work for next dev in .next/dev/cache/turbopack. Restarting the dev server reuses the previous compilation.turbopackFileSystemCacheForBuild (default: true): caches Turbopack's work for next build in .next/cache/turbopack. Subsequent builds start warm. See Build environments.\n\nSet either option to false to opt out.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\turbopackFileSystemCache.mdx"
+  },
+  {
+    "documentTitle": "Turbopack FileSystem Caching",
+    "documentDescription": "Learn how to enable and configure FileSystem Caching for Turbopack builds",
+    "sectionTitle": "Build environments",
+    "content": "The build cache lives in .next/cache. Builds only get faster when that directory is restored before each build.\n\nSelf-hosted builds: reuse the same working directory between builds. Containerized builds start from a clean layer and do not carry .next/cache over unless you cache or mount it explicitly.CI providers: configure build caching for .next/cache.\n\nIf your build environment never preserves .next/cache, set turbopackFileSystemCacheForBuild: false to skip writing a cache that will not be read.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\turbopackFileSystemCache.mdx"
+  },
+  {
+    "documentTitle": "Turbopack FileSystem Caching",
+    "documentDescription": "Learn how to enable and configure FileSystem Caching for Turbopack builds",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                                        |\r\n| --------- | -------------------------------------------------------------- |\r\n| v16.3.0 | FileSystem caching is enabled by default for builds            |\r\n| v16.1.0 | FileSystem caching is enabled by default for development       |\r\n| v16.0.0 | Beta release with separate flags for build and dev             |\r\n| v15.5.0 | Persistent caching released as experimental on canary releases |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\turbopackFileSystemCache.mdx"
+  }
+]

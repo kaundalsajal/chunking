@@ -1,0 +1,76 @@
+[
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Introduction",
+    "content": "The 'use cache: private' directive allows functions to access runtime request APIs like cookies(), headers(), and searchParams within a cached scope. However, results are never stored on the server, they're cached only in the browser's memory and do not persist across page reloads.\n\nReach for 'use cache: private' when:\n\nYou want to cache a function that already accesses runtime data, and refactoring to move the runtime access outside and pass values as arguments is not practical.Compliance requirements prevent storing certain data on the server, even temporarily\n\nBecause this directive accesses runtime data, the function executes on every server render and is excluded from running during static shell generation.\n\nIt is not possible to configure custom cache handlers for 'use cache: private'.\n\nFor a comparison of the different cache directives, see How use cache: remote differs from use cache and use cache: private.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  },
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Usage",
+    "content": "To use 'use cache: private', enable the cacheComponents flag in your next.config.ts file:\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nexport default nextConfig\n\n/** @type {import('next').NextConfig} */\r\nconst nextConfig = {\r\n  cacheComponents: true,\r\n}\r\n\r\nexport default nextConfig\n\nThen add 'use cache: private' to your function along with a cacheLife configuration.\n\nGood to know: This directive is not available in Route Handlers.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  },
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Basic example",
+    "content": "In this example, we demonstrate that you can access cookies within a 'use cache: private' scope:\n\nimport { Suspense } from 'react'\r\nimport { cookies } from 'next/headers'\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\n\r\nexport async function generateStaticParams() {\r\n  return [{ id: '1' }]\r\n}\r\n\r\nexport default async function ProductPage({\r\n  params,\r\n}: {\r\n  params: Promise<{ id: string }>\r\n}) {\r\n  const { id } = await params\r\n\r\n  return (\r\n    <div>\r\n      <ProductDetails id={id} />\r\n      <Suspense fallback={<div>Loading recommendations...</div>}>\r\n        <Recommendations productId={id} />\r\n      </Suspense>\r\n    </div>\r\n  )\r\n}\r\n\r\nasync function Recommendations({ productId }: { productId: string }) {\r\n  const recommendations = await getRecommendations(productId)\r\n\r\n  return (\r\n    <div>\r\n      {recommendations.map((rec) => (\r\n        <ProductCard key={rec.id} product={rec} />\r\n      ))}\r\n    </div>\r\n  )\r\n}\r\n\r\nasync function getRecommendations(productId: string) {",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  },
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Basic example",
+    "content": "return (\r\n    <div>\r\n      {recommendations.map((rec) => (\r\n        <ProductCard key={rec.id} product={rec} />\r\n      ))}\r\n    </div>\r\n  )\r\n}\r\n\r\nasync function getRecommendations(productId: string) {\r\n  'use cache: private'\r\n  cacheTag(`recommendations-${productId}`)\r\n  cacheLife({ stale: 60 })\r\n\r\n  // Access cookies within private cache functions\r\n  const sessionId = (await cookies()).get('session-id')?.value || 'guest'\r\n\r\n  return getPersonalizedRecommendations(productId, sessionId)\r\n}\n\nimport { Suspense } from 'react'\r\nimport { cookies } from 'next/headers'\r\nimport { cacheLife, cacheTag } from 'next/cache'\r\n\r\nexport async function generateStaticParams() {\r\n  return [{ id: '1' }]\r\n}\r\n\r\nexport default async function ProductPage({ params }) {\r\n  const { id } = await params\r\n\r\n  return (\r\n    <div>\r\n      <ProductDetails id={id} />\r\n      <Suspense fallback={<div>Loading recommendations...</div>}>\r\n        <Recommendations productId={id} />\r\n      </Suspense>\r\n    </div>\r\n  )\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  },
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Basic example",
+    "content": "(\r\n    <div>\r\n      <ProductDetails id={id} />\r\n      <Suspense fallback={<div>Loading recommendations...</div>}>\r\n        <Recommendations productId={id} />\r\n      </Suspense>\r\n    </div>\r\n  )\r\n}\r\n\r\nasync function Recommendations({ productId }) {\r\n  const recommendations = await getRecommendations(productId)\r\n\r\n  return (\r\n    <div>\r\n      {recommendations.map((rec) => (\r\n        <ProductCard key={rec.id} product={rec} />\r\n      ))}\r\n    </div>\r\n  )\r\n}\r\n\r\nasync function getRecommendations(productId) {\r\n  'use cache: private'\r\n  cacheTag(`recommendations-${productId}`)\r\n  cacheLife({ stale: 60 })\r\n\r\n  // Access cookies within private cache functions\r\n  const sessionId = (await cookies()).get('session-id')?.value || 'guest'\r\n\r\n  return getPersonalizedRecommendations(productId, sessionId)\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  },
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Basic example",
+    "content": "})\r\n\r\n  // Access cookies within private cache functions\r\n  const sessionId = (await cookies()).get('session-id')?.value || 'guest'\r\n\r\n  return getPersonalizedRecommendations(productId, sessionId)\r\n}\n\nGood to know: The stale time must be at least 30 seconds for per-link prefetching to work, and at least 5 minutes for the content to be included in the route's App Shell. See cacheLife prerendering behavior for details.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  },
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Request APIs allowed in private caches",
+    "content": "The following request-specific APIs can be used inside 'use cache: private' functions:\n\n| API            | Allowed in use cache | Allowed in 'use cache: private' |\r\n| -------------- | ---------------------- | --------------------------------- |\r\n| cookies()    | No                     | Yes                               |\r\n| headers()    | No                     | Yes                               |\r\n| searchParams | No                     | Yes                               |\r\n| connection() | No                     | No                                |\n\nNote: The connection() API is prohibited in both use cache and 'use cache: private' as it provides connection-specific information that cannot be safely cached.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  },
+  {
+    "documentTitle": "use cache: private",
+    "documentDescription": "Learn how to use the \"use cache: private\" directive to cache functions that access runtime request APIs.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                                                              |\r\n| --------- | -------------------------------------------------------------------- |\r\n| v16.0.0 | \"use cache: private\" is enabled with the Cache Components feature. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\01-directives\\use-cache-private.mdx"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "documentTitle": "Invoking Entrypoints",
+    "documentDescription": "Invoke Node.js and Edge build entrypoints with adapter runtime context.",
+    "sectionTitle": "Introduction",
+    "content": "Build output entrypoints use a handler(..., ctx) interface, with runtime-specific request/response types.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\08-invoking-entrypoints.mdx"
+  },
+  {
+    "documentTitle": "Invoking Entrypoints",
+    "documentDescription": "Invoke Node.js and Edge build entrypoints with adapter runtime context.",
+    "sectionTitle": "Node.js runtime (runtime: 'nodejs')",
+    "content": "Node.js entrypoints use the following interface:\n\nhandler(\r\n  req: IncomingMessage,\r\n  res: ServerResponse,\r\n  ctx: {\r\n    waitUntil?: (promise: Promise<void>) => void\r\n    requestMeta?: RequestMeta\r\n  }\r\n): Promise<void>\n\nWhen invoking Node.js entrypoints directly, adapters can pass helpers directly on requestMeta instead of relying on internals. Some of the supported fields are hostname,\r\nrevalidate, and render404:\n\nawait handler(req, res, {\r\n  requestMeta: {\r\n    // Relative path from process.cwd() to the Next.js project directory.\r\n    relativeProjectDir: '.',\r\n    // Optional hostname used by route handlers when constructing absolute URLs.\r\n    hostname: '127.0.0.1',\r\n    // Optional internal revalidate function to avoid revalidating over the network\r\n    revalidate: async ({ urlPath, headers, opts }) => {\r\n      // platform-specific revalidate implementation\r\n    },\r\n    // Optional function to render the 404 page for pages router `notFound: true`",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\08-invoking-entrypoints.mdx"
+  },
+  {
+    "documentTitle": "Invoking Entrypoints",
+    "documentDescription": "Invoke Node.js and Edge build entrypoints with adapter runtime context.",
+    "sectionTitle": "Node.js runtime (runtime: 'nodejs')",
+    "content": "revalidate: async ({ urlPath, headers, opts }) => {\r\n      // platform-specific revalidate implementation\r\n    },\r\n    // Optional function to render the 404 page for pages router `notFound: true`\r\n    render404: async (req, res, parsedUrl, setHeaders) => {\r\n      // platform-specific 404 rendering implementation\r\n    },\r\n  },\r\n})\n\nRelevant files in the Next.js core:\n\npackages/next/src/build/templates/app-page.tspackages/next/src/build/templates/app-route.tsand packages/next/src/build/templates/pages-api.ts",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\08-invoking-entrypoints.mdx"
+  },
+  {
+    "documentTitle": "Invoking Entrypoints",
+    "documentDescription": "Invoke Node.js and Edge build entrypoints with adapter runtime context.",
+    "sectionTitle": "Edge runtime (runtime: 'edge') (deprecated)",
+    "content": "The Edge Runtime is deprecated. New routes should use the Node.js runtime.\n\nEdge entrypoints use the following interface:\n\nhandler(\r\n  request: Request,\r\n  ctx: {\r\n    waitUntil?: (prom: Promise<void>) => void\r\n    signal?: AbortSignal\r\n    requestMeta?: RequestMeta\r\n  }\r\n): Promise<Response>\n\nThe shape is aligned around handler(..., ctx), but Node.js and Edge runtimes use different request/response primitives.\n\nFor outputs with runtime: 'edge', Next.js also provides output.edgeRuntime with the canonical metadata needed to invoke the entrypoint:\n\n{\r\n  modulePath: string // Absolute path to the module registered in the edge runtime\r\n  entryKey: string // Canonical key used by the edge entry registry\r\n  handlerExport: string // Export name to invoke, currently 'handler'\r\n}\n\nAfter your edge runtime loads and evaluates the chunks for modulePath, use entryKey to read the registered entry from the global edge entry registry (globalThis._ENTRIES), then invoke handlerExport from that entry:",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\08-invoking-entrypoints.mdx"
+  },
+  {
+    "documentTitle": "Invoking Entrypoints",
+    "documentDescription": "Invoke Node.js and Edge build entrypoints with adapter runtime context.",
+    "sectionTitle": "Edge runtime (runtime: 'edge') (deprecated)",
+    "content": "runtime loads and evaluates the chunks for modulePath, use entryKey to read the registered entry from the global edge entry registry (globalThis._ENTRIES), then invoke handlerExport from that entry:\n\nconst entry = await globalThis._ENTRIES[output.edgeRuntime.entryKey]\r\nconst handler = entry[output.edgeRuntime.handlerExport]\r\nawait handler(request, ctx)\n\nUse edgeRuntime instead of deriving registry keys or handler names from filenames.\n\nRelevant files in the Next.js core:\n\npackages/next/src/build/templates/edge-ssr.tspackages/next/src/build/templates/edge-app-route.tspackages/next/src/build/templates/pages-edge-api.tsand packages/next/src/build/templates/middleware.ts",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\07-adapters\\08-invoking-entrypoints.mdx"
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "documentTitle": "appDir",
+    "documentDescription": "Enable the App Router to use layouts, streaming, and more.",
+    "sectionTitle": "Introduction",
+    "content": "Good to know: This option is no longer needed as of Next.js 13.4. The App Router is now stable.\n\nThe App Router (app directory) enables support for layouts, Server Components, streaming, and colocated data fetching.\n\nUsing the app directory will automatically enable React Strict Mode. Learn how to incrementally adopt app.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\appDir.mdx"
+  }
+]

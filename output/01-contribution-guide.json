@@ -1,0 +1,954 @@
+[
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Introduction",
+    "content": "Welcome to the Next.js Docs Contribution Guide! We're excited to have you here.\n\nThis page provides instructions on how to edit the Next.js documentation. Our goal is to ensure that everyone in the community feels empowered to contribute and improve our docs.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Why Contribute?",
+    "content": "Open-source work is never done, and neither is documentation. Contributing to docs is a good way for beginners to get involved in open-source and for experienced developers to clarify more complex topics while sharing their knowledge with the community.\n\nBy contributing to the Next.js docs, you're helping us build a more robust learning resource for all developers. Whether you've found a typo, a confusing section, or you've realized that a particular topic is missing, your contributions are welcomed and appreciated.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "How to Contribute",
+    "content": "The docs content can be found on the Next.js repo. To contribute, you can edit the files directly on GitHub or clone the repo and edit the files locally.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "GitHub Workflow",
+    "content": "If you're new to GitHub, we recommend reading the GitHub Open Source Guide to learn how to fork a repository, create a branch, and submit a pull request.\n\nGood to know: The underlying docs code lives in a private codebase that is synced to the Next.js public repo. This means that you can't preview the docs locally. However, you'll see your changes on nextjs.org after merging a pull request.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Writing MDX",
+    "content": "The docs are written in MDX, a markdown format that supports JSX syntax. This allows us to embed React components in the docs. See the GitHub Markdown Guide for a quick overview of markdown syntax.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Previewing Changes Locally",
+    "content": "VSCode has a built-in markdown previewer that you can use to see your edits locally. To enable the previewer for MDX files, you'll need to add a configuration option to your user settings.\n\nOpen the command palette (⌘ + ⇧ + P on Mac or Ctrl + Shift + P on Windows) and search for Preferences: Open User Settings (JSON).\n\nThen, add the following line to your settings.json file:\n\n{\r\n  \"files.associations\": {\r\n    \"*.mdx\": \"markdown\"\r\n  }\r\n}\n\nNext, open the command palette again, and search for Markdown: Preview File or Markdown: Open Preview to the Side. This will open a preview window where you can see your formatted changes.",
+    "metadata": {
+      "language": "json"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Extensions",
+    "content": "We also recommend the following extensions for VSCode users:\n\nMDX: Intellisense and syntax highlighting for MDX.Prettier: Format MDX files on save.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Review Process",
+    "content": "Once you've submitted your contribution, the Next.js or Developer Experience teams will review your changes, provide feedback, and merge the pull request when it's ready.\n\nPlease let us know if you have any questions or need further assistance in your PR's comments. Thank you for contributing to the Next.js docs and being a part of our community!\n\nTip: Run pnpm prettier-fix to run Prettier before submitting your PR.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "File Structure",
+    "content": "The docs use file-system routing. Each folder and files inside /docs represent a route segment. These segments are used to generate the URL paths, navigation, and breadcrumbs.\n\nThe file structure reflects the navigation that you see on the site, and by default, navigation items are sorted alphabetically. However, we can change the order of the items by prepending a two-digit number (00-) to the folder or file name.\n\nFor example, in the functions API Reference, the pages are sorted alphabetically because it makes it easier for developers to find a specific function:\n\n04-functions\r\n├── after.mdx\r\n├── cacheLife.mdx\r\n├── cacheTag.mdx\r\n└── ...\n\nBut, in the app router section, the files are prefixed with a two-digit number, sorted in the order developers should learn these concepts:\n\n01-getting-started\r\n├── 01-installation.mdx\r\n├── 02-project-structure.mdx\r\n├── 03-layouts-and-pages.mdx\r\n└── ...",
+    "metadata": {
+      "language": "txt"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "File Structure",
+    "content": "with a two-digit number, sorted in the order developers should learn these concepts:\n\n01-getting-started\r\n├── 01-installation.mdx\r\n├── 02-project-structure.mdx\r\n├── 03-layouts-and-pages.mdx\r\n└── ...\n\nTo quickly find a page, you can use ⌘ + P (Mac) or Ctrl + P (Windows) to open the search bar on VSCode. Then, type the slug of the page you're looking for. E.g. installation\n\nWhy not use a manifest?We considered using a manifest file (another popular way to generate the docs navigation), but we found that a manifest would quickly get out of sync with the files. File-system routing forces us to think about the structure of the docs and feels more native to Next.js.",
+    "metadata": {
+      "language": "txt"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Metadata",
+    "content": "Each page has a metadata block at the top of the file separated by three dashes.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Required Fields",
+    "content": "The following fields are required:\n\n| Field         | Description                                                                  |\r\n| ------------- | ---------------------------------------------------------------------------- |\r\n| title       | The page's <h1> title, used for SEO and OG Images.                         |\r\n| description | The page's description, used in the <meta name=\"description\"> tag for SEO. |\n\n---\r\ntitle: Page Title\r\ndescription: Page Description\r\n---\n\nIt's good practice to limit the page title to 2-3 words (e.g. Optimizing Images) and the description to 1-2 sentences (e.g. Learn how to optimize images in Next.js).",
+    "metadata": {
+      "language": "yaml"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Optional Fields",
+    "content": "The following fields are optional:\n\n| Field       | Description                                                                                                                                        |\r\n| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| nav_title | Overrides the page's title in the navigation. This is useful when the page's title is too long to fit. If not provided, the title field is used. |\r\n| source    | Pulls content into a shared page. See Shared Pages.                                                                               |\r\n| related   | A list of related pages at the bottom of the document. These will automatically be turned into cards. See Related Links.         |\r\n| version   | A stage of development. e.g. experimental,legacy,unstable,RC                                                                               |\n\n---",
+    "metadata": {
+      "language": "yaml"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Optional Fields",
+    "content": "to cards. See Related Links.         |\r\n| version   | A stage of development. e.g. experimental,legacy,unstable,RC                                                                               |\n\n---\r\nnav_title: Nav Item Title\r\nsource: app/building-your-application/optimizing/images\r\nrelated:\r\n  description: See the image component API reference.\r\n  links:\r\n    - app/api-reference/components/image\r\nversion: experimental\r\n---",
+    "metadata": {
+      "language": "yaml"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "App and Pages Docs",
+    "content": "Since most of the features in the App Router and Pages Router are completely different, their docs for each are kept in separate sections (02-app and 03-pages). However, there are a few features that are shared between them.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Shared Pages",
+    "content": "To avoid content duplication and risk the content becoming out of sync, we use the source field to pull content from one page into another. For example, the <Link> component behaves mostly the same in App and Pages. Instead of duplicating the content, we can pull the content from app/.../link.mdx into pages/.../link.mdx:\n\n---\r\ntitle: <Link>\r\ndescription: API reference for the <Link> component.\r\n---\r\n\r\nThis API reference will help you understand how to use the props\r\nand configuration options available for the Link Component.\n\n---\r\ntitle: <Link>\r\ndescription: API reference for the <Link> component.\r\nsource: app/api-reference/components/link\r\n---\r\n\r\n{/* DO NOT EDIT THIS PAGE. */}\r\n{/* The content of this page is pulled from the source above. */}\n\nWe can therefore edit the content in one place and have it reflected in both sections.",
+    "metadata": {
+      "language": "mdx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Shared Content",
+    "content": "In shared pages, sometimes there might be content that is App Router or Pages Router specific. For example, the <Link> component has a shallow prop that is only available in Pages but not in App.\n\nTo make sure the content only shows in the correct router, we can wrap content blocks in an <AppOnly> or <PagesOnly> components:\n\nThis content is shared between App and Pages.\r\n\r\n<PagesOnly>\r\n\r\nThis content will only be shown on the Pages docs.\r\n\r\n</PagesOnly>\r\n\r\nThis content is shared between App and Pages.\n\nYou'll likely use these components for examples and code blocks.",
+    "metadata": {
+      "language": "mdx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Code Blocks",
+    "content": "Code blocks should contain a minimum working example that can be copied and pasted. This means that the code should be able to run without any additional configuration.\n\nFor example, if you're showing how to use the <Link> component, you should include the import statement and the <Link> component itself.\n\nimport Link from 'next/link'\r\n\r\nexport default function Page() {\r\n  return <Link href=\"/about\">About</Link>\r\n}\n\nAlways run examples locally before committing them. This will ensure that the code is up-to-date and working.",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Language and Filename",
+    "content": "Code blocks should have a header that includes the language and the filename. For example:\n\n```tsx filename=\"app/page.tsx\"\r\nexport default function Page() {\r\n  return <h1>Hello, Next.js!</h1>\r\n}\r\n```\n\nFor CLI commands, use the package prop to show the command for each package manager:\n\n```bash package=\"pnpm\"\r\npnpm create next-app\r\n```\r\n\r\n```bash package=\"npm\"\r\nnpx create-next-app@latest\r\n```\r\n\r\n```bash package=\"yarn\"\r\nyarn create next-app\r\n```\r\n\r\n```bash package=\"bun\"\r\nbun create next-app\r\n```\n\nMost examples in the docs are written in tsx and jsx, and a few in bash. However, you can use any supported language, here's the full list.\n\nWhen writing JavaScript code blocks, we use the following language and extension combinations.\n\n|                                | Language   | Extension |\r\n| ------------------------------ | ---------- | --------- |\r\n| JavaScript files with JSX code | ```jsx | .js       |\r\n| JavaScript files without JSX   | ```js  | .js       |",
+    "metadata": {
+      "language": "mdx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Language and Filename",
+    "content": "Language   | Extension |\r\n| ------------------------------ | ---------- | --------- |\r\n| JavaScript files with JSX code | ```jsx | .js       |\r\n| JavaScript files without JSX   | ```js  | .js       |\r\n| TypeScript files with JSX      | ```tsx | .tsx      |\r\n| TypeScript files without JSX   | ```ts  | .ts       |\n\nGood to know:Make sure to use .js extension for JavaScript files with JSX code.For example, ```jsx filename=\"app/layout.js\"",
+    "metadata": {
+      "language": "mdx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "TS and JS Switcher",
+    "content": "Add a language switcher to toggle between TypeScript and JavaScript. Code blocks should be TypeScript first with a JavaScript version to accommodate users.\n\nCurrently, we write TS and JS examples one after the other, and link them with switcher prop:\n\n```tsx filename=\"app/page.tsx\" switcher\r\n\r\n```\r\n\r\n```jsx filename=\"app/page.js\" switcher\r\n\r\n```\n\nGood to know: We plan to automatically compile TypeScript snippets to JavaScript in the future. In the meantime, you can use transform.tools.",
+    "metadata": {
+      "language": "mdx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Line Highlighting",
+    "content": "Code lines can be highlighted. This is useful when you want to draw attention to a specific part of the code. You can highlight lines by passing a number to the highlight prop.\n\nSingle Line: highlight={1}\n\nimport Link from 'next/link'\r\n\r\nexport default function Page() {\r\n  return <Link href=\"/about\">About</Link>\r\n}\n\nMultiple Lines: highlight={1,3}\n\nimport Link from 'next/link'\r\n\r\nexport default function Page() {\r\n  return <Link href=\"/about\">About</Link>\r\n}\n\nRange of Lines: highlight={1-5}\n\nimport Link from 'next/link'\r\n\r\nexport default function Page() {\r\n  return <Link href=\"/about\">About</Link>\r\n}",
+    "metadata": {
+      "language": "tsx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Icons",
+    "content": "The following icons are available for use in the docs:\n\n<Check size={18} />\r\n<Cross size={18} />\n\nOutput:\n\nWe do not use emojis in the docs.",
+    "metadata": {
+      "language": "mdx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Notes",
+    "content": "For information that is important but not critical, use notes. Notes are a good way to add information without distracting the user from the main content.\n\n> **Good to know**: This is a single line note.\r\n\r\n> **Good to know**:\r\n>\r\n> - We also use this format for multi-line notes.\r\n> - There are sometimes multiple items worth knowing or keeping in mind.\n\nOutput:\n\nGood to know: This is a single line note.\n\nGood to know:We also use this format for multi-line notes.There are sometimes multiple items worth knowing or keeping in mind.",
+    "metadata": {
+      "language": "mdx"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Related Links",
+    "content": "Related Links guide the user's learning journey by adding links to logical next steps.\n\nLinks will be displayed in cards under the main content of the page.Links will be automatically generated for pages that have child pages.\n\nCreate related links using the related field in the page's metadata.\n\n---\r\nrelated:\r\n  description: Learn how to quickly get started with your first application.\r\n  links:\r\n    - app/building-your-application/routing/defining-routes\r\n    - app/building-your-application/data-fetching\r\n    - app/api-reference/file-conventions/page\r\n---",
+    "metadata": {
+      "language": "yaml"
+    },
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Nested Fields",
+    "content": "| Field         | Required? | Description                                                                                                                                               |\r\n| ------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |\r\n| title       | Optional  | The title of the card list. Defaults to Next Steps.                                                                                                   |\r\n| description | Optional  | The description of the card list.                                                                                                                         |\r\n| links       | Required  | A list of links to other doc pages. Each list item should be a relative URL path (without a leading slash) e.g. app/api-reference/file-conventions/page |",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Diagrams",
+    "content": "Diagrams are a great way to explain complex concepts. We use Figma to create diagrams, following Vercel's design guide.\n\nThe diagrams currently live in the /public folder in our private Next.js site. If you'd like to update or add a diagram, please open a GitHub issue with your ideas.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Custom Components and HTML",
+    "content": "These are the React Components available for the docs: <Image /> (next/image), <PagesOnly />, <AppOnly />, <Cross />, and <Check />. We do not allow raw HTML in the docs besides the <details> tag.\n\nIf you have ideas for new components, please open a GitHub issue.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Style Guide",
+    "content": "This section contains guidelines for writing docs for those who are new to technical writing.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Page Templates",
+    "content": "While we don't have a strict template for pages, there are page sections you'll see repeated across the docs:\n\nOverview: The first paragraph of a page should tell the user what the feature is and what it's used for. Followed by a minimum working example or its API reference.Convention: If the feature has a convention, it should be explained here.Examples: Show how the feature can be used with different use cases.API Tables: API Pages should have an overview table at the top of the page with jump-to-section links (when possible).Next Steps (Related Links): Add links to related pages to guide the user's learning journey.\n\nFeel free to add these sections as needed.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Page Types",
+    "content": "Docs pages are also split into two categories: Conceptual and Reference.\n\nConceptual pages are used to explain a concept or feature. They are usually longer and contain more information than reference pages. In the Next.js docs, conceptual pages are found in the Building Your Application section.Reference pages are used to explain a specific API. They are usually shorter and more focused. In the Next.js docs, reference pages are found in the API Reference section.\n\nGood to know: Depending on the page you're contributing to, you may need to follow a different voice and style. For example, conceptual pages are more instructional and use the word you to address the user. Reference pages are more technical, they use more imperative words like \"create, update, accept\" and tend to omit the word you.",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "Here are some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ere are some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "re are some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "e are some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "are some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "are some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "re some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "e some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "some guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ome guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "me guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "e guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "guidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "uidelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "idelines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "delines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "elines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "lines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ines to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "nes to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "es to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "s to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "to maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "o maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "maintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "aintain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "intain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ntain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "tain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ain a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "in a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "n a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "a consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "consistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "onsistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "nsistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "sistent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "istent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "stent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "tent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ent style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "nt style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "t style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "style and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "tyle and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "yle and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "le and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "e and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "and voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "nd voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "d voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "voice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "oice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ice across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ce across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "e across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "across the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "cross the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ross the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "oss the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ss the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "s the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "the docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "he docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "e docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "docs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "ocs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "cs:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "s:",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": ":",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "Write clear, concise sentences. Avoid tangents.If you find yourself using a lot of commas, consider breaking the sentence into multiple sentences or use a list.Swap out complex words for simpler ones. For example, use instead of utilize.Be mindful with the word this. It can be ambiguous and confusing, don't be afraid to repeat the subject of the sentence if unclear.For example, Next.js uses React instead of Next.js uses this.Use an active voice instead of passive. An active sentence is easier to read.For example, Next.js uses React instead of React is used by Next.js. If you find yourself using words like was and by you may be using a passive voice.Avoid using words like easy, quick, simple, just, etc. This is subjective and can be discouraging to users.Avoid negative words like don't, can't, won't, etc. This can be discouraging to readers.For example, \"You can use the Link component to create links between pages\" instead of \"Don't use the <a> tag to create links between pages\".Write",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  },
+  {
+    "documentTitle": "Docs Contribution Guide",
+    "documentDescription": "Learn how to contribute to Next.js Documentation",
+    "sectionTitle": "Voice",
+    "content": "an't, won't, etc. This can be discouraging to readers.For example, \"You can use the Link component to create links between pages\" instead of \"Don't use the <a> tag to create links between pages\".Write in second person (you/your). This is more personal and engaging.Use gender-neutral language. Use developers, users, or readers, when referring to the audience.If adding code examples, ensure they are properly formatted and working.\n\nWhile these guidelines are not exhaustive, they should help you get started. If you'd like to dive deeper into technical writing, check out the Google Technical Writing Course.\n\nThank you for contributing to the docs and being part of the Next.js community!\n\n/* To do: Latest Contributors Component */",
+    "metadata": {},
+    "sourceFile": "docs\\04-community\\01-contribution-guide.mdx"
+  }
+]

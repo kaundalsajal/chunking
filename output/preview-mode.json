@@ -1,0 +1,170 @@
+[
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Introduction",
+    "content": "Note: This feature is superseded by Draft Mode.\n\nExamplesAgility CMS Example (Demo)Builder.io Example (Demo)ButterCMS Example (Demo)Contentful Example (Demo)Cosmic Example (Demo)DatoCMS Example (Demo)DotCMS Example (Demo)Drupal Example (Demo)Enterspeed Example (Demo)GraphCMS Example (Demo)Keystone Example (Demo)Kontent.ai Example (Demo)Makeswift Example (Demo)Plasmic Example (Demo)Prepr Example (Demo)Prismic Example (Demo)Sanity Example (Demo)Sitecore XM Cloud Example (Demo)Storyblok Example (Demo)Strapi Example (Demo)TakeShape Example (Demo)Tina Example (Demo)Umbraco Example (Demo)Umbraco Heartcore Example (Demo)Webiny Example (Demo)WordPress Example (Demo)Blog Starter Example (Demo)\n\nIn the Pages documentation and the Data Fetching documentation, we talked about how to prerender a page at build time (Static Generation) using getStaticProps and getStaticPaths.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Introduction",
+    "content": "rter Example (Demo)\n\nIn the Pages documentation and the Data Fetching documentation, we talked about how to prerender a page at build time (Static Generation) using getStaticProps and getStaticPaths.\n\nStatic Generation is useful when your pages fetch data from a headless CMS. However, it’s not ideal when you’re writing a draft on your headless CMS and want to preview the draft immediately on your page. You’d want Next.js to render these pages at request time instead of build time and fetch the draft content instead of the published content. You’d want Next.js to bypass Static Generation only for this specific case.\n\nNext.js has a feature called Preview Mode which solves this problem. Here are instructions on how to use it.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Step 1: Create and access a preview API route",
+    "content": "Take a look at the API Routes documentation first if you’re not familiar with Next.js API Routes.\n\nFirst, create a preview API route. It can have any name - e.g. pages/api/preview.js (or .ts if using TypeScript).\n\nIn this API route, you need to call setPreviewData on the response object. The argument for setPreviewData should be an object, and this can be used by getStaticProps (more on this later). For now, we’ll use {}.\n\nexport default function handler(req, res) {\r\n  // ...\r\n  res.setPreviewData({})\r\n  // ...\r\n}\n\nres.setPreviewData sets some cookies on the browser which turns on the preview mode. Any requests to Next.js containing these cookies will be considered as the preview mode, and the behavior for statically generated pages will change (more on this later).\n\nYou can test this manually by creating an API route like below and accessing it from your browser manually:\n\n// simple example for testing it manually from your browser.\r\nexport default function handler(req, res) {",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Step 1: Create and access a preview API route",
+    "content": "is manually by creating an API route like below and accessing it from your browser manually:\n\n// simple example for testing it manually from your browser.\r\nexport default function handler(req, res) {\r\n  res.setPreviewData({})\r\n  res.end('Preview mode enabled')\r\n}\n\nIf you open your browser’s developer tools and visit /api/preview, you’ll notice that the __prerender_bypass and __next_preview_data cookies will be set on this request.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Securely accessing it from your Headless CMS",
+    "content": "In practice, you’d want to call this API route securely from your headless CMS. The specific steps will vary depending on which headless CMS you’re using, but here are some common steps you could take.\n\nThese steps assume that the headless CMS you’re using supports setting custom preview URLs. If it doesn’t, you can still use this method to secure your preview URLs, but you’ll need to construct and access the preview URL manually.\n\nFirst, you should create a secret token string using a token generator of your choice. This secret will only be known by your Next.js app and your headless CMS. This secret prevents people who don’t have access to your CMS from accessing preview URLs.\n\nSecond, if your headless CMS supports setting custom preview URLs, specify the following as the preview URL. This assumes that your preview API route is located at pages/api/preview.js.\n\nhttps://<your-site>/api/preview?secret=<token>&slug=<path>",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Securely accessing it from your Headless CMS",
+    "content": "custom preview URLs, specify the following as the preview URL. This assumes that your preview API route is located at pages/api/preview.js.\n\nhttps://<your-site>/api/preview?secret=<token>&slug=<path>\n\n<your-site> should be your deployment domain.<token> should be replaced with the secret token you generated.<path> should be the path for the page that you want to preview. If you want to preview /posts/foo, then you should use &slug=/posts/foo.\n\nYour headless CMS might allow you to include a variable in the preview URL so that <path> can be set dynamically based on the CMS’s data like so: &slug=/posts/{entry.fields.slug}\n\nFinally, in the preview API route:\n\nCheck that the secret matches and that the slug parameter exists (if not, the request should fail).Call res.setPreviewData.Then redirect the browser to the path specified by slug. (The following example uses a 307 redirect).\n\nexport default async (req, res) => {\r\n  // Check the secret and next parameters",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Securely accessing it from your Headless CMS",
+    "content": "s.setPreviewData.Then redirect the browser to the path specified by slug. (The following example uses a 307 redirect).\n\nexport default async (req, res) => {\r\n  // Check the secret and next parameters\r\n  // This secret should only be known to this API route and the CMS\r\n  if (req.query.secret !== 'MY_SECRET_TOKEN' || !req.query.slug) {\r\n    return res.status(401).json({ message: 'Invalid token' })\r\n  }\r\n\r\n  // Fetch the headless CMS to check if the provided `slug` exists\r\n  // getPostBySlug would implement the required fetching logic to the headless CMS\r\n  const post = await getPostBySlug(req.query.slug)\r\n\r\n  // If the slug doesn't exist prevent preview mode from being enabled\r\n  if (!post) {\r\n    return res.status(401).json({ message: 'Invalid slug' })\r\n  }\r\n\r\n  // Enable Preview Mode by setting the cookies\r\n  res.setPreviewData({})\r\n\r\n  // Redirect to the path from the fetched post\r\n  // We don't redirect to req.query.slug as that might lead to open redirect vulnerabilities",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Securely accessing it from your Headless CMS",
+    "content": "Mode by setting the cookies\r\n  res.setPreviewData({})\r\n\r\n  // Redirect to the path from the fetched post\r\n  // We don't redirect to req.query.slug as that might lead to open redirect vulnerabilities\r\n  res.redirect(post.slug)\r\n}\n\nIf it succeeds, then the browser will be redirected to the path you want to preview with the preview mode cookies being set.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Step 2: Update getStaticProps",
+    "content": "The next step is to update getStaticProps to support the preview mode.\n\nIf you request a page which has getStaticProps with the preview mode cookies set (via res.setPreviewData), then getStaticProps will be called at request time (instead of at build time).\n\nFurthermore, it will be called with a context object where:\n\ncontext.preview will be true.context.previewData will be the same as the argument used for setPreviewData.\n\nexport async function getStaticProps(context) {\r\n  // If you request this page with the preview mode cookies set:\r\n  //\r\n  // - context.preview will be true\r\n  // - context.previewData will be the same as\r\n  //   the argument used for `setPreviewData`.\r\n}\n\nWe used res.setPreviewData({}) in the preview API route, so context.previewData will be {}. You can use this to pass session information from the preview API route to getStaticProps if necessary.\n\nIf you’re also using getStaticPaths, then context.params will also be available.",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Fetch preview data",
+    "content": "You can update getStaticProps to fetch different data based on context.preview and/or context.previewData.\n\nFor example, your headless CMS might have a different API endpoint for draft posts. If so, you can use context.preview to modify the API endpoint URL like below:\n\nexport async function getStaticProps(context) {\r\n  // If context.preview is true, append \"/preview\" to the API endpoint\r\n  // to request draft data instead of published data. This will vary\r\n  // based on which headless CMS you're using.\r\n  const res = await fetch(`https://.../${context.preview ? 'preview' : ''}`)\r\n  // ...\r\n}\n\nThat’s it! If you access the preview API route (with secret and slug) from your headless CMS or manually, you should now be able to see the preview content. And if you update your draft without publishing, you should be able to preview the draft.\n\nSet this as the preview URL on your headless CMS or access manually, and you should be able to see the preview.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Fetch preview data",
+    "content": "if you update your draft without publishing, you should be able to preview the draft.\n\nSet this as the preview URL on your headless CMS or access manually, and you should be able to see the preview.\n\nhttps://<your-site>/api/preview?secret=<token>&slug=<path>",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "More Details",
+    "content": "Good to know: during rendering next/router exposes an isPreview flag, see the router object docs for more info.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Specify the Preview Mode duration",
+    "content": "setPreviewData takes an optional second parameter which should be an options object. It accepts the following keys:\n\nmaxAge: Specifies the number (in seconds) for the preview session to last for.path: Specifies the path the cookie should be applied under. Defaults to / enabling preview mode for all paths.\n\nsetPreviewData(data, {\r\n  maxAge: 60 * 60, // The preview mode cookies expire in 1 hour\r\n  path: '/about', // The preview mode cookies apply to paths with /about\r\n})",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Clear the Preview Mode cookies",
+    "content": "By default, no expiration date is set for Preview Mode cookies, so the preview session ends when the browser is closed.\n\nTo clear the Preview Mode cookies manually, create an API route that calls clearPreviewData():\n\nexport default function handler(req, res) {\r\n  res.clearPreviewData({})\r\n}\n\nThen, send a request to /api/clear-preview-mode-cookies to invoke the API Route. If calling this route using next/link, you must pass prefetch={false} to prevent calling clearPreviewData during link prefetching.\n\nIf a path was specified in the setPreviewData call, you must pass the same path to clearPreviewData:\n\nexport default function handler(req, res) {\r\n  const { path } = req.query\r\n\r\n  res.clearPreviewData({ path })\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "previewData size limits",
+    "content": "You can pass an object to setPreviewData and have it be available in getStaticProps. However, because the data will be stored in a cookie, there’s a size limitation. Currently, preview data is limited to 2KB.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Works with getServerSideProps",
+    "content": "The preview mode works on getServerSideProps as well. It will also be available on the context object containing preview and previewData.\n\nGood to know: You shouldn't set the Cache-Control header when using Preview Mode because it cannot be bypassed. Instead, we recommend using ISR.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Works with API Routes",
+    "content": "API Routes will have access to preview and previewData under the request object. For example:\n\nexport default function myApiRoute(req, res) {\r\n  const isPreview = req.preview\r\n  const previewData = req.previewData\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  },
+  {
+    "documentTitle": "How to preview content with Preview Mode in Next.js",
+    "documentDescription": "Next.js has the preview mode for statically generated pages. You can learn how it works here.",
+    "sectionTitle": "Unique per next build",
+    "content": "Both the bypass cookie value and the private key for encrypting the previewData change when next build is completed.\r\nThis ensures that the bypass cookie can’t be guessed.\n\nGood to know: To test Preview Mode locally over HTTP your browser will need to allow third-party cookies and local storage access.",
+    "metadata": {},
+    "sourceFile": "docs\\02-pages\\02-guides\\preview-mode.mdx"
+  }
+]

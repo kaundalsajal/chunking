@@ -1,0 +1,34 @@
+[
+  {
+    "documentTitle": "Route Groups",
+    "documentDescription": "Route Groups can be used to partition your Next.js application into different sections.",
+    "sectionTitle": "Introduction",
+    "content": "Route Groups are a folder convention that let you organize routes by category or team.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\route-groups.mdx"
+  },
+  {
+    "documentTitle": "Route Groups",
+    "documentDescription": "Route Groups can be used to partition your Next.js application into different sections.",
+    "sectionTitle": "Convention",
+    "content": "A route group can be created by wrapping a folder's name in parenthesis: (folderName).\n\nThis convention indicates the folder is for organizational purposes and should not be included in the route's URL path.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\route-groups.mdx"
+  },
+  {
+    "documentTitle": "Route Groups",
+    "documentDescription": "Route Groups can be used to partition your Next.js application into different sections.",
+    "sectionTitle": "Use cases",
+    "content": "Organizing routes by team, concern, or feature.Defining multiple root layouts.Opting specific route segments into sharing a layout, while keeping others out.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\route-groups.mdx"
+  },
+  {
+    "documentTitle": "Route Groups",
+    "documentDescription": "Route Groups can be used to partition your Next.js application into different sections.",
+    "sectionTitle": "Caveats",
+    "content": "Full page load: If you navigate between routes that use different root layouts, it'll trigger a full page reload. For example, navigating from /cart that uses app/(shop)/layout.js to /blog that uses app/(marketing)/layout.js. This only applies to multiple root layouts.Conflicting paths: Routes in different groups should not resolve to the same URL path. For example, (marketing)/about/page.js and (shop)/about/page.js would both resolve to /about and cause an error.Top-level root layout: If you use multiple root layouts without a top-level layout.js file, make sure your home route (/) is defined within one of the route groups, e.g. app/(marketing)/page.js.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\route-groups.mdx"
+  }
+]

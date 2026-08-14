@@ -1,0 +1,20 @@
+[
+  {
+    "documentTitle": "staticGeneration*",
+    "documentDescription": "Learn how to configure static generation in your Next.js application.",
+    "sectionTitle": "Introduction",
+    "content": "The staticGeneration* options allow you to configure the Static Generation process for advanced use cases.\n\nimport type { NextConfig } from 'next'\r\n\r\nconst nextConfig: NextConfig = {\r\n  experimental: {\r\n    staticGenerationRetryCount: 1,\r\n    staticGenerationMaxConcurrency: 8,\r\n    staticGenerationMinPagesPerWorker: 25,\r\n  },\r\n}\r\n\r\nexport default nextConfig\n\nconst nextConfig = {\r\n  experimental: {\r\n    staticGenerationRetryCount: 1,\r\n    staticGenerationMaxConcurrency: 8,\r\n    staticGenerationMinPagesPerWorker: 25,\r\n  },\r\n}\r\n\r\nexport default nextConfig",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\staticGeneration.mdx"
+  },
+  {
+    "documentTitle": "staticGeneration*",
+    "documentDescription": "Learn how to configure static generation in your Next.js application.",
+    "sectionTitle": "Config Options",
+    "content": "The following options are available:\n\nstaticGenerationRetryCount: The number of times to retry a failed page generation before failing the build.staticGenerationMaxConcurrency: The maximum number of pages to be processed per worker.staticGenerationMinPagesPerWorker: The minimum number of pages to be processed before starting a new worker.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\05-config\\01-next-config-js\\staticGeneration.mdx"
+  }
+]

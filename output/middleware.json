@@ -1,0 +1,12 @@
+[
+  {
+    "documentTitle": "middleware.js",
+    "documentDescription": "API reference for the middleware.js file (deprecated, renamed to proxy.js).",
+    "sectionTitle": "Introduction",
+    "content": "The middleware.js file convention has been deprecated in Next.js 16 and renamed to proxy.js.\n\nAll functionality remains the same — only the file and export names have changed. See the Migration to Proxy section for details on how to migrate.\n\nYou can automatically migrate by running:\n\nnpx @next/codemod@canary middleware-to-proxy .\n\nFor full documentation, see the proxy.js API reference.",
+    "metadata": {
+      "language": "bash"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\03-file-conventions\\middleware.mdx"
+  }
+]

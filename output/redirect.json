@@ -1,0 +1,110 @@
+[
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Introduction",
+    "content": "The redirect function allows you to redirect the user to another URL. redirect can be used while rendering in Server and Client Components, Route Handlers, and Server Functions.\n\nWhen used in a streaming context, this will insert a meta tag to emit the redirect on the client side. In a Server Action, redirect performs a client-side navigation when JavaScript is available. For progressive enhancement form submissions, it serves a 303 HTTP redirect response. Otherwise, it serves a 307 HTTP redirect response.\n\nIf a resource doesn't exist, you can use the notFound function instead.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Parameters",
+    "content": "The redirect function accepts two arguments:\n\nredirect(path, type)\n\n| Parameter | Type                                                          | Description                                                 |\r\n| --------- | ------------------------------------------------------------- | ----------------------------------------------------------- |\r\n| path    | string                                                      | The URL to redirect to. Can be a relative or absolute path. |\r\n| type    | 'replace' (default) or 'push' (default in Server Actions) | The type of redirect to perform.                            |\n\nBy default, redirect will use push (adding a new entry to the browser history stack) in Server Actions and replace (replacing the current URL in the browser history stack) everywhere else. You can override this behavior by specifying the type parameter.\n\nThe RedirectType object contains the available options for the type parameter.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Parameters",
+    "content": "ent URL in the browser history stack) everywhere else. You can override this behavior by specifying the type parameter.\n\nThe RedirectType object contains the available options for the type parameter.\n\nimport { redirect, RedirectType } from 'next/navigation'\r\n\r\nredirect('/redirect-to', RedirectType.replace)\r\n// or\r\nredirect('/redirect-to', RedirectType.push)\n\nThe type parameter has no effect when used in Server Components.",
+    "metadata": {
+      "language": "ts"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Returns",
+    "content": "redirect does not return a value.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Behavior",
+    "content": "In Server Actions and Route Handlers, redirect should be called outside the try block when using try/catch statements.If you prefer to return a 308 (Permanent) HTTP redirect instead of 307 (Temporary), you can use the permanentRedirect function instead.redirect throws an error so it should be called outside the try block when using try/catch statements.redirect can be called in Client Components during the rendering process but not in event handlers. You can use the useRouter hook instead.redirect also accepts absolute URLs and can be used to redirect to external links.If you'd like to redirect before the render process, use next.config.js or Proxy.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Server Component",
+    "content": "Invoking the redirect() function throws a NEXT_REDIRECT error and terminates rendering of the route segment in which it was thrown.\n\nimport { redirect } from 'next/navigation'\r\n\r\nasync function fetchTeam(id: string) {\r\n  const res = await fetch('https://...')\r\n  if (!res.ok) return undefined\r\n  return res.json()\r\n}\r\n\r\nexport default async function Profile({\r\n  params,\r\n}: {\r\n  params: Promise<{ id: string }>\r\n}) {\r\n  const { id } = await params\r\n  const team = await fetchTeam(id)\r\n\r\n  if (!team) {\r\n    redirect('/login')\r\n  }\r\n\r\n  // ...\r\n}\n\nimport { redirect } from 'next/navigation'\r\n\r\nasync function fetchTeam(id) {\r\n  const res = await fetch('https://...')\r\n  if (!res.ok) return undefined\r\n  return res.json()\r\n}\r\n\r\nexport default async function Profile({ params }) {\r\n  const { id } = await params\r\n  const team = await fetchTeam(id)\r\n\r\n  if (!team) {\r\n    redirect('/login')\r\n  }\r\n\r\n  // ...\r\n}",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Server Component",
+    "content": "n res.json()\r\n}\r\n\r\nexport default async function Profile({ params }) {\r\n  const { id } = await params\r\n  const team = await fetchTeam(id)\r\n\r\n  if (!team) {\r\n    redirect('/login')\r\n  }\r\n\r\n  // ...\r\n}\n\nGood to know: redirect does not require you to use return redirect() as it uses the TypeScript never type.",
+    "metadata": {
+      "language": "jsx"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Client Component",
+    "content": "redirect can be directly used in a Client Component.\n\n'use client'\r\n\r\nimport { redirect, usePathname } from 'next/navigation'\r\n\r\nexport function ClientRedirect() {\r\n  const pathname = usePathname()\r\n\r\n  if (pathname.startsWith('/admin') && !pathname.includes('/login')) {\r\n    redirect('/admin/login')\r\n  }\r\n\r\n  return <div>Login Page</div>\r\n}\n\n'use client'\r\n\r\nimport { redirect, usePathname } from 'next/navigation'\r\n\r\nexport function ClientRedirect() {\r\n  const pathname = usePathname()\r\n\r\n  if (pathname.startsWith('/admin') && !pathname.includes('/login')) {\r\n    redirect('/admin/login')\r\n  }\r\n\r\n  return <div>Login Page</div>\r\n}\n\nGood to know: When using redirect in a Client Component on initial page load during Server-Side Rendering (SSR), it will perform a server-side redirect.\n\nredirect can be used in a Client Component through a Server Action. If you need to use an event handler to redirect the user, you can use the useRouter hook.\n\n'use client'",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Client Component",
+    "content": "a server-side redirect.\n\nredirect can be used in a Client Component through a Server Action. If you need to use an event handler to redirect the user, you can use the useRouter hook.\n\n'use client'\r\n\r\nimport { navigate } from './actions'\r\n\r\nexport function ClientRedirect() {\r\n  return (\r\n    <form action={navigate}>\r\n      <input type=\"text\" name=\"id\" />\r\n      <button>Submit</button>\r\n    </form>\r\n  )\r\n}\n\n'use client'\r\n\r\nimport { navigate } from './actions'\r\n\r\nexport function ClientRedirect() {\r\n  return (\r\n    <form action={navigate}>\r\n      <input type=\"text\" name=\"id\" />\r\n      <button>Submit</button>\r\n    </form>\r\n  )\r\n}\n\n'use server'\r\n\r\nimport { redirect } from 'next/navigation'\r\n\r\nexport async function navigate(data: FormData) {\r\n  redirect(`/posts/${data.get('id')}`)\r\n}\n\n'use server'\r\n\r\nimport { redirect } from 'next/navigation'\r\n\r\nexport async function navigate(data) {\r\n  redirect(`/posts/${data.get('id')}`)\r\n}",
+    "metadata": {
+      "language": "js"
+    },
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Why does redirect use 307 and 308?",
+    "content": "When using redirect() you may notice that the status codes used are 307 for a temporary redirect, and 308 for a permanent redirect. While traditionally a 302 was used for a temporary redirect, and a 301 for a permanent redirect, many browsers changed the request method of the redirect, from a POST to GET request when using a 302, regardless of the origins request method.\n\nTaking the following example of a redirect from /users to /people, if you make a POST request to /users to create a new user, and are conforming to a 302 temporary redirect, the request method will be changed from a POST to a GET request. This doesn't make sense, as to create a new user, you should be making a POST request to /people, and not a GET request.\n\nThe introduction of the 307 status code means that the request method is preserved as POST.\n\n302 - Temporary redirect, will change the request method from POST to GET307 - Temporary redirect, will preserve the request method as POST",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Why does redirect use 307 and 308?",
+    "content": "s code means that the request method is preserved as POST.\n\n302 - Temporary redirect, will change the request method from POST to GET307 - Temporary redirect, will preserve the request method as POST\n\nThe redirect() method uses a 307 by default, instead of a 302 temporary redirect, meaning the request method is preserved. Server Action form submissions are an exception: they use a 303 response so the browser follows the redirect with a GET request. When JavaScript is available, Server Actions perform a client-side navigation instead of an HTTP redirect.\n\nLearn more about HTTP Redirects.",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  },
+  {
+    "documentTitle": "redirect",
+    "documentDescription": "API Reference for the redirect function.",
+    "sectionTitle": "Version History",
+    "content": "| Version   | Changes                |\r\n| --------- | ---------------------- |\r\n| v13.0.0 | redirect introduced. |",
+    "metadata": {},
+    "sourceFile": "docs\\01-app\\03-api-reference\\04-functions\\redirect.mdx"
+  }
+]
